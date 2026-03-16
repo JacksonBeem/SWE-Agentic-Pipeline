@@ -445,6 +445,36 @@ def main() -> int:
         for k, v in bool_stats.items():
             print(f"{k}: {v}")
 
+    # Optional companion flow: convert/evaluate pre-verifier QA predictions if present.
+    pre_input = args.input.parent / "pre_verifier_qa_predictions.jsonl"
+    pre_output = args.input.parent / "pre_verifier_qa_predictions_executable.jsonl"
+    pre_bool_output = args.input.parent / "pre_verifier_qa_boolean_results.jsonl"
+    if pre_input.exists():
+        pre_converted, pre_stats = normalize_predictions(
+            input_path=pre_input,
+            dataset_by_task=dataset_by_task,
+            dataset_type=dataset_type,
+            valid_task_ids=task_ids,
+            keep_all_samples=args.keep_all_samples,
+            completion_field=args.completion_field,
+        )
+        write_jsonl(pre_output, pre_converted)
+        print(f"Wrote pre-verifier executable predictions: {pre_output}")
+        for k, v in pre_stats.items():
+            print(f"pre_{k}: {v}")
+
+        if args.run_bool_eval:
+            pre_bool_results, pre_bool_stats = evaluate_boolean(
+                predictions=pre_converted,
+                dataset_by_task=dataset_by_task,
+                dataset_type=dataset_type,
+                timeout_s=args.timeout_s,
+            )
+            write_jsonl(pre_bool_output, pre_bool_results)
+            print(f"Wrote pre-verifier boolean results: {pre_bool_output}")
+            for k, v in pre_bool_stats.items():
+                print(f"pre_{k}: {v}")
+
     return 0
 
 

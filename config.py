@@ -4,7 +4,7 @@ from dataclasses import dataclass
 # HARD-CODED CONFIG
 # =========================
 
-OPENROUTER_API_KEY =   
+OPENROUTER_API_KEY = 
 
 ARCHITECT_MODEL = "google/gemini-3-pro-preview"
 DEVELOPER_MODEL = "anthropic/claude-sonnet-4.5"
@@ -15,14 +15,25 @@ VERIFIER_MODEL  = "google/gemini-3-pro-preview"
 # =========================
 # WORKFLOW PROFILE
 # =========================
-# One of: "monolithic(developer model)", "agentic", "agentic_plus_verifier"
-WORKFLOW_PROFILE = "agentic"
+# One of:
+# - "monolithic"
+# - "agentic"
+# - "agentic_plus_verifier"
+# - "agentic_no_planner"
+# - "agentic_no_planner_plus_verifier"
+WORKFLOW_PROFILE = "agentic_plus_verifier"
+
+# Verifier trigger policy:
+# - "always": run verifier for every task (when verifier enabled)
+# - "disagreement": run verifier on QA fail, severe security issues, or format disagreement
+# - "qa_fail": run verifier only when QA explicitly returns FAIL
+VERIFIER_TRIGGER_POLICY = "qa_fail"
 
 # =========================
 # DATASET SELECTION
 # =========================
 # One of: "humaneval", "bigcodebench", "mbpp"
-ACTIVE_DATASET = "humaneval"
+ACTIVE_DATASET = "BigCodeBench"
 
 # Relative to pipeline/ directory.
 DATASET_PATHS = {
@@ -52,10 +63,13 @@ class ModelConfig:
 class PipelineConfig:
     run_id: str
     traceable: bool = True
-    trigger_policy: str = "disagreement"
+    trigger_policy: str = VERIFIER_TRIGGER_POLICY
     allow_single_repair: bool = True
+    enable_planner: bool = True
     enable_security: bool = False
     enable_verifier: bool = True
+    enable_pre_verifier_checkpoint: bool = True
+    enable_verifier_repair_checkpoints: bool = True
 
 @dataclass(frozen=True)
 class AppConfig:
@@ -122,6 +136,28 @@ def get_workflow_defaults() -> WorkflowDefaults:
             predictions_path="pipeline/logs/predictions_agentic_plus_verifier.jsonl",
             executable_predictions_path="pipeline/logs/predictions_agentic_plus_verifier_executable.jsonl",
             boolean_results_path="pipeline/logs/humaneval_boolean_results_agentic_plus_verifier.jsonl",
+        )
+
+    if profile == "agentic_no_planner":
+        return WorkflowDefaults(
+            profile=profile,
+            mode="pipeline",
+            enable_security=False,
+            enable_verifier=False,
+            predictions_path="pipeline/logs/predictions_agentic_no_planner.jsonl",
+            executable_predictions_path="pipeline/logs/predictions_agentic_no_planner_executable.jsonl",
+            boolean_results_path="pipeline/logs/humaneval_boolean_results_agentic_no_planner.jsonl",
+        )
+
+    if profile == "agentic_no_planner_plus_verifier":
+        return WorkflowDefaults(
+            profile=profile,
+            mode="pipeline",
+            enable_security=False,
+            enable_verifier=True,
+            predictions_path="pipeline/logs/predictions_agentic_no_planner_plus_verifier.jsonl",
+            executable_predictions_path="pipeline/logs/predictions_agentic_no_planner_plus_verifier_executable.jsonl",
+            boolean_results_path="pipeline/logs/humaneval_boolean_results_agentic_no_planner_plus_verifier.jsonl",
         )
 
     # Default "agentic" (no verifier)

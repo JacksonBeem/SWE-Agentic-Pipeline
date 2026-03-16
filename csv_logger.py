@@ -84,6 +84,18 @@ class RunRow:
     developer_harm: int | None = None
     verifier_repair: int | None = None
     verifier_harm: int | None = None
+    pre_verifier_exec_invoked: int | None = None
+    pre_verifier_exec_passed: int | None = None
+    pre_verifier_exec_error_type: str | None = None
+    pre_verifier_exec_error: str | None = None
+    verifier_pre_repair_exec_invoked: int | None = None
+    verifier_pre_repair_exec_passed: int | None = None
+    verifier_pre_repair_exec_error_type: str | None = None
+    verifier_pre_repair_exec_error: str | None = None
+    verifier_post_repair_exec_invoked: int | None = None
+    verifier_post_repair_exec_passed: int | None = None
+    verifier_post_repair_exec_error_type: str | None = None
+    verifier_post_repair_exec_error: str | None = None
 
 
 class CSVLogger:
@@ -169,6 +181,18 @@ class CSVLogger:
         "developer_harm",
         "verifier_repair",
         "verifier_harm",
+        "pre_verifier_exec_invoked",
+        "pre_verifier_exec_passed",
+        "pre_verifier_exec_error_type",
+        "pre_verifier_exec_error",
+        "verifier_pre_repair_exec_invoked",
+        "verifier_pre_repair_exec_passed",
+        "verifier_pre_repair_exec_error_type",
+        "verifier_pre_repair_exec_error",
+        "verifier_post_repair_exec_invoked",
+        "verifier_post_repair_exec_passed",
+        "verifier_post_repair_exec_error_type",
+        "verifier_post_repair_exec_error",
     ]
 
     def __init__(self, out_dir: str = "logs"):
@@ -293,4 +317,16 @@ class CSVLogger:
             "developer_harm": d.get("developer_harm"),
             "verifier_repair": d.get("verifier_repair"),
             "verifier_harm": d.get("verifier_harm"),
+            "pre_verifier_exec_invoked": d.get("pre_verifier_exec_invoked"),
+            "pre_verifier_exec_passed": d.get("pre_verifier_exec_passed"),
+            "pre_verifier_exec_error_type": d.get("pre_verifier_exec_error_type"),
+            "pre_verifier_exec_error": d.get("pre_verifier_exec_error"),
+            "verifier_pre_repair_exec_invoked": d.get("verifier_pre_repair_exec_invoked"),
+            "verifier_pre_repair_exec_passed": d.get("verifier_pre_repair_exec_passed"),
+            "verifier_pre_repair_exec_error_type": d.get("verifier_pre_repair_exec_error_type"),
+            "verifier_pre_repair_exec_error": d.get("verifier_pre_repair_exec_error"),
+            "verifier_post_repair_exec_invoked": d.get("verifier_post_repair_exec_invoked"),
+            "verifier_post_repair_exec_passed": d.get("verifier_post_repair_exec_passed"),
+            "verifier_post_repair_exec_error_type": d.get("verifier_post_repair_exec_error_type"),
+            "verifier_post_repair_exec_error": d.get("verifier_post_repair_exec_error"),
         })

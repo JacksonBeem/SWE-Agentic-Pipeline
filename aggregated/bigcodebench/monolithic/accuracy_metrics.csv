@@ -1,0 +1,6 @@
+dataset,strategy,scope,run_id,rows,unique_task_ids,rows_with_boolean,rows_without_boolean,pass_count,fail_count,unknown_count,accuracy_eval_pct,accuracy_eval_ci95_low_pct,accuracy_eval_ci95_high_pct,fail_rate_eval_pct,unknown_rate_eval_pct,expected_task_count,accuracy_expected_pct,coverage_vs_expected_pct,missing_vs_expected
+bigcodebench,monolithic,unique_runs,,200,200,200,0,109,91,0,54.5,47.578485,61.251901,45.5,0.0,200,54.5,100.0,0
+bigcodebench,monolithic,run_id,run-656eae3b,102,102,102,0,59,43,0,57.843137,48.146362,66.970568,42.156863,0.0,200,29.5,51.0,98
+bigcodebench,monolithic,run_id,run-c001e0e8,11,11,11,0,7,4,0,63.636364,35.379678,84.833776,36.363636,0.0,200,3.5,5.5,189
+bigcodebench,monolithic,run_id,run-d15f7ccc,67,67,67,0,35,32,0,52.238806,40.484989,63.749811,47.761194,0.0,200,17.5,33.5,133
+bigcodebench,monolithic,run_id,run-f43ceaba,20,20,20,0,8,12,0,40.0,21.880397,61.342206,60.0,0.0,200,4.0,10.0,180

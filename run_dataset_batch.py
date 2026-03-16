@@ -16,6 +16,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from pipeline.config import (
     ModelConfig,
     PipelineConfig,
+    VERIFIER_TRIGGER_POLICY,
     get_active_dataset_path,
     get_active_dataset_type,
     get_default_paths_for_dataset,
@@ -30,7 +31,7 @@ from pipeline.dataset_utils import (
     task_id_for_row,
     task_prompt_for_dataset,
 )
-from pipeline.io_utils import append_prediction, iter_jsonl
+from pipeline.io_utils import append_jsonl, append_prediction, iter_jsonl
 from pipeline.openrouter_client import OpenRouterClient
 from pipeline.orchestrator import PipelineOrchestrator
 from pipeline.schemas import TaskInput
@@ -47,6 +48,16 @@ def resolve_path_from_config(path_str: str) -> Path:
     if txt.startswith("pipeline/"):
         return PROJECT_ROOT / Path(txt)
     return SCRIPT_DIR / p
+
+
+def derive_profile_for_flags(skip_architect: bool, skip_verifier: bool) -> str:
+    if skip_architect and (not skip_verifier):
+        return "agentic_no_planner_plus_verifier"
+    if skip_architect and skip_verifier:
+        return "agentic_no_planner"
+    if (not skip_architect) and (not skip_verifier):
+        return "agentic_plus_verifier"
+    return "agentic"
 
 
 DEFAULT_DATASET_PATH = resolve_path_from_config(get_active_dataset_path())
@@ -101,6 +112,36 @@ def parse_args() -> argparse.Namespace:
         action=argparse.BooleanOptionalAction,
         default=(not WORKFLOW_DEFAULTS.enable_verifier),
         help="When mode=pipeline, skip the Verifier stage.",
+    )
+    p.add_argument(
+        "--skip-architect",
+        action=argparse.BooleanOptionalAction,
+        default=WORKFLOW_DEFAULTS.profile.startswith("agentic_no_planner"),
+        help="When mode=pipeline, bypass Architect and send prompt directly to Developer.",
+    )
+    p.add_argument(
+        "--enable-pre-verifier-checkpoint",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="When mode=pipeline, run local execution checkpoint after QA and before Verifier.",
+    )
+    p.add_argument(
+        "--enable-verifier-repair-checkpoints",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="When mode=pipeline, run pre/post repair execution checkpoints when Verifier rejects.",
+    )
+    p.add_argument(
+        "--trigger-policy",
+        choices=["always", "disagreement", "qa_fail"],
+        default=VERIFIER_TRIGGER_POLICY,
+        help="When mode=pipeline, controls when Verifier is invoked.",
+    )
+    p.add_argument(
+        "--delay-s",
+        type=float,
+        default=0.0,
+        help="Optional delay in seconds between attempted task runs (helps reduce API 429s).",
     )
     return p.parse_args()
 
@@ -202,20 +243,41 @@ def main() -> int:
             args.predictions = resolve_path_from_config(default_pred)
             completed = load_completed_task_ids(args.predictions) if args.skip_existing else set()
 
+        # If user enabled no-architect mode and left predictions at default,
+        # route outputs into explicit no-planner strategy directories.
+        current_profile = (WORKFLOW_DEFAULTS.profile or "").strip().lower()
+        target_profile = derive_profile_for_flags(
+            skip_architect=bool(args.skip_architect),
+            skip_verifier=bool(args.skip_verifier),
+        )
+        if (
+            args.predictions == resolve_path_from_config(default_pred)
+            and current_profile != target_profile
+        ):
+            args.predictions = SCRIPT_DIR / "logs" / inferred_type / target_profile / "predictions.jsonl"
+            completed = load_completed_task_ids(args.predictions) if args.skip_existing else set()
+
     run_id = f"run-{uuid.uuid4().hex[:8]}"
     app = load_config(run_id=run_id)
+    pre_verifier_pred_output = args.predictions.parent / "pre_verifier_qa_predictions.jsonl"
+    if args.reset_predictions:
+        if pre_verifier_pred_output.exists():
+            pre_verifier_pred_output.unlink()
     pipe_cfg = None
-    logger = CSVLogger(out_dir="logs")
+    logger = CSVLogger(out_dir=str(args.predictions.parent))
     orch = None
     mono_client = None
     if args.mode == "pipeline":
         pipe_cfg = PipelineConfig(
             run_id=run_id,
             traceable=True,
-            trigger_policy="always",
+            trigger_policy=args.trigger_policy,
             allow_single_repair=True,
+            enable_planner=(not args.skip_architect),
             enable_security=(not args.skip_security),
             enable_verifier=(not args.skip_verifier),
+            enable_pre_verifier_checkpoint=bool(args.enable_pre_verifier_checkpoint),
+            enable_verifier_repair_checkpoints=bool(args.enable_verifier_repair_checkpoints),
         )
         orch = PipelineOrchestrator(app, pipe_cfg, logger)
     else:
@@ -257,12 +319,14 @@ def main() -> int:
 
         print(f"[{idx + 1}/{total}] Running {task_id} ...")
         t0 = time.time()
+        attempted = False
         try:
+            attempted = True
             if args.mode == "pipeline":
-                if args.skip_security and args.skip_verifier:
-                    pipe_name = f"{dataset_type}_no_security_no_verifier"
-                elif args.skip_security:
-                    pipe_name = f"{dataset_type}_no_security"
+                if args.skip_architect and args.skip_verifier:
+                    pipe_name = f"{dataset_type}_no_planner_no_verifier"
+                elif args.skip_architect:
+                    pipe_name = f"{dataset_type}_no_planner"
                 elif args.skip_verifier:
                     pipe_name = f"{dataset_type}_no_verifier"
                 else:
@@ -310,6 +374,18 @@ def main() -> int:
                 completion=completion,
                 model_name=app.developer_model.model,
             )
+            if args.mode == "pipeline":
+                pre_artifact = (out.get("pre_verifier_artifact") or "").strip()
+                if pre_artifact:
+                    append_jsonl(
+                        pre_verifier_pred_output,
+                        {
+                            "task_id": task_id,
+                            "completion": pre_artifact,
+                            "run_id": run_id,
+                            "pipeline_config": pipe_name,
+                        },
+                    )
             if args.mode == "monolithic":
                 logger.log_run(
                     RunRow(
@@ -371,12 +447,17 @@ def main() -> int:
                     )
                 )
             print(f"[{idx + 1}/{total}] FAILED {task_id}: {type(exc).__name__}: {exc}")
+        finally:
+            if attempted and args.delay_s > 0:
+                time.sleep(args.delay_s)
 
     print("Batch run complete.")
     print(f"processed: {processed}")
     print(f"skipped_existing: {skipped_existing}")
     print(f"failures: {failures}")
     print(f"predictions_file: {args.predictions}")
+    if args.mode == "pipeline":
+        print(f"pre_verifier_predictions_file: {pre_verifier_pred_output}")
     return 0 if failures == 0 else 1
 
 

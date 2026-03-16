@@ -1,0 +1,3224 @@
+dataset,strategy,task_id,run_id,ts_unix,pipeline_config,trigger_policy,verifier_invoked,verifier_decision,repair_attempted,origin_stage,run_total_tokens,end_to_end_latency_s,parse_error_type,parse_error_text,architect,developer,qa,verifier,architect_total_tokens,developer_total_tokens,qa_total_tokens,verifier_total_tokens,architect_latency_s,developer_latency_s,qa_latency_s,verifier_latency_s,architect_error,developer_repair,developer_harm,verifier_repair,verifier_harm,run_index_for_task,run_count_for_task,is_latest_for_task,has_boolean_result,passed,error_type,error
+bigcodebench,monolithic,BigCodeBench/842,run-c001e0e8,1771513907.619856,humaneval_monolithic,monolithic,0,,0,Monolithic,2785,27.852705,SyntaxError,"unterminated string literal (detected at line 54) (<unknown>, line 54)",,,,,,,,,,,,,,,,,,4,4,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/213,run-c001e0e8,1771513926.962967,humaneval_monolithic,monolithic,0,,0,Monolithic,1740,19.305874,SyntaxError,"invalid decimal literal (<unknown>, line 35)",,,,,,,,,,,,,,,,,,4,4,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 13, in test_case_1
+AssertionError: 4 != 5
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.509s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/479,run-c001e0e8,1771513948.860022,humaneval_monolithic,monolithic,0,,0,Monolithic,2395,21.861045,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 55)",,,,,,,,,,,,,,,,,,4,4,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/22,run-c001e0e8,1771513971.823751,humaneval_monolithic,monolithic,0,,0,Monolithic,2108,22.932093,SyntaxError,"unterminated string literal (detected at line 50) (<unknown>, line 50)",,,,,,,,,,,,,,,,,,3,3,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/587,run-c001e0e8,1771513993.135592,humaneval_monolithic,monolithic,0,,0,Monolithic,2315,21.276288,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 38)",,,,,,,,,,,,,,,,,,3,3,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/1051,run-c001e0e8,1771514027.418133,humaneval_monolithic,monolithic,0,,0,Monolithic,2819,34.250136,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 40)",,,,,,,,,,,,,,,,,,3,3,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/645,run-c001e0e8,1771514042.101818,humaneval_monolithic,monolithic,0,,0,Monolithic,1397,14.651331,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 25)",,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_empty_csv (builtins.TestCases.test_empty_csv)
+Test reading an empty CSV file.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 30, in test_empty_csv
+  File ""<string>"", line 9, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\parsers\readers.py"", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\parsers\readers.py"", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\parsers\readers.py"", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\parsers\readers.py"", line 1898, in _make_engine
+    return mapping[engine](f, **self.options)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\parsers\c_parser_wrapper.py"", line 93, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File ""pandas/_libs/parsers.pyx"", line 581, in pandas._libs.parsers.TextReader.__cinit__
+pandas.errors.EmptyDataError: No columns to parse from file
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.052s
+
+FAILED (errors=1)"
+bigcodebench,monolithic,BigCodeBench/335,run-c001e0e8,1771514056.19979,humaneval_monolithic,monolithic,0,,0,Monolithic,1555,14.067367,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 34)",,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/33,run-c001e0e8,1771514068.170739,humaneval_monolithic,monolithic,0,,0,Monolithic,1367,11.937691,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 14)",,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/942,run-c001e0e8,1771514087.937737,humaneval_monolithic,monolithic,0,,0,Monolithic,2241,19.733706,SyntaxError,"closing parenthesis ')' does not match opening parenthesis '[' (<unknown>, line 48)",,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+Test with default parameters.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 11, in test_case_1
+AssertionError: 'Sales Report by Category' != 'Category-wise Sales Trends'
+- Sales Report by Category
++ Category-wise Sales Trends
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.735s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/200,run-c001e0e8,1771514105.445513,humaneval_monolithic,monolithic,0,,0,Monolithic,1824,17.473056,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 38)",,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_count_greater_than_or_equal_value (builtins.TestCases.test_count_greater_than_or_equal_value)
+Verify the count includes numbers greater than or equal to the value.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 28, in test_count_greater_than_or_equal_value
+AssertionError: 3 != 2
+
+======================================================================
+FAIL: test_plotting_mocked (builtins.TestCases.test_plotting_mocked)
+Test that the function calls plt.show().
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 13, in test_plotting_mocked
+  File ""C:\Python314\Lib\unittest\mock.py"", line 964, in assert_called_once
+    raise AssertionError(msg)
+AssertionError: Expected 'show' to have been called once. Called 0 times.
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.250s
+
+FAILED (failures=2)"
+bigcodebench,monolithic,BigCodeBench/107,run-d15f7ccc,1771514796.932566,humaneval_monolithic,monolithic,0,,0,Monolithic,1879,15.292882,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/37,run-d15f7ccc,1771514816.128503,humaneval_monolithic,monolithic,0,,0,Monolithic,2054,19.163208,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/908,run-d15f7ccc,1771514831.235491,humaneval_monolithic,monolithic,0,,0,Monolithic,1633,15.092936,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_invalid_directory (builtins.TestCases.test_invalid_directory)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 35, in test_invalid_directory
+AssertionError: FileNotFoundError not raised
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.744s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/487,run-d15f7ccc,1771514851.103109,humaneval_monolithic,monolithic,0,,0,Monolithic,2206,19.83038,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/458,run-d15f7ccc,1771514870.396479,humaneval_monolithic,monolithic,0,,0,Monolithic,2099,19.276757,SyntaxError,"invalid character '→' (U+2192) (<unknown>, line 46)",,,,,,,,,,,,,,,,,,2,2,1,1,False,SyntaxError,"invalid character '→' (U+2192) (<unknown>, line 46)"
+bigcodebench,monolithic,BigCodeBench/304,run-d15f7ccc,1771514886.254216,humaneval_monolithic,monolithic,0,,0,Monolithic,1892,15.844222,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/798,run-d15f7ccc,1771514901.880427,humaneval_monolithic,monolithic,0,,0,Monolithic,1447,15.6053,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_no_backups_in_backup_directory (builtins.TestCases.test_no_backups_in_backup_directory)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 27, in test_no_backups_in_backup_directory
+  File ""<string>"", line 11, in task_func
+  File ""C:\Python314\Lib\shutil.py"", line 852, in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\shutil.py"", line 675, in _rmtree_unsafe
+    onexc(os.lstat, path, err)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\shutil.py"", line 673, in _rmtree_unsafe
+    st = os.lstat(path)
+FileNotFoundError: [WinError 3] The system cannot find the path specified: '/tmp/my_data'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.006s
+
+FAILED (errors=1)"
+bigcodebench,monolithic,BigCodeBench/328,run-d15f7ccc,1771514921.205818,humaneval_monolithic,monolithic,0,,0,Monolithic,1823,19.290572,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/510,run-d15f7ccc,1771514936.069004,humaneval_monolithic,monolithic,0,,0,Monolithic,1639,14.847803,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/89,run-d15f7ccc,1771514955.453144,humaneval_monolithic,monolithic,0,,0,Monolithic,2307,19.356898,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,TimeoutError,Timeout after 30.0s
+bigcodebench,monolithic,BigCodeBench/49,run-d15f7ccc,1771514967.306882,humaneval_monolithic,monolithic,0,,0,Monolithic,1503,11.833469,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 14, in test_case_1
+  File ""<string>"", line 50, in assert_function_output
+TypeError: 'Axes' object is not subscriptable
+
+======================================================================
+ERROR: test_case_2 (builtins.TestCases.test_case_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 17, in test_case_2
+  File ""<string>"", line 50, in assert_function_output
+TypeError: 'Axes' object is not subscriptable
+
+======================================================================
+ERROR: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 28, in test_case_4
+  File ""<string>"", line 50, in assert_function_output
+TypeError: 'Axes' object is not subscriptable
+
+======================================================================
+ERROR: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 31, in test_case_5
+  File ""<string>"", line 50, in assert_function_output
+TypeError: 'Axes' object is not subscriptable
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.476s
+
+FAILED (errors=4)"
+bigcodebench,monolithic,BigCodeBench/157,run-d15f7ccc,1771514970.140993,humaneval_monolithic,monolithic,0,,0,Monolithic,864,2.821634,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_correlation_calculation (builtins.TestCases.test_correlation_calculation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 32, in test_correlation_calculation
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\numpy\testing\_private\utils.py"", line 1222, in assert_array_almost_equal
+    assert_array_compare(compare, actual, desired, err_msg=err_msg,
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         verbose=verbose,
+                         ^^^^^^^^^^^^^^^^
+             header=('Arrays are not almost equal to %d decimals' % decimal),
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+             precision=decimal)
+             ^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\numpy\testing\_private\utils.py"", line 842, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Arrays are not almost equal to 6 decimals
+
+(shapes (9, 9), (64,) mismatch)
+ ACTUAL: MaskedArray([[ 1., inf, inf, inf, -1.,  1., -1., inf,  1.],
+             [inf, inf, inf, inf, inf, inf, inf, inf, inf],
+             [inf, inf, inf, inf, inf, inf, inf, inf, inf],...
+ DESIRED: array([ 1., nan, nan, nan, -1.,  1., -1., nan, nan, nan, nan, nan, nan,
+       nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan,
+       nan, nan, nan, nan, nan, nan, -1., nan, nan, nan,  1., -1.,  1.,...
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.323s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/611,run-d15f7ccc,1771514990.544021,humaneval_monolithic,monolithic,0,,0,Monolithic,1972,20.384101,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_more_plots_than_data (builtins.TestCases.test_more_plots_than_data)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 27, in test_more_plots_than_data
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.338s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/1071,run-d15f7ccc,1771515012.715655,humaneval_monolithic,monolithic,0,,0,Monolithic,2339,22.153673,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_color_cycle (builtins.TestCases.test_color_cycle)
+Check that the colors of the plotted lines follow the specified cycle.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 39, in test_color_cycle
+AssertionError: Lists differ: ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'b'] != [(0.0, 0.0, 1.0, 1), (0.0, 0.5, 0.0, 1), ([119 chars], 1)]
+
+First differing element 0:
+'b'
+(0.0, 0.0, 1.0, 1)
+
+- ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'b']
++ [(0.0, 0.0, 1.0, 1),
++  (0.0, 0.5, 0.0, 1),
++  (1.0, 0.0, 0.0, 1),
++  (0.0, 0.75, 0.75, 1),
++  (0.75, 0.0, 0.75, 1),
++  (0.75, 0.75, 0.0, 1),
++  (0.0, 0.0, 0.0, 1),
++  (0.0, 0.0, 1.0, 1)] : The colors of the plotted lines should follow the specified cycle.
+
+======================================================================
+FAIL: test_y_values (builtins.TestCases.test_y_values)
+Check that the y-values are shuffled.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 49, in test_y_values
+AssertionError: False is not true : The y-values should be shuffled numbers from the range [1, len(list)].
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.512s
+
+FAILED (failures=2)"
+bigcodebench,monolithic,BigCodeBench/499,run-d15f7ccc,1771515029.822825,humaneval_monolithic,monolithic,0,,0,Monolithic,1765,17.090973,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/617,run-d15f7ccc,1771515046.747353,humaneval_monolithic,monolithic,0,,0,Monolithic,1964,16.909319,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 46)",,,,,,,,,,,,,,,,,,2,2,1,1,False,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 46)"
+bigcodebench,monolithic,BigCodeBench/375,run-d15f7ccc,1771515059.668433,humaneval_monolithic,monolithic,0,,0,Monolithic,1427,12.907155,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/1042,run-d15f7ccc,1771515075.445188,humaneval_monolithic,monolithic,0,,0,Monolithic,1742,15.765402,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_email_with_empty_message (builtins.TestCases.test_email_with_empty_message)
+Test behavior when an empty message is received.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 45, in test_email_with_empty_message
+  File ""<string>"", line 16, in task_func
+EOFError: EOF when reading a line
+
+======================================================================
+ERROR: test_smtp_server_connection_error (builtins.TestCases.test_smtp_server_connection_error)
+Test behavior when there is a network error (e.g., SMTP server unreachable).
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 67, in test_smtp_server_connection_error
+  File ""<string>"", line 16, in task_func
+EOFError: EOF when reading a line
+
+======================================================================
+ERROR: test_socket_closes_after_operation (builtins.TestCases.test_socket_closes_after_operation)
+Test if the socket is properly closed after the operation.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 83, in test_socket_closes_after_operation
+  File ""<string>"", line 16, in task_func
+EOFError: EOF when reading a line
+
+======================================================================
+ERROR: test_successful_email_dispatch (builtins.TestCases.test_successful_email_dispatch)
+Test if the email is successfully composed and sent with valid inputs.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 102, in test_successful_email_dispatch
+  File ""<string>"", line 16, in task_func
+EOFError: EOF when reading a line
+
+======================================================================
+ERROR: test_successful_email_send (builtins.TestCases.test_successful_email_send)
+Test if the email is successfully sent with valid inputs.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 23, in test_successful_email_send
+  File ""<string>"", line 16, in task_func
+EOFError: EOF when reading a line
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.006s
+
+FAILED (errors=5)"
+bigcodebench,monolithic,BigCodeBench/1127,run-d15f7ccc,1771515092.428915,humaneval_monolithic,monolithic,0,,0,Monolithic,1616,16.971411,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_path_with_existing_files (builtins.TestCases.test_path_with_existing_files)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 53, in test_path_with_existing_files
+AssertionError: Lists differ: [('C:[59 chars]t', 'b10a8db164e0754105b7a99be72e3fe5'), ('###[79 chars]one)] != [('C:[59 chars]t', 'a591a6d40bf420404a011733cfb7b190d62c65bf0[173 chars]e7')]
+
+First differing element 0:
+('C:\[58 chars]t', 'b10a8db164e0754105b7a99be72e3fe5')
+('C:\[58 chars]t', 'a591a6d40bf420404a011733cfb7b190d62c65bf0[20 chars]46e')
+
+  [('C:\\Users\\jbeem\\AppData\\Local\\Temp\\tmpiuvozonh\\file1.txt',
+-   'b10a8db164e0754105b7a99be72e3fe5'),
++   'a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e'),
+   ('####', None),
+-  ('C:\\Users\\jbeem\\AppData\\Local\\Temp\\tmpiuvozonh\\file2.txt', None)]
+?                                                                    -------
+
++  ('C:\\Users\\jbeem\\AppData\\Local\\Temp\\tmpiuvozonh\\file2.txt',
++   'c96724127af2d6f56bbc3898632b101167242f02519a99e5ab3f1cab9ff995e7')]
+
+======================================================================
+FAIL: test_path_with_non_standard_delimiter (builtins.TestCases.test_path_with_non_standard_delimiter)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 38, in test_path_with_non_standard_delimiter
+AssertionError: Lists differ: [('Di[117 chars]xt', None), ('-', None), ('file2.txt', None)] != [('Di[117 chars]xt', 'a591a6d40bf420404a011733cfb7b190d62c65bf[56 chars]one)]
+
+First differing element 4:
+('C:\[57 chars]xt', None)
+('C:\[57 chars]xt', 'a591a6d40bf420404a011733cfb7b190d62c65bf[21 chars]46e')
+
+  [('Dir1', None),
+   ('-', None),
+   ('file1', None),
+   ('-', None),
+-  ('C:\\Users\\jbeem\\AppData\\Local\\Temp\\tmp3z2mwe_k\\file1.txt', None),
+?                                                                    -------
+
++  ('C:\\Users\\jbeem\\AppData\\Local\\Temp\\tmp3z2mwe_k\\file1.txt',
++   'a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e'),
+   ('-', None),
+   ('file2.txt', None)]
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.020s
+
+FAILED (failures=2)"
+bigcodebench,monolithic,BigCodeBench/938,run-d15f7ccc,1771515104.062803,humaneval_monolithic,monolithic,0,,0,Monolithic,1486,11.623899,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_clean_text_and_calculate_length (builtins.TestCases.test_clean_text_and_calculate_length)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 6, in test_clean_text_and_calculate_length
+  File ""<string>"", line 8, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\series.py"", line 4943, in apply
+    ).apply()
+      ~~~~~^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\apply.py"", line 1422, in apply
+    return self.apply_standard()
+           ~~~~~~~~~~~~~~~~~~~^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\apply.py"", line 1502, in apply_standard
+    mapped = obj._map_values(
+        mapper=curried, na_action=action, convert=self.convert_dtype
+    )
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\base.py"", line 925, in _map_values
+    return algorithms.map_array(arr, mapper, na_action=na_action, convert=convert)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\algorithms.py"", line 1743, in map_array
+    return lib.map_infer(values, mapper, convert=convert)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""pandas/_libs/lib.pyx"", line 2999, in pandas._libs.lib.map_infer
+  File ""<string>"", line 6, in clean_text
+  File ""C:\Python314\Lib\re\__init__.py"", line 208, in sub
+    return _compile(pattern, flags).sub(repl, string, count)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected string or bytes-like object, got 'NoneType'
+
+======================================================================
+ERROR: test_empty_and_none (builtins.TestCases.test_empty_and_none)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 27, in test_empty_and_none
+  File ""<string>"", line 8, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\series.py"", line 4943, in apply
+    ).apply()
+      ~~~~~^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\apply.py"", line 1422, in apply
+    return self.apply_standard()
+           ~~~~~~~~~~~~~~~~~~~^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\apply.py"", line 1502, in apply_standard
+    mapped = obj._map_values(
+        mapper=curried, na_action=action, convert=self.convert_dtype
+    )
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\base.py"", line 925, in _map_values
+    return algorithms.map_array(arr, mapper, na_action=na_action, convert=convert)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\algorithms.py"", line 1743, in map_array
+    return lib.map_infer(values, mapper, convert=convert)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""pandas/_libs/lib.pyx"", line 2999, in pandas._libs.lib.map_infer
+  File ""<string>"", line 6, in clean_text
+  File ""C:\Python314\Lib\re\__init__.py"", line 208, in sub
+    return _compile(pattern, flags).sub(repl, string, count)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected string or bytes-like object, got 'NoneType'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.008s
+
+FAILED (errors=2)"
+bigcodebench,monolithic,BigCodeBench/953,run-d15f7ccc,1771515120.173051,humaneval_monolithic,monolithic,0,,0,Monolithic,2039,16.097125,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/624,run-d15f7ccc,1771515132.386557,humaneval_monolithic,monolithic,0,,0,Monolithic,1374,12.197391,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/820,run-d15f7ccc,1771515142.850741,humaneval_monolithic,monolithic,0,,0,Monolithic,1333,10.448255,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/895,run-d15f7ccc,1771515160.00346,humaneval_monolithic,monolithic,0,,0,Monolithic,1766,17.142543,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 8, in test_case_1
+AssertionError: np.float64(50.1663) != 250.7154
+
+======================================================================
+FAIL: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 18, in test_case_3
+AssertionError: np.int32(52) != 103
+
+======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 26, in test_case_4
+AssertionError: np.int32(22) != 278
+
+======================================================================
+FAIL: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 33, in test_case_5
+AssertionError: np.int32(78) != 367
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.651s
+
+FAILED (failures=4)"
+bigcodebench,monolithic,BigCodeBench/464,run-d15f7ccc,1771515174.368406,humaneval_monolithic,monolithic,0,,0,Monolithic,1670,14.352904,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/48,run-d15f7ccc,1771515188.424399,humaneval_monolithic,monolithic,0,,0,Monolithic,1624,14.045426,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,TimeoutError,Timeout after 30.0s
+bigcodebench,monolithic,BigCodeBench/12,run-d15f7ccc,1771515208.783137,humaneval_monolithic,monolithic,0,,0,Monolithic,2229,20.348548,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_custom_values_successful_script (builtins.TestCases.test_custom_values_successful_script)
+Test the function with custom script name and log file with successful execution
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 32, in test_custom_values_successful_script
+  File ""<string>"", line 9, in task_func
+FileNotFoundError: Script file 'custom_backup.sh' does not exist.
+
+======================================================================
+ERROR: test_default_values_successful_script (builtins.TestCases.test_default_values_successful_script)
+Test the function with default parameters and successful execution
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 10, in test_default_values_successful_script
+  File ""<string>"", line 9, in task_func
+FileNotFoundError: Script file 'backup.sh' does not exist.
+
+======================================================================
+ERROR: test_log_data_format (builtins.TestCases.test_log_data_format)
+Test that the timestamps are in the correct format
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 41, in test_log_data_format
+  File ""<string>"", line 9, in task_func
+FileNotFoundError: Script file 'backup.sh' does not exist.
+
+======================================================================
+ERROR: test_non_zero_exit_status (builtins.TestCases.test_non_zero_exit_status)
+Test the function with a non-zero exit status
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 49, in test_non_zero_exit_status
+  File ""<string>"", line 9, in task_func
+FileNotFoundError: Script file 'backup.sh' does not exist.
+
+======================================================================
+ERROR: test_script_execution_failure (builtins.TestCases.test_script_execution_failure)
+Test the function raising RuntimeError on script execution failure
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 24, in test_script_execution_failure
+  File ""<string>"", line 9, in task_func
+FileNotFoundError: Script file 'backup.sh' does not exist.
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.009s
+
+FAILED (errors=5)"
+bigcodebench,monolithic,BigCodeBench/1095,run-d15f7ccc,1771515232.492782,humaneval_monolithic,monolithic,0,,0,Monolithic,2201,23.695124,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 42, in test_case_3
+AssertionError: Lists differ: ['$abc$', '$def'] != ['$abc', '$def']
+
+First differing element 0:
+'$abc$'
+'$abc'
+
+- ['$abc$', '$def']
+?       -
+
++ ['$abc', '$def']
+
+======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 52, in test_case_4
+AssertionError: Lists differ: ['$hello', '$world!', '$test.'] != ['$hello', '$world', '$test']
+
+First differing element 1:
+'$world!'
+'$world'
+
+- ['$hello', '$world!', '$test.']
+?                   -         -
+
++ ['$hello', '$world', '$test']
+
+======================================================================
+FAIL: test_save_dollar_prefixed_words_to_file (builtins.TestCases.test_save_dollar_prefixed_words_to_file)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 80, in test_save_dollar_prefixed_words_to_file
+AssertionError: '$example\n$valid\n$!invalid\n$1234\n' != '$example\n$valid\n$1234\n'
+  $example
+  $valid
+- $!invalid
+  $1234
+
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.043s
+
+FAILED (failures=3)"
+bigcodebench,monolithic,BigCodeBench/384,run-d15f7ccc,1771515249.945784,humaneval_monolithic,monolithic,0,,0,Monolithic,2163,17.430005,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/557,run-d15f7ccc,1771515270.067385,humaneval_monolithic,monolithic,0,,0,Monolithic,2130,20.108389,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_single_string (builtins.TestCases.test_single_string)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 20, in test_single_string
+TypeError: 'float' object is not subscriptable
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.315s
+
+FAILED (errors=1)"
+bigcodebench,monolithic,BigCodeBench/149,run-d15f7ccc,1771515272.438276,humaneval_monolithic,monolithic,0,,0,Monolithic,821,2.353496,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/937,run-d15f7ccc,1771515282.256624,humaneval_monolithic,monolithic,0,,0,Monolithic,1295,9.804591,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/718,run-d15f7ccc,1771515299.346698,humaneval_monolithic,monolithic,0,,0,Monolithic,1832,17.072531,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/973,run-d15f7ccc,1771515312.620372,humaneval_monolithic,monolithic,0,,0,Monolithic,1745,13.237552,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 47)",,,,,,,,,,,,,,,,,,2,2,1,1,False,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 47)"
+bigcodebench,monolithic,BigCodeBench/956,run-d15f7ccc,1771515330.479109,humaneval_monolithic,monolithic,0,,0,Monolithic,1789,17.837316,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/17,run-d15f7ccc,1771515345.519436,humaneval_monolithic,monolithic,0,,0,Monolithic,1512,15.00552,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_process_found_restarts_process (builtins.TestCases.test_process_found_restarts_process)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 20, in test_process_found_restarts_process
+AssertionError: 'Process not found. Starting notepad.' != 'Process found. Restarting notepad.'
+- Process not found. Starting notepad.
+?         ----       ^
++ Process found. Restarting notepad.
+?                ^^^
+
+
+======================================================================
+FAIL: test_process_terminates_and_restarts_multiple_instances (builtins.TestCases.test_process_terminates_and_restarts_multiple_instances)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 34, in test_process_terminates_and_restarts_multiple_instances
+AssertionError: 'Process not found. Starting multi_instance.' != 'Process found. Restarting multi_instance.'
+- Process not found. Starting multi_instance.
+?         ----       ^
++ Process found. Restarting multi_instance.
+?                ^^^
+
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.010s
+
+FAILED (failures=2)"
+bigcodebench,monolithic,BigCodeBench/886,run-d15f7ccc,1771515361.599406,humaneval_monolithic,monolithic,0,,0,Monolithic,1875,16.049221,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/92,run-d15f7ccc,1771515378.393163,humaneval_monolithic,monolithic,0,,0,Monolithic,1856,16.778845,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_cluster_centers (builtins.TestCases.test_cluster_centers)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 11, in test_cluster_centers
+AssertionError: False is not true : Centroids should be marked in the plot.
+
+----------------------------------------------------------------------
+Ran 7 tests in 6.769s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/833,run-d15f7ccc,1771515394.057326,humaneval_monolithic,monolithic,0,,0,Monolithic,1824,15.651595,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/625,run-d15f7ccc,1771515409.045286,humaneval_monolithic,monolithic,0,,0,Monolithic,1477,14.968819,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/926,run-d15f7ccc,1771515424.890521,humaneval_monolithic,monolithic,0,,0,Monolithic,1579,15.834737,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_different_table_and_column (builtins.TestCases.test_different_table_and_column)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 18, in setUp
+  File ""<string>"", line 4, in create_mock_db
+sqlite3.OperationalError: table TestData1 already exists
+
+======================================================================
+ERROR: test_invalid_column_name (builtins.TestCases.test_invalid_column_name)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 18, in setUp
+  File ""<string>"", line 4, in create_mock_db
+sqlite3.OperationalError: table TestData1 already exists
+
+======================================================================
+ERROR: test_invalid_db_path (builtins.TestCases.test_invalid_db_path)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 18, in setUp
+  File ""<string>"", line 4, in create_mock_db
+sqlite3.OperationalError: table TestData1 already exists
+
+======================================================================
+ERROR: test_invalid_table_name (builtins.TestCases.test_invalid_table_name)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 18, in setUp
+  File ""<string>"", line 4, in create_mock_db
+sqlite3.OperationalError: table TestData1 already exists
+
+======================================================================
+ERROR: test_valid_input (builtins.TestCases.test_valid_input)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 18, in setUp
+  File ""<string>"", line 4, in create_mock_db
+sqlite3.OperationalError: table TestData1 already exists
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.025s
+
+FAILED (errors=5)"
+bigcodebench,monolithic,BigCodeBench/509,run-d15f7ccc,1771515454.615269,humaneval_monolithic,monolithic,0,,0,Monolithic,3369,29.683007,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_difference_report (builtins.TestCases.test_difference_report)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 54, in test_difference_report
+AssertionError: Lists differ: [""1,,('name', 'age')"", ""2,-,('Alice', '30')"",[38 chars]5')""] != [""1, ,('name', 'age')"", ""2,-,('Alice', '30')""[40 chars]5')""]
+
+First differing element 0:
+""1,,('name', 'age')""
+""1, ,('name', 'age')""
+
+- [""1,,('name', 'age')"",
++ [""1, ,('name', 'age')"",
+?     +
+
+   ""2,-,('Alice', '30')"",
+-  ""2,+,('Alice', '31')"",
+?   ^
+
++  ""3,+,('Alice', '31')"",
+?   ^
+
+-  ""3,,('Bob', '25')""]
+?   ^
+
++  ""4, ,('Bob', '25')""]
+?   ^ +
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.077s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/579,run-d15f7ccc,1771515476.893576,humaneval_monolithic,monolithic,0,,0,Monolithic,2321,22.248731,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_normalized_text (builtins.TestCases.test_normalized_text)
+Test if the text normalization works correctly.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 42, in test_normalized_text
+  File ""<string>"", line 30, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\pyplot.py"", line 1776, in subplots
+    fig = figure(**fig_kw)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\pyplot.py"", line 1041, in figure
+    manager = new_figure_manager(
+        num, figsize=figsize, dpi=dpi,
+        facecolor=facecolor, edgecolor=edgecolor, frameon=frameon,
+        FigureClass=FigureClass, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\pyplot.py"", line 551, in new_figure_manager
+    return _get_backend_mod().new_figure_manager(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\backend_bases.py"", line 3504, in new_figure_manager
+    return cls.new_figure_manager_given_figure(num, fig)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\backend_bases.py"", line 3509, in new_figure_manager_given_figure
+    return cls.FigureCanvas.new_manager(figure, num)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\backend_bases.py"", line 1785, in new_manager
+    return cls.manager_class.create_with_canvas(cls, figure, num)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\backends\_backend_tk.py"", line 546, in create_with_canvas
+    icon_img = ImageTk.PhotoImage(file=icon_fname, master=window)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\PIL\ImageTk.py"", line 101, in __init__
+    image = _get_image_from_kw(kw)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\PIL\ImageTk.py"", line 51, in _get_image_from_kw
+    return Image.open(source)
+           ~~~~~~~~~~^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\PIL\Image.py"", line 3579, in open
+    raise UnidentifiedImageError(msg)
+PIL.UnidentifiedImageError: cannot identify image file 'C:\\Users\\jbeem\\AppData\\Roaming\\Python\\Python314\\site-packages\\matplotlib\\mpl-data\\images\\matplotlib.png'
+
+======================================================================
+ERROR: test_plot_output (builtins.TestCases.test_plot_output)
+Test the output plot's type and attributes.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 35, in test_plot_output
+  File ""<string>"", line 30, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\pyplot.py"", line 1776, in subplots
+    fig = figure(**fig_kw)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\pyplot.py"", line 1041, in figure
+    manager = new_figure_manager(
+        num, figsize=figsize, dpi=dpi,
+        facecolor=facecolor, edgecolor=edgecolor, frameon=frameon,
+        FigureClass=FigureClass, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\pyplot.py"", line 551, in new_figure_manager
+    return _get_backend_mod().new_figure_manager(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\backend_bases.py"", line 3504, in new_figure_manager
+    return cls.new_figure_manager_given_figure(num, fig)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\backend_bases.py"", line 3509, in new_figure_manager_given_figure
+    return cls.FigureCanvas.new_manager(figure, num)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\backend_bases.py"", line 1785, in new_manager
+    return cls.manager_class.create_with_canvas(cls, figure, num)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\backends\_backend_tk.py"", line 546, in create_with_canvas
+    icon_img = ImageTk.PhotoImage(file=icon_fname, master=window)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\PIL\ImageTk.py"", line 101, in __init__
+    image = _get_image_from_kw(kw)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\PIL\ImageTk.py"", line 51, in _get_image_from_kw
+    return Image.open(source)
+           ~~~~~~~~~~^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\PIL\Image.py"", line 3579, in open
+    raise UnidentifiedImageError(msg)
+PIL.UnidentifiedImageError: cannot identify image file 'C:\\Users\\jbeem\\AppData\\Roaming\\Python\\Python314\\site-packages\\matplotlib\\mpl-data\\images\\matplotlib.png'
+
+======================================================================
+ERROR: test_valid_csv_file (builtins.TestCases.test_valid_csv_file)
+Test with a valid CSV file.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 19, in test_valid_csv_file
+  File ""<string>"", line 30, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\pyplot.py"", line 1776, in subplots
+    fig = figure(**fig_kw)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\pyplot.py"", line 1041, in figure
+    manager = new_figure_manager(
+        num, figsize=figsize, dpi=dpi,
+        facecolor=facecolor, edgecolor=edgecolor, frameon=frameon,
+        FigureClass=FigureClass, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\pyplot.py"", line 551, in new_figure_manager
+    return _get_backend_mod().new_figure_manager(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\backend_bases.py"", line 3504, in new_figure_manager
+    return cls.new_figure_manager_given_figure(num, fig)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\backend_bases.py"", line 3509, in new_figure_manager_given_figure
+    return cls.FigureCanvas.new_manager(figure, num)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\backend_bases.py"", line 1785, in new_manager
+    return cls.manager_class.create_with_canvas(cls, figure, num)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\backends\_backend_tk.py"", line 546, in create_with_canvas
+    icon_img = ImageTk.PhotoImage(file=icon_fname, master=window)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\PIL\ImageTk.py"", line 101, in __init__
+    image = _get_image_from_kw(kw)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\PIL\ImageTk.py"", line 51, in _get_image_from_kw
+    return Image.open(source)
+           ~~~~~~~~~~^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\PIL\Image.py"", line 3579, in open
+    raise UnidentifiedImageError(msg)
+PIL.UnidentifiedImageError: cannot identify image file 'C:\\Users\\jbeem\\AppData\\Roaming\\Python\\Python314\\site-packages\\matplotlib\\mpl-data\\images\\matplotlib.png'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.263s
+
+FAILED (errors=3)"
+bigcodebench,monolithic,BigCodeBench/261,run-d15f7ccc,1771515488.960625,humaneval_monolithic,monolithic,0,,0,Monolithic,1418,12.031197,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 23)",,,,,,,,,,,,,,,,,,2,2,1,1,False,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 23)"
+bigcodebench,monolithic,BigCodeBench/212,run-d15f7ccc,1771515504.66818,humaneval_monolithic,monolithic,0,,0,Monolithic,1637,15.672195,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/164,run-d15f7ccc,1771515520.790105,humaneval_monolithic,monolithic,0,,0,Monolithic,1646,16.089844,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/650,run-d15f7ccc,1771515537.285587,humaneval_monolithic,monolithic,0,,0,Monolithic,1659,16.461047,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/806,run-d15f7ccc,1771515558.243148,humaneval_monolithic,monolithic,0,,0,Monolithic,2235,20.924439,SyntaxError,"invalid character '→' (U+2192) (<unknown>, line 37)",,,,,,,,,,,,,,,,,,2,2,1,1,False,SyntaxError,"invalid character '→' (U+2192) (<unknown>, line 37)"
+bigcodebench,monolithic,BigCodeBench/868,run-d15f7ccc,1771515574.107366,humaneval_monolithic,monolithic,0,,0,Monolithic,2094,15.824895,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/605,run-d15f7ccc,1771515585.265254,humaneval_monolithic,monolithic,0,,0,Monolithic,1150,11.121549,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/764,run-d15f7ccc,1771515618.442307,humaneval_monolithic,monolithic,0,,0,Monolithic,3941,33.152769,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/121,run-d15f7ccc,1771515634.332259,humaneval_monolithic,monolithic,0,,0,Monolithic,1794,15.857137,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_output_types (builtins.TestCases.test_output_types)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 17, in test_output_types
+AssertionError: Lists differ: ['Electronics,860', 'Fashion,1294', 'Home & Kitchen,113[32 chars]638'] != ['Electronics,1605', 'Fashion,370', 'Home & Kitchen,513[29 chars]663']
+
+First differing element 0:
+'Electronics,860'
+'Electronics,1605'
+
+- ['Electronics,860',
+?               ^
+
++ ['Electronics,1605',
+?               ^  +
+
+-  'Fashion,1294',
+?           ^^^^
+
++  'Fashion,370',
+?           ^^^
+
+-  'Home & Kitchen,1130',
+?                  ^  -
+
++  'Home & Kitchen,513',
+?                  ^
+
+-  'Automotive,1095',
+?                --
+
++  'Automotive,120',
+?               +
+
+-  'Sports,1638']
+?          ^  -
+
++  'Sports,663']
+?          ^
+ : DataFrame contents should match the expected output
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.525s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/1003,run-d15f7ccc,1771515648.283669,humaneval_monolithic,monolithic,0,,0,Monolithic,1622,13.916014,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/639,run-d15f7ccc,1771515663.704938,humaneval_monolithic,monolithic,0,,0,Monolithic,1578,15.389321,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/211,run-d15f7ccc,1771515684.123721,humaneval_monolithic,monolithic,0,,0,Monolithic,2017,20.384301,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/485,run-d15f7ccc,1771515705.442412,humaneval_monolithic,monolithic,0,,0,Monolithic,2434,21.282721,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 7, in test_case_1
+  File ""<string>"", line 33, in _common_assertions
+AssertionError: 'utc offset (hours)' != 'time difference (hours)'
+- utc offset (hours)
++ time difference (hours)
+
+
+======================================================================
+FAIL: test_case_2 (builtins.TestCases.test_case_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 11, in test_case_2
+  File ""<string>"", line 33, in _common_assertions
+AssertionError: 'utc offset (hours)' != 'time difference (hours)'
+- utc offset (hours)
++ time difference (hours)
+
+
+======================================================================
+FAIL: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 15, in test_case_3
+  File ""<string>"", line 33, in _common_assertions
+AssertionError: 'utc offset (hours)' != 'time difference (hours)'
+- utc offset (hours)
++ time difference (hours)
+
+
+======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 19, in test_case_4
+  File ""<string>"", line 33, in _common_assertions
+AssertionError: 'utc offset (hours)' != 'time difference (hours)'
+- utc offset (hours)
++ time difference (hours)
+
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.436s
+
+FAILED (failures=4)"
+bigcodebench,monolithic,BigCodeBench/607,run-d15f7ccc,1771515725.511086,humaneval_monolithic,monolithic,0,,0,Monolithic,2061,20.045469,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_empty_dataframe (builtins.TestCases.test_empty_dataframe)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 20, in test_empty_dataframe
+AssertionError: 0 != 2 : Should attempt to generate 2 plots even for an empty DataFrame.
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.425s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/153,run-d15f7ccc,1771515737.332099,humaneval_monolithic,monolithic,0,,0,Monolithic,1288,11.798669,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/403,run-d15f7ccc,1771515752.437011,humaneval_monolithic,monolithic,0,,0,Monolithic,1681,15.07972,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/320,run-d15f7ccc,1771515769.430655,humaneval_monolithic,monolithic,0,,0,Monolithic,1467,16.980386,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_invalid_directory (builtins.TestCases.test_invalid_directory)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 31, in test_invalid_directory
+  File ""<string>"", line 12, in task_func
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1175, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1179, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1234, in _execute_mock_call
+    raise effect
+Exception: Error
+
+======================================================================
+FAIL: test_non_zero_exit_code (builtins.TestCases.test_non_zero_exit_code)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 44, in test_non_zero_exit_code
+AssertionError: None != 1
+
+======================================================================
+FAIL: test_valid_input (builtins.TestCases.test_valid_input)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 17, in test_valid_input
+AssertionError: None != 0
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.004s
+
+FAILED (failures=2, errors=1)"
+bigcodebench,monolithic,BigCodeBench/379,run-d15f7ccc,1771515780.452412,humaneval_monolithic,monolithic,0,,0,Monolithic,1239,10.984463,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/300,run-d15f7ccc,1771515802.856611,humaneval_monolithic,monolithic,0,,0,Monolithic,2314,22.389035,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/364,run-d15f7ccc,1771515816.049158,humaneval_monolithic,monolithic,0,,0,Monolithic,1551,13.176832,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/34,run-d15f7ccc,1771515831.378621,humaneval_monolithic,monolithic,0,,0,Monolithic,1752,15.308304,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,TimeoutError,Timeout after 30.0s
+bigcodebench,monolithic,BigCodeBench/979,run-d15f7ccc,1771515845.227196,humaneval_monolithic,monolithic,0,,0,Monolithic,1705,13.826316,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_8 (builtins.TestCases.test_case_8)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 69, in test_case_8
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 10 tests in 1.161s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/759,run-d15f7ccc,1771515863.1873,humaneval_monolithic,monolithic,0,,0,Monolithic,1802,17.941466,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_sensitivity (builtins.TestCases.test_case_sensitivity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 37, in test_case_sensitivity
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1038, in assert_has_calls
+    raise AssertionError(
+    ...<3 lines>...
+    ) from cause
+AssertionError: 'move' does not contain all of (call('/fake/source_directory\\file2.TXT', '/fake/destination_directory\\file2.TXT'), call('/fake/source_directory\\report.TXT', '/fake/destination_directory\\report.TXT')) in its call list, found [] instead
+
+======================================================================
+FAIL: test_non_existing_source_directory (builtins.TestCases.test_non_existing_source_directory)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 22, in test_non_existing_source_directory
+AssertionError: FileNotFoundError not raised
+
+======================================================================
+FAIL: test_special_characters_in_filenames (builtins.TestCases.test_special_characters_in_filenames)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 44, in test_special_characters_in_filenames
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1038, in assert_has_calls
+    raise AssertionError(
+    ...<3 lines>...
+    ) from cause
+AssertionError: 'move' does not contain all of (call('/fake/source_directory\\config file.cfg', '/fake/destination_directory\\config file.cfg'),) in its call list, found [] instead
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.009s
+
+FAILED (failures=3)"
+bigcodebench,monolithic,BigCodeBench/337,run-d15f7ccc,1771515887.416506,humaneval_monolithic,monolithic,0,,0,Monolithic,2644,24.20936,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/658,run-656eae3b,1771516520.485878,humaneval_monolithic,monolithic,0,,0,Monolithic,1619,16.619574,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/46,run-656eae3b,1771516540.808537,humaneval_monolithic,monolithic,0,,0,Monolithic,1944,20.286189,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 14, in test_case_1
+  File ""<string>"", line 15, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\_api\deprecation.py"", line 453, in wrapper
+    return func(*args, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\__init__.py"", line 1524, in inner
+    return func(
+        ax,
+        *map(cbook.sanitize_sequence, args),
+        **{k: cbook.sanitize_sequence(v) for k, v in kwargs.items()})
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\axes\_axes.py"", line 7132, in hist
+    m, bins = np.histogram(x[i], bins, weights=w[i], **hist_kwargs)
+              ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\numpy\lib\_histograms_impl.py"", line 792, in histogram
+    bin_edges, uniform_bins = _get_bin_edges(a, bins, range, weights)
+                              ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\numpy\lib\_histograms_impl.py"", line 425, in _get_bin_edges
+    first_edge, last_edge = _get_outer_edges(a, range)
+                            ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\numpy\lib\_histograms_impl.py"", line 317, in _get_outer_edges
+    raise ValueError(
+        f""autodetected range of [{first_edge}, {last_edge}] is not finite"")
+ValueError: autodetected range of [nan, nan] is not finite
+
+======================================================================
+ERROR: test_case_2 (builtins.TestCases.test_case_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 27, in test_case_2
+TypeError: object of type 'Axes' has no len()
+
+======================================================================
+ERROR: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 43, in test_case_3
+TypeError: object of type 'Axes' has no len()
+
+======================================================================
+ERROR: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 54, in test_case_4
+TypeError: object of type 'Axes' has no len()
+
+======================================================================
+ERROR: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 62, in test_case_5
+  File ""<string>"", line 15, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\_api\deprecation.py"", line 453, in wrapper
+    return func(*args, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\__init__.py"", line 1524, in inner
+    return func(
+        ax,
+        *map(cbook.sanitize_sequence, args),
+        **{k: cbook.sanitize_sequence(v) for k, v in kwargs.items()})
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\axes\_axes.py"", line 7132, in hist
+    m, bins = np.histogram(x[i], bins, weights=w[i], **hist_kwargs)
+              ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\numpy\lib\_histograms_impl.py"", line 792, in histogram
+    bin_edges, uniform_bins = _get_bin_edges(a, bins, range, weights)
+                              ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\numpy\lib\_histograms_impl.py"", line 425, in _get_bin_edges
+    first_edge, last_edge = _get_outer_edges(a, range)
+                            ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\numpy\lib\_histograms_impl.py"", line 317, in _get_outer_edges
+    raise ValueError(
+        f""autodetected range of [{first_edge}, {last_edge}] is not finite"")
+ValueError: autodetected range of [nan, nan] is not finite
+
+======================================================================
+ERROR: test_case_6 (builtins.TestCases.test_case_6)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 73, in test_case_6
+  File ""<string>"", line 15, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\_api\deprecation.py"", line 453, in wrapper
+    return func(*args, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\__init__.py"", line 1524, in inner
+    return func(
+        ax,
+        *map(cbook.sanitize_sequence, args),
+        **{k: cbook.sanitize_sequence(v) for k, v in kwargs.items()})
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\matplotlib\axes\_axes.py"", line 7132, in hist
+    m, bins = np.histogram(x[i], bins, weights=w[i], **hist_kwargs)
+              ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\numpy\lib\_histograms_impl.py"", line 792, in histogram
+    bin_edges, uniform_bins = _get_bin_edges(a, bins, range, weights)
+                              ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\numpy\lib\_histograms_impl.py"", line 425, in _get_bin_edges
+    first_edge, last_edge = _get_outer_edges(a, range)
+                            ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\numpy\lib\_histograms_impl.py"", line 317, in _get_outer_edges
+    raise ValueError(
+        f""autodetected range of [{first_edge}, {last_edge}] is not finite"")
+ValueError: autodetected range of [nan, nan] is not finite
+
+======================================================================
+ERROR: test_case_7 (builtins.TestCases.test_case_7)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 86, in test_case_7
+TypeError: object of type 'Axes' has no len()
+
+----------------------------------------------------------------------
+Ran 7 tests in 1.607s
+
+FAILED (errors=7)"
+bigcodebench,monolithic,BigCodeBench/1068,run-656eae3b,1771516556.699351,humaneval_monolithic,monolithic,0,,0,Monolithic,1755,15.871152,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_successful_query (builtins.TestCases.test_successful_query)
+Test task_func function for successful query execution.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 23, in test_successful_query
+  File ""C:\Python314\Lib\unittest\mock.py"", line 985, in assert_called_with
+    raise AssertionError(_error_message()) from cause
+AssertionError: expected call not found.
+Expected: read_sql_query('SELECT * FROM table_name', <MagicMock name='connect().__enter__()' id='1882105406400'>)
+  Actual: read_sql_query('SELECT * FROM table_name', <MagicMock name='connect()' id='1882105406736'>)
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.011s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/657,run-656eae3b,1771516573.083801,humaneval_monolithic,monolithic,0,,0,Monolithic,1683,16.369814,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 35)",,,,,,,,,,,,,,,,,,2,2,1,1,False,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 35)"
+bigcodebench,monolithic,BigCodeBench/663,run-656eae3b,1771516588.987243,humaneval_monolithic,monolithic,0,,0,Monolithic,1835,15.87714,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_no_data (builtins.TestCases.test_no_data)
+Test the function with no data provided.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 27, in test_no_data
+AssertionError: ValueError not raised : Empty data lists should raise a ValueError.
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.440s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/844,run-656eae3b,1771516606.396384,humaneval_monolithic,monolithic,0,,0,Monolithic,2229,17.39026,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/322,run-656eae3b,1771516620.133162,humaneval_monolithic,monolithic,0,,0,Monolithic,1525,13.716521,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_backup_of_large_file (builtins.TestCases.test_backup_of_large_file)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 40, in test_backup_of_large_file
+AssertionError: -1 != 0
+
+======================================================================
+FAIL: test_successful_execution (builtins.TestCases.test_successful_execution)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 14, in test_successful_execution
+AssertionError: -1 != 0
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.003s
+
+FAILED (failures=2)"
+bigcodebench,monolithic,BigCodeBench/967,run-656eae3b,1771516636.541678,humaneval_monolithic,monolithic,0,,0,Monolithic,1767,16.3927,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/1120,run-656eae3b,1771516663.600098,humaneval_monolithic,monolithic,0,,0,Monolithic,2475,27.03554,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_api_failure_handling (builtins.TestCases.test_api_failure_handling)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 72, in test_api_failure_handling
+AssertionError: Exception not raised
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.003s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/1016,run-656eae3b,1771516679.90095,humaneval_monolithic,monolithic,0,,0,Monolithic,1656,16.271401,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_histogram_bins (builtins.TestCases.test_histogram_bins)
+Test if the histogram generated by the function contains the correct number of bins.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 16, in task_func
+TypeError: a bytes-like object is required, not 'Mock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 53, in test_histogram_bins
+  File ""<string>"", line 20, in task_func
+OSError: Error processing image: a bytes-like object is required, not 'Mock'
+
+======================================================================
+ERROR: test_histogram_data_range (builtins.TestCases.test_histogram_data_range)
+Test if the data range of the histogram is appropriate for a grayscale image (0 to 255).
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 16, in task_func
+TypeError: a bytes-like object is required, not 'Mock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 64, in test_histogram_data_range
+  File ""<string>"", line 20, in task_func
+OSError: Error processing image: a bytes-like object is required, not 'Mock'
+
+======================================================================
+ERROR: test_valid_image_url (builtins.TestCases.test_valid_image_url)
+Test if the function correctly processes a valid image URL and returns a matplotlib Axes object with the correct title.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 16, in task_func
+TypeError: a bytes-like object is required, not 'Mock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 26, in test_valid_image_url
+  File ""<string>"", line 20, in task_func
+OSError: Error processing image: a bytes-like object is required, not 'Mock'
+
+======================================================================
+FAIL: test_ioerror_image_processing (builtins.TestCases.test_ioerror_image_processing)
+Test if the function raises an IOError when there is an error in processing the image.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 90, in test_ioerror_image_processing
+AssertionError: ""Error processing image: a bytes-like object is required, not 'MagicMock'"" != 'Error processing the image: Mocked IOError'
+- Error processing image: a bytes-like object is required, not 'MagicMock'
++ Error processing the image: Mocked IOError
+
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.013s
+
+FAILED (failures=1, errors=3)"
+bigcodebench,monolithic,BigCodeBench/539,run-656eae3b,1771516697.01488,humaneval_monolithic,monolithic,0,,0,Monolithic,2061,17.09294,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 38)",,,,,,,,,,,,,,,,,,2,2,1,1,False,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 38)"
+bigcodebench,monolithic,BigCodeBench/1050,run-656eae3b,1771516711.505908,humaneval_monolithic,monolithic,0,,0,Monolithic,1647,14.465701,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/1029,run-656eae3b,1771516727.278473,humaneval_monolithic,monolithic,0,,0,Monolithic,1552,15.758862,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/947,run-656eae3b,1771516741.810155,humaneval_monolithic,monolithic,0,,0,Monolithic,1689,14.513031,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 21)",,,,,,,,,,,,,,,,,,2,2,1,1,False,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 21)"
+bigcodebench,monolithic,BigCodeBench/980,run-656eae3b,1771516759.672627,humaneval_monolithic,monolithic,0,,0,Monolithic,1995,17.843286,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_7 (builtins.TestCases.test_case_7)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 48, in test_case_7
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.840s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/676,run-656eae3b,1771516772.785405,humaneval_monolithic,monolithic,0,,0,Monolithic,1702,13.098777,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/672,run-656eae3b,1771516785.749053,humaneval_monolithic,monolithic,0,,0,Monolithic,1234,12.950264,SyntaxError,"invalid character '→' (U+2192) (<unknown>, line 23)",,,,,,,,,,,,,,,,,,2,2,1,1,False,SyntaxError,"invalid character '→' (U+2192) (<unknown>, line 23)"
+bigcodebench,monolithic,BigCodeBench/637,run-656eae3b,1771516807.722693,humaneval_monolithic,monolithic,0,,0,Monolithic,2014,21.95446,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/4,run-656eae3b,1771516819.465597,humaneval_monolithic,monolithic,0,,0,Monolithic,1574,11.724428,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/757,run-656eae3b,1771516828.929222,humaneval_monolithic,monolithic,0,,0,Monolithic,1191,9.444481,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/381,run-656eae3b,1771516847.214049,humaneval_monolithic,monolithic,0,,0,Monolithic,2274,18.249931,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/266,run-656eae3b,1771516866.988754,humaneval_monolithic,monolithic,0,,0,Monolithic,1766,19.755744,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_nested_directories (builtins.TestCases.test_nested_directories)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 45, in test_nested_directories
+AssertionError: 1 != 3 : Incorrect number of rows in CSV for nested directories
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.149s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/708,run-656eae3b,1771516887.645888,humaneval_monolithic,monolithic,0,,0,Monolithic,1883,20.639676,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 13, in test_case_1
+AssertionError: './output\\data.csv' != './output/data.csv'
+- ./output\data.csv
+?         ^
++ ./output/data.csv
+?         ^
+
+
+======================================================================
+FAIL: test_case_2 (builtins.TestCases.test_case_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 24, in test_case_2
+AssertionError: './output\\data.csv' != './output/data.csv'
+- ./output\data.csv
+?         ^
++ ./output/data.csv
+?         ^
+
+
+======================================================================
+FAIL: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 34, in test_case_3
+AssertionError: './output\\data.csv' != './output/data.csv'
+- ./output\data.csv
+?         ^
++ ./output/data.csv
+?         ^
+
+
+======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 44, in test_case_4
+AssertionError: './output\\data.csv' != './output/data.csv'
+- ./output\data.csv
+?         ^
++ ./output/data.csv
+?         ^
+
+
+======================================================================
+FAIL: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 54, in test_case_5
+AssertionError: './output\\data.csv' != './output/data.csv'
+- ./output\data.csv
+?         ^
++ ./output/data.csv
+?         ^
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.022s
+
+FAILED (failures=5)"
+bigcodebench,monolithic,BigCodeBench/400,run-656eae3b,1771516906.106388,humaneval_monolithic,monolithic,0,,0,Monolithic,1968,18.441567,SyntaxError,"invalid character '→' (U+2192) (<unknown>, line 41)",,,,,,,,,,,,,,,,,,2,2,1,1,False,SyntaxError,"invalid character '→' (U+2192) (<unknown>, line 41)"
+bigcodebench,monolithic,BigCodeBench/355,run-656eae3b,1771516922.107535,humaneval_monolithic,monolithic,0,,0,Monolithic,1876,15.980607,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/1101,run-656eae3b,1771516936.546323,humaneval_monolithic,monolithic,0,,0,Monolithic,1452,14.420989,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/402,run-656eae3b,1771516953.914565,humaneval_monolithic,monolithic,0,,0,Monolithic,1831,17.346336,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/647,run-656eae3b,1771516965.917991,humaneval_monolithic,monolithic,0,,0,Monolithic,1370,11.96633,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/846,run-656eae3b,1771516980.514835,humaneval_monolithic,monolithic,0,,0,Monolithic,1789,14.562344,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/472,run-656eae3b,1771516998.570708,humaneval_monolithic,monolithic,0,,0,Monolithic,2126,18.020374,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/396,run-656eae3b,1771517013.059617,humaneval_monolithic,monolithic,0,,0,Monolithic,1590,14.458722,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/428,run-656eae3b,1771517031.98043,humaneval_monolithic,monolithic,0,,0,Monolithic,2120,18.886446,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_6 (builtins.TestCases.test_case_6)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 97, in test_case_6
+AssertionError: 4 != 3
+
+----------------------------------------------------------------------
+Ran 8 tests in 14.033s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/495,run-656eae3b,1771517048.939015,humaneval_monolithic,monolithic,0,,0,Monolithic,1895,16.92437,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 43, in test_case_4
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.025s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/832,run-656eae3b,1771517061.915759,humaneval_monolithic,monolithic,0,,0,Monolithic,1308,12.939091,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_serialization_failure (builtins.TestCases.test_serialization_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 24, in test_serialization_failure
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.019s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/614,run-656eae3b,1771517075.170697,humaneval_monolithic,monolithic,0,,0,Monolithic,1601,13.22099,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_data_integrity (builtins.TestCases.test_data_integrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 46, in test_data_integrity
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 1242, in assert_frame_equal
+    raise_assert_detail(
+    ~~~~~~~~~~~~~~~~~~~^
+        obj, f""{obj} shape mismatch"", f""{repr(left.shape)}"", f""{repr(right.shape)}""
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 620, in raise_assert_detail
+    raise AssertionError(msg)
+AssertionError: DataFrame are different
+
+DataFrame shape mismatch
+[left]:  (3, 3)
+[right]: (5, 3)
+
+======================================================================
+FAIL: test_empty_input (builtins.TestCases.test_empty_input)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 24, in test_empty_input
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 1242, in assert_frame_equal
+    raise_assert_detail(
+    ~~~~~~~~~~~~~~~~~~~^
+        obj, f""{obj} shape mismatch"", f""{repr(left.shape)}"", f""{repr(right.shape)}""
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 620, in raise_assert_detail
+    raise AssertionError(msg)
+AssertionError: DataFrame are different
+
+DataFrame shape mismatch
+[left]:  (0, 3)
+[right]: (5, 3)
+
+======================================================================
+FAIL: test_invalid_keys (builtins.TestCases.test_invalid_keys)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 34, in test_invalid_keys
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.592s
+
+FAILED (failures=3)"
+bigcodebench,monolithic,BigCodeBench/722,run-656eae3b,1771517090.702606,humaneval_monolithic,monolithic,0,,0,Monolithic,1385,15.500738,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/11,run-656eae3b,1771517106.787836,humaneval_monolithic,monolithic,0,,0,Monolithic,1780,16.047648,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/876,run-656eae3b,1771517126.933463,humaneval_monolithic,monolithic,0,,0,Monolithic,2340,20.105147,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/365,run-656eae3b,1771517139.52829,humaneval_monolithic,monolithic,0,,0,Monolithic,1315,12.562212,SyntaxError,"invalid character '→' (U+2192) (<unknown>, line 26)",,,,,,,,,,,,,,,,,,2,2,1,1,False,SyntaxError,"invalid character '→' (U+2192) (<unknown>, line 26)"
+bigcodebench,monolithic,BigCodeBench/81,run-656eae3b,1771517153.193019,humaneval_monolithic,monolithic,0,,0,Monolithic,1464,13.630139,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,ModuleNotFoundError,ModuleNotFoundError: No module named 'flask'
+bigcodebench,monolithic,BigCodeBench/927,run-656eae3b,1771517170.743314,humaneval_monolithic,monolithic,0,,0,Monolithic,1581,17.514514,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/904,run-656eae3b,1771517185.483322,humaneval_monolithic,monolithic,0,,0,Monolithic,1454,14.707725,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_empty_data_list (builtins.TestCases.test_empty_data_list)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 25, in test_empty_data_list
+  File ""<string>"", line 6, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\frame.py"", line 4119, in __getitem__
+    indexer = self.columns._get_indexer_strict(key, ""columns"")[1]
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\indexes\base.py"", line 6212, in _get_indexer_strict
+    self._raise_if_missing(keyarr, indexer, axis_name)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\indexes\base.py"", line 6261, in _raise_if_missing
+    raise KeyError(f""None of [{key}] are in the [{axis_name}]"")
+KeyError: ""None of [Index(['x', 'y', 'z'], dtype='object')] are in the [columns]""
+
+======================================================================
+ERROR: test_single_key_data (builtins.TestCases.test_single_key_data)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 31, in test_single_key_data
+  File ""<string>"", line 6, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\frame.py"", line 4119, in __getitem__
+    indexer = self.columns._get_indexer_strict(key, ""columns"")[1]
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\indexes\base.py"", line 6212, in _get_indexer_strict
+    self._raise_if_missing(keyarr, indexer, axis_name)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\indexes\base.py"", line 6264, in _raise_if_missing
+    raise KeyError(f""{not_found} not in index"")
+KeyError: ""['y', 'z'] not in index""
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.408s
+
+FAILED (errors=2)"
+bigcodebench,monolithic,BigCodeBench/577,run-656eae3b,1771517201.07951,humaneval_monolithic,monolithic,0,,0,Monolithic,1711,15.557816,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/360,run-656eae3b,1771517218.855423,humaneval_monolithic,monolithic,0,,0,Monolithic,1983,17.74214,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_bar_chart_labels (builtins.TestCases.test_bar_chart_labels)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 25, in setUp
+  File ""<string>"", line 11, in create_dummy_excel
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\util\_decorators.py"", line 333, in wrapper
+    return func(*args, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\generic.py"", line 2439, in to_excel
+    formatter.write(
+    ~~~~~~~~~~~~~~~^
+        excel_writer,
+        ^^^^^^^^^^^^^
+    ...<6 lines>...
+        engine_kwargs=engine_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\formats\excel.py"", line 943, in write
+    writer = ExcelWriter(
+        writer,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\excel\_openpyxl.py"", line 57, in __init__
+    from openpyxl.workbook import Workbook
+ModuleNotFoundError: No module named 'openpyxl'
+
+======================================================================
+ERROR: test_correct_mean_and_std_values (builtins.TestCases.test_correct_mean_and_std_values)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 25, in setUp
+  File ""<string>"", line 11, in create_dummy_excel
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\util\_decorators.py"", line 333, in wrapper
+    return func(*args, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\generic.py"", line 2439, in to_excel
+    formatter.write(
+    ~~~~~~~~~~~~~~~^
+        excel_writer,
+        ^^^^^^^^^^^^^
+    ...<6 lines>...
+        engine_kwargs=engine_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\formats\excel.py"", line 943, in write
+    writer = ExcelWriter(
+        writer,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\excel\_openpyxl.py"", line 57, in __init__
+    from openpyxl.workbook import Workbook
+ModuleNotFoundError: No module named 'openpyxl'
+
+======================================================================
+ERROR: test_invalid_sheet_name (builtins.TestCases.test_invalid_sheet_name)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 25, in setUp
+  File ""<string>"", line 11, in create_dummy_excel
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\util\_decorators.py"", line 333, in wrapper
+    return func(*args, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\generic.py"", line 2439, in to_excel
+    formatter.write(
+    ~~~~~~~~~~~~~~~^
+        excel_writer,
+        ^^^^^^^^^^^^^
+    ...<6 lines>...
+        engine_kwargs=engine_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\formats\excel.py"", line 943, in write
+    writer = ExcelWriter(
+        writer,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\excel\_openpyxl.py"", line 57, in __init__
+    from openpyxl.workbook import Workbook
+ModuleNotFoundError: No module named 'openpyxl'
+
+======================================================================
+ERROR: test_non_existent_file (builtins.TestCases.test_non_existent_file)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 25, in setUp
+  File ""<string>"", line 11, in create_dummy_excel
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\util\_decorators.py"", line 333, in wrapper
+    return func(*args, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\generic.py"", line 2439, in to_excel
+    formatter.write(
+    ~~~~~~~~~~~~~~~^
+        excel_writer,
+        ^^^^^^^^^^^^^
+    ...<6 lines>...
+        engine_kwargs=engine_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\formats\excel.py"", line 943, in write
+    writer = ExcelWriter(
+        writer,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\excel\_openpyxl.py"", line 57, in __init__
+    from openpyxl.workbook import Workbook
+ModuleNotFoundError: No module named 'openpyxl'
+
+======================================================================
+ERROR: test_normal_functionality (builtins.TestCases.test_normal_functionality)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 25, in setUp
+  File ""<string>"", line 11, in create_dummy_excel
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\util\_decorators.py"", line 333, in wrapper
+    return func(*args, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\generic.py"", line 2439, in to_excel
+    formatter.write(
+    ~~~~~~~~~~~~~~~^
+        excel_writer,
+        ^^^^^^^^^^^^^
+    ...<6 lines>...
+        engine_kwargs=engine_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\formats\excel.py"", line 943, in write
+    writer = ExcelWriter(
+        writer,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\excel\_openpyxl.py"", line 57, in __init__
+    from openpyxl.workbook import Workbook
+ModuleNotFoundError: No module named 'openpyxl'
+
+======================================================================
+ERROR: test_value (builtins.TestCases.test_value)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 25, in setUp
+  File ""<string>"", line 11, in create_dummy_excel
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\util\_decorators.py"", line 333, in wrapper
+    return func(*args, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\generic.py"", line 2439, in to_excel
+    formatter.write(
+    ~~~~~~~~~~~~~~~^
+        excel_writer,
+        ^^^^^^^^^^^^^
+    ...<6 lines>...
+        engine_kwargs=engine_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\formats\excel.py"", line 943, in write
+    writer = ExcelWriter(
+        writer,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\excel\_openpyxl.py"", line 57, in __init__
+    from openpyxl.workbook import Workbook
+ModuleNotFoundError: No module named 'openpyxl'
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.105s
+
+FAILED (errors=6)"
+bigcodebench,monolithic,BigCodeBench/117,run-656eae3b,1771517237.871243,humaneval_monolithic,monolithic,0,,0,Monolithic,2527,18.982962,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_with_seed (builtins.TestCases.test_with_seed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 9, in test_with_seed
+AssertionError: Lists differ: ['John,18,Male,88', 'John,19,Male,68', 'Sara,17,Male,72'[36 chars],60'] != ['John,18,Male,78', 'Sara,17,Male,57', 'Mike,19,Male,70'[36 chars],60']
+
+First differing element 0:
+'John,18,Male,88'
+'John,18,Male,78'
+
+- ['John,18,Male,88',
+?                ^
+
++ ['John,18,Male,78',
+?                ^
+
+-  'John,19,Male,68',
+-  'Sara,17,Male,72',
+?                 -
+
++  'Sara,17,Male,57',
+?                +
+
+-  'Mike,19,Female,60',
+-  'Mike,19,Male,60']
+?                ^  ^
+
++  'Mike,19,Male,70',
+?                ^  ^
+
++  'John,16,Male,68',
++  'Nick,17,Female,60'] : DataFrame contents should match the expected output
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.007s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/56,run-656eae3b,1771517253.041713,humaneval_monolithic,monolithic,0,,0,Monolithic,1435,15.145808,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 41, in test_case_5
+AssertionError: 'Machine' != 'Machine Learning'
+- Machine
++ Machine Learning
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.002s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/390,run-656eae3b,1771517268.641125,humaneval_monolithic,monolithic,0,,0,Monolithic,1697,15.565878,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/66,run-656eae3b,1771517286.772747,humaneval_monolithic,monolithic,0,,0,Monolithic,2269,18.091542,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 13, in test_case_1
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 1303, in assert_frame_equal
+    assert_series_equal(
+    ~~~~~~~~~~~~~~~~~~~^
+        lcol,
+        ^^^^^
+    ...<12 lines>...
+        check_flags=False,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 1021, in assert_series_equal
+    assert_numpy_array_equal(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        lv,
+        ^^^
+    ...<3 lines>...
+        index_values=left.index,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 696, in assert_numpy_array_equal
+    _raise(left, right, err_msg)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 690, in _raise
+    raise_assert_detail(obj, msg, left, right, index_values=index_values)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 620, in raise_assert_detail
+    raise AssertionError(msg)
+AssertionError: DataFrame.iloc[:, 2] (column name=""col3"") are different
+
+DataFrame.iloc[:, 2] (column name=""col3"") values are different (75.0 %)
+[index]: [0, 1, 2, 3]
+[left]:  [3, 3, 3, 3]
+[right]: [2, 1, 3, 1]
+
+======================================================================
+FAIL: test_case_2 (builtins.TestCases.test_case_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 26, in test_case_2
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 1303, in assert_frame_equal
+    assert_series_equal(
+    ~~~~~~~~~~~~~~~~~~~^
+        lcol,
+        ^^^^^
+    ...<12 lines>...
+        check_flags=False,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 1021, in assert_series_equal
+    assert_numpy_array_equal(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        lv,
+        ^^^
+    ...<3 lines>...
+        index_values=left.index,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 696, in assert_numpy_array_equal
+    _raise(left, right, err_msg)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 690, in _raise
+    raise_assert_detail(obj, msg, left, right, index_values=index_values)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 620, in raise_assert_detail
+    raise AssertionError(msg)
+AssertionError: DataFrame.iloc[:, 2] (column name=""col3"") are different
+
+DataFrame.iloc[:, 2] (column name=""col3"") values are different (50.0 %)
+[index]: [0, 1]
+[left]:  [3, 3]
+[right]: [3, 1]
+
+======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 60, in test_case_4
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 1303, in assert_frame_equal
+    assert_series_equal(
+    ~~~~~~~~~~~~~~~~~~~^
+        lcol,
+        ^^^^^
+    ...<12 lines>...
+        check_flags=False,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 1021, in assert_series_equal
+    assert_numpy_array_equal(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        lv,
+        ^^^
+    ...<3 lines>...
+        index_values=left.index,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 696, in assert_numpy_array_equal
+    _raise(left, right, err_msg)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 690, in _raise
+    raise_assert_detail(obj, msg, left, right, index_values=index_values)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 620, in raise_assert_detail
+    raise AssertionError(msg)
+AssertionError: DataFrame.iloc[:, 2] (column name=""col3"") are different
+
+DataFrame.iloc[:, 2] (column name=""col3"") values are different (25.0 %)
+[index]: [0, 1, 2, 3]
+[left]:  [2, 2, 1, 3]
+[right]: [2, 2, 1, 1]
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.280s
+
+FAILED (failures=3)"
+bigcodebench,monolithic,BigCodeBench/845,run-656eae3b,1771517311.442884,humaneval_monolithic,monolithic,0,,0,Monolithic,2597,24.634492,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,ModuleNotFoundError,ModuleNotFoundError: No module named 'Levenshtein'
+bigcodebench,monolithic,BigCodeBench/642,run-656eae3b,1771517328.311622,humaneval_monolithic,monolithic,0,,0,Monolithic,1697,16.831478,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/1005,run-656eae3b,1771517346.599771,humaneval_monolithic,monolithic,0,,0,Monolithic,2095,18.246487,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_extraction_path_already_exists (builtins.TestCases.test_extraction_path_already_exists)
+Test Case 5: Extraction Path Already Exists
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 60, in test_extraction_path_already_exists
+AssertionError: 'URL Error: Forbidden' != WindowsPath('C:/VScode/pipeline/mnt/data/task_func_data/existing_extract_path')
+
+======================================================================
+FAIL: test_file_already_exists_at_save_path (builtins.TestCases.test_file_already_exists_at_save_path)
+Test Case 4: File Already Exists at Save Path
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 49, in test_file_already_exists_at_save_path
+AssertionError: 'URL Error: Forbidden' != WindowsPath('C:/VScode/pipeline/mnt/data/task_func_data/existing_file_extract')
+
+======================================================================
+FAIL: test_successful_download_and_extraction_sample_1 (builtins.TestCases.test_successful_download_and_extraction_sample_1)
+Test Case 1: Successful Download and Extraction of Sample 1
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 21, in test_successful_download_and_extraction_sample_1
+AssertionError: 'URL Error: Forbidden' != WindowsPath('C:/VScode/pipeline/mnt/data/task_func_data/sample_1_extract')
+
+======================================================================
+FAIL: test_successful_download_and_extraction_sample_5 (builtins.TestCases.test_successful_download_and_extraction_sample_5)
+Test Case 2: Successful Download and Extraction of Sample 5
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 30, in test_successful_download_and_extraction_sample_5
+AssertionError: 'URL Error: Forbidden' != WindowsPath('C:/VScode/pipeline/mnt/data/task_func_data/sample_5_extract')
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.668s
+
+FAILED (failures=4)"
+bigcodebench,monolithic,BigCodeBench/193,run-656eae3b,1771517369.927111,humaneval_monolithic,monolithic,0,,0,Monolithic,2442,23.29325,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/595,run-656eae3b,1771517385.801285,humaneval_monolithic,monolithic,0,,0,Monolithic,1639,15.851232,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/828,run-656eae3b,1771517402.669771,humaneval_monolithic,monolithic,0,,0,Monolithic,1787,16.849011,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/256,run-656eae3b,1771517418.892516,humaneval_monolithic,monolithic,0,,0,Monolithic,1788,16.208365,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 18, in test_case_1
+AssertionError: '914d18aa8114a0fb5bb2022b2e8bcac8efd954489bf6156a2616d70063c940d3' != '3da4b6faf766416fe75b2e5efd831f0fc907e0cc450e7fb58f61110be0a6ab3a'
+- 914d18aa8114a0fb5bb2022b2e8bcac8efd954489bf6156a2616d70063c940d3
++ 3da4b6faf766416fe75b2e5efd831f0fc907e0cc450e7fb58f61110be0a6ab3a
+
+
+======================================================================
+FAIL: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 41, in test_case_3
+AssertionError: 'a292f52d67514d5eeb0ebda2964fd36a3e7600976f5c6df9f5970044cb1278a2' != 'afd33d74be6cbfb08c6ad76d6f8556ef910e252912d7ebb13603ace3edccd260'
+- a292f52d67514d5eeb0ebda2964fd36a3e7600976f5c6df9f5970044cb1278a2
++ afd33d74be6cbfb08c6ad76d6f8556ef910e252912d7ebb13603ace3edccd260
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.002s
+
+FAILED (failures=2)"
+bigcodebench,monolithic,BigCodeBench/731,run-656eae3b,1771517430.70812,humaneval_monolithic,monolithic,0,,0,Monolithic,1434,11.797745,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/920,run-656eae3b,1771517444.440896,humaneval_monolithic,monolithic,0,,0,Monolithic,1391,13.711991,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/524,run-656eae3b,1771517449.376772,humaneval_monolithic,monolithic,0,,0,Monolithic,1125,4.921384,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/398,run-656eae3b,1771517463.934788,humaneval_monolithic,monolithic,0,,0,Monolithic,1696,14.523924,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/411,run-656eae3b,1771517484.824662,humaneval_monolithic,monolithic,0,,0,Monolithic,2051,20.866553,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/729,run-656eae3b,1771517498.822142,humaneval_monolithic,monolithic,0,,0,Monolithic,1365,13.917569,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/148,run-656eae3b,1771517512.432983,humaneval_monolithic,monolithic,0,,0,Monolithic,1330,13.588617,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/800,run-656eae3b,1771517529.181563,humaneval_monolithic,monolithic,0,,0,Monolithic,2005,16.728292,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+Test Case 1:
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 17, in test_case_1
+AssertionError: Counter({'goals': 11, 'penalties': 5}) != Counter({'goals': 0, 'penalties': 0}) : Test Case 1 Failed
+
+======================================================================
+FAIL: test_case_2 (builtins.TestCases.test_case_2)
+Test Case 2:
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 27, in test_case_2
+AssertionError: Counter({'goals': 16, 'penalties': 8}) != Counter({'goals': 5, 'penalties': 3}) : Test Case 2 Failed
+
+======================================================================
+FAIL: test_case_3 (builtins.TestCases.test_case_3)
+Test Case 3:
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 37, in test_case_3
+AssertionError: Counter({'goals': 11, 'penalties': 5}) != Counter({'goals': 0, 'penalties': 0}) : Test Case 3 Failed
+
+======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+Test Case 4:
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 48, in test_case_4
+AssertionError: Counter({'goals': 16, 'penalties': 8}) != {'goals': 5, 'penalties': 3} : Test Case 4 Failed
+
+======================================================================
+FAIL: test_case_5 (builtins.TestCases.test_case_5)
+Test Case 5:
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 58, in test_case_5
+AssertionError: Counter({'goals': 12, 'penalties': 4}) != Counter({'goals': 1, 'penalties': -1}) : Test Case 5 Failed
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.019s
+
+FAILED (failures=5)"
+bigcodebench,monolithic,BigCodeBench/282,run-656eae3b,1771517545.244219,humaneval_monolithic,monolithic,0,,0,Monolithic,1851,16.040648,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/280,run-656eae3b,1771517574.278188,humaneval_monolithic,monolithic,0,,0,Monolithic,2429,29.013698,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/752,run-656eae3b,1771517595.349566,humaneval_monolithic,monolithic,0,,0,Monolithic,2462,21.036881,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/103,run-656eae3b,1771517610.16148,humaneval_monolithic,monolithic,0,,0,Monolithic,1762,14.793039,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/287,run-656eae3b,1771517632.132705,humaneval_monolithic,monolithic,0,,0,Monolithic,1878,21.950476,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_empty_files (builtins.TestCases.test_empty_files)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 50, in test_empty_files
+AssertionError: {'hello': 2, 'world': 1} != {}
+- {'hello': 2, 'world': 1}
++ {}
+
+======================================================================
+FAIL: test_files_with_special_characters (builtins.TestCases.test_files_with_special_characters)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 63, in test_files_with_special_characters
+AssertionError: {'hello': 2, 'world': 1} != {'hello-world': 1, 'hello_python': 1}
+- {'hello': 2, 'world': 1}
++ {'hello-world': 1, 'hello_python': 1}
+
+======================================================================
+FAIL: test_multiple_files (builtins.TestCases.test_multiple_files)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 39, in test_multiple_files
+AssertionError: {'hello': 2, 'world': 1} != {'hello': 2, 'world': 2, 'python': 2, 'coding': 1}
+- {'hello': 2, 'world': 1}
++ {'coding': 1, 'hello': 2, 'python': 2, 'world': 2}
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.193s
+
+FAILED (failures=3)"
+bigcodebench,monolithic,BigCodeBench/119,run-656eae3b,1771517641.503347,humaneval_monolithic,monolithic,0,,0,Monolithic,1325,9.350492,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,TimeoutError,Timeout after 30.0s
+bigcodebench,monolithic,BigCodeBench/31,run-656eae3b,1771517662.455253,humaneval_monolithic,monolithic,0,,0,Monolithic,2070,20.935092,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 25, in test_case_1
+  File ""<string>"", line 9, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 142, in word_tokenize
+    sentences = [text] if preserve_line else sent_tokenize(text, language)
+                                             ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 119, in sent_tokenize
+    tokenizer = _get_punkt_tokenizer(language)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 105, in _get_punkt_tokenizer
+    return PunktTokenizer(language)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\punkt.py"", line 1744, in __init__
+    self.load_lang(lang)
+    ~~~~~~~~~~~~~~^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\punkt.py"", line 1749, in load_lang
+    lang_dir = find(f""tokenizers/punkt_tab/{lang}/"")
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\data.py"", line 579, in find
+    raise LookupError(resource_not_found)
+LookupError: 
+**********************************************************************
+  Resource [93mpunkt_tab[0m not found.
+  Please use the NLTK Downloader to obtain the resource:
+
+  [31m>>> import nltk
+  >>> nltk.download('punkt_tab')
+  [0m
+  For more information see: https://www.nltk.org/data.html
+
+  Attempted to load [93mtokenizers/punkt_tab/english/[0m
+
+  Searched in:
+    - 'C:\\Users\\jbeem/nltk_data'
+    - 'C:\\Python314\\nltk_data'
+    - 'C:\\Python314\\share\\nltk_data'
+    - 'C:\\Python314\\lib\\nltk_data'
+    - 'C:\\Users\\jbeem\\AppData\\Roaming\\nltk_data'
+    - 'C:\\nltk_data'
+    - 'D:\\nltk_data'
+    - 'E:\\nltk_data'
+**********************************************************************
+
+
+======================================================================
+ERROR: test_case_2 (builtins.TestCases.test_case_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 31, in test_case_2
+  File ""<string>"", line 9, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 142, in word_tokenize
+    sentences = [text] if preserve_line else sent_tokenize(text, language)
+                                             ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 119, in sent_tokenize
+    tokenizer = _get_punkt_tokenizer(language)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 105, in _get_punkt_tokenizer
+    return PunktTokenizer(language)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\punkt.py"", line 1744, in __init__
+    self.load_lang(lang)
+    ~~~~~~~~~~~~~~^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\punkt.py"", line 1749, in load_lang
+    lang_dir = find(f""tokenizers/punkt_tab/{lang}/"")
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\data.py"", line 579, in find
+    raise LookupError(resource_not_found)
+LookupError: 
+**********************************************************************
+  Resource [93mpunkt_tab[0m not found.
+  Please use the NLTK Downloader to obtain the resource:
+
+  [31m>>> import nltk
+  >>> nltk.download('punkt_tab')
+  [0m
+  For more information see: https://www.nltk.org/data.html
+
+  Attempted to load [93mtokenizers/punkt_tab/english/[0m
+
+  Searched in:
+    - 'C:\\Users\\jbeem/nltk_data'
+    - 'C:\\Python314\\nltk_data'
+    - 'C:\\Python314\\share\\nltk_data'
+    - 'C:\\Python314\\lib\\nltk_data'
+    - 'C:\\Users\\jbeem\\AppData\\Roaming\\nltk_data'
+    - 'C:\\nltk_data'
+    - 'D:\\nltk_data'
+    - 'E:\\nltk_data'
+**********************************************************************
+
+
+======================================================================
+ERROR: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 41, in test_case_3
+  File ""<string>"", line 9, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 142, in word_tokenize
+    sentences = [text] if preserve_line else sent_tokenize(text, language)
+                                             ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 119, in sent_tokenize
+    tokenizer = _get_punkt_tokenizer(language)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 105, in _get_punkt_tokenizer
+    return PunktTokenizer(language)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\punkt.py"", line 1744, in __init__
+    self.load_lang(lang)
+    ~~~~~~~~~~~~~~^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\punkt.py"", line 1749, in load_lang
+    lang_dir = find(f""tokenizers/punkt_tab/{lang}/"")
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\data.py"", line 579, in find
+    raise LookupError(resource_not_found)
+LookupError: 
+**********************************************************************
+  Resource [93mpunkt_tab[0m not found.
+  Please use the NLTK Downloader to obtain the resource:
+
+  [31m>>> import nltk
+  >>> nltk.download('punkt_tab')
+  [0m
+  For more information see: https://www.nltk.org/data.html
+
+  Attempted to load [93mtokenizers/punkt_tab/english/[0m
+
+  Searched in:
+    - 'C:\\Users\\jbeem/nltk_data'
+    - 'C:\\Python314\\nltk_data'
+    - 'C:\\Python314\\share\\nltk_data'
+    - 'C:\\Python314\\lib\\nltk_data'
+    - 'C:\\Users\\jbeem\\AppData\\Roaming\\nltk_data'
+    - 'C:\\nltk_data'
+    - 'D:\\nltk_data'
+    - 'E:\\nltk_data'
+**********************************************************************
+
+
+======================================================================
+ERROR: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 46, in test_case_4
+  File ""<string>"", line 9, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 142, in word_tokenize
+    sentences = [text] if preserve_line else sent_tokenize(text, language)
+                                             ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 119, in sent_tokenize
+    tokenizer = _get_punkt_tokenizer(language)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 105, in _get_punkt_tokenizer
+    return PunktTokenizer(language)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\punkt.py"", line 1744, in __init__
+    self.load_lang(lang)
+    ~~~~~~~~~~~~~~^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\punkt.py"", line 1749, in load_lang
+    lang_dir = find(f""tokenizers/punkt_tab/{lang}/"")
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\data.py"", line 579, in find
+    raise LookupError(resource_not_found)
+LookupError: 
+**********************************************************************
+  Resource [93mpunkt_tab[0m not found.
+  Please use the NLTK Downloader to obtain the resource:
+
+  [31m>>> import nltk
+  >>> nltk.download('punkt_tab')
+  [0m
+  For more information see: https://www.nltk.org/data.html
+
+  Attempted to load [93mtokenizers/punkt_tab/english/[0m
+
+  Searched in:
+    - 'C:\\Users\\jbeem/nltk_data'
+    - 'C:\\Python314\\nltk_data'
+    - 'C:\\Python314\\share\\nltk_data'
+    - 'C:\\Python314\\lib\\nltk_data'
+    - 'C:\\Users\\jbeem\\AppData\\Roaming\\nltk_data'
+    - 'C:\\nltk_data'
+    - 'D:\\nltk_data'
+    - 'E:\\nltk_data'
+**********************************************************************
+
+
+======================================================================
+ERROR: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 54, in test_case_5
+  File ""<string>"", line 9, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 142, in word_tokenize
+    sentences = [text] if preserve_line else sent_tokenize(text, language)
+                                             ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 119, in sent_tokenize
+    tokenizer = _get_punkt_tokenizer(language)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\__init__.py"", line 105, in _get_punkt_tokenizer
+    return PunktTokenizer(language)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\punkt.py"", line 1744, in __init__
+    self.load_lang(lang)
+    ~~~~~~~~~~~~~~^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\tokenize\punkt.py"", line 1749, in load_lang
+    lang_dir = find(f""tokenizers/punkt_tab/{lang}/"")
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\nltk\data.py"", line 579, in find
+    raise LookupError(resource_not_found)
+LookupError: 
+**********************************************************************
+  Resource [93mpunkt_tab[0m not found.
+  Please use the NLTK Downloader to obtain the resource:
+
+  [31m>>> import nltk
+  >>> nltk.download('punkt_tab')
+  [0m
+  For more information see: https://www.nltk.org/data.html
+
+  Attempted to load [93mtokenizers/punkt_tab/english/[0m
+
+  Searched in:
+    - 'C:\\Users\\jbeem/nltk_data'
+    - 'C:\\Python314\\nltk_data'
+    - 'C:\\Python314\\share\\nltk_data'
+    - 'C:\\Python314\\lib\\nltk_data'
+    - 'C:\\Users\\jbeem\\AppData\\Roaming\\nltk_data'
+    - 'C:\\nltk_data'
+    - 'D:\\nltk_data'
+    - 'E:\\nltk_data'
+**********************************************************************
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.011s
+
+FAILED (errors=5)"
+bigcodebench,monolithic,BigCodeBench/966,run-656eae3b,1771517678.011004,humaneval_monolithic,monolithic,0,,0,Monolithic,1860,15.520786,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/982,run-656eae3b,1771517681.450134,humaneval_monolithic,monolithic,0,,0,Monolithic,996,3.420422,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/604,run-656eae3b,1771517699.266963,humaneval_monolithic,monolithic,0,,0,Monolithic,1677,17.802778,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_compilation_failure (builtins.TestCases.test_compilation_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 17, in test_compilation_failure
+  File ""<string>"", line 11, in task_func
+  File ""C:\Python314\Lib\subprocess.py"", line 554, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\subprocess.py"", line 1038, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\subprocess.py"", line 1552, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+                             # no special security
+                             ^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+                             cwd,
+                             ^^^^
+                             startupinfo)
+                             ^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+
+======================================================================
+ERROR: test_compiler_not_found (builtins.TestCases.test_compiler_not_found)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 23, in test_compiler_not_found
+  File ""<string>"", line 11, in task_func
+  File ""C:\Python314\Lib\subprocess.py"", line 554, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\subprocess.py"", line 1038, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\subprocess.py"", line 1552, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+                             # no special security
+                             ^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+                             cwd,
+                             ^^^^
+                             startupinfo)
+                             ^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+
+======================================================================
+ERROR: test_empty_file (builtins.TestCases.test_empty_file)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 27, in test_empty_file
+  File ""<string>"", line 11, in task_func
+  File ""C:\Python314\Lib\subprocess.py"", line 554, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\subprocess.py"", line 1038, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\subprocess.py"", line 1552, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+                             # no special security
+                             ^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+                             cwd,
+                             ^^^^
+                             startupinfo)
+                             ^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+
+======================================================================
+ERROR: test_logging_output (builtins.TestCases.test_logging_output)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 32, in test_logging_output
+  File ""<string>"", line 11, in task_func
+  File ""C:\Python314\Lib\subprocess.py"", line 554, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\subprocess.py"", line 1038, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\subprocess.py"", line 1552, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+                             # no special security
+                             ^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+                             cwd,
+                             ^^^^
+                             startupinfo)
+                             ^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+
+======================================================================
+ERROR: test_successful_compilation (builtins.TestCases.test_successful_compilation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 13, in test_successful_compilation
+  File ""<string>"", line 11, in task_func
+  File ""C:\Python314\Lib\subprocess.py"", line 554, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\subprocess.py"", line 1038, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\subprocess.py"", line 1552, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+                             # no special security
+                             ^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+                             cwd,
+                             ^^^^
+                             startupinfo)
+                             ^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.055s
+
+FAILED (errors=5)"
+bigcodebench,monolithic,BigCodeBench/656,run-656eae3b,1771517714.487534,humaneval_monolithic,monolithic,0,,0,Monolithic,1728,15.207781,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/1119,run-656eae3b,1771517729.70857,humaneval_monolithic,monolithic,0,,0,Monolithic,1506,15.200516,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/1115,run-656eae3b,1771517744.026209,humaneval_monolithic,monolithic,0,,0,Monolithic,1718,14.283065,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/723,run-656eae3b,1771517762.00802,humaneval_monolithic,monolithic,0,,0,Monolithic,1624,17.962919,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_no_table (builtins.TestCases.test_no_table)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 38, in test_no_table
+AssertionError: Exception not raised
+
+======================================================================
+FAIL: test_overwrite_existing_csv (builtins.TestCases.test_overwrite_existing_csv)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 53, in test_overwrite_existing_csv
+  File ""C:\Python314\Lib\unittest\mock.py"", line 997, in assert_called_once_with
+    return self.assert_called_with(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File ""C:\Python314\Lib\unittest\mock.py"", line 985, in assert_called_with
+    raise AssertionError(_error_message()) from cause
+AssertionError: expected call not found.
+Expected: open('scraped_data.csv', 'w')
+  Actual: open('scraped_data.csv', 'w', newline='', encoding='utf-8')
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.027s
+
+FAILED (failures=2)"
+bigcodebench,monolithic,BigCodeBench/700,run-656eae3b,1771517774.049055,humaneval_monolithic,monolithic,0,,0,Monolithic,1318,12.024574,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/68,run-656eae3b,1771517788.045153,humaneval_monolithic,monolithic,0,,0,Monolithic,1371,13.98369,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/659,run-656eae3b,1771517807.196884,humaneval_monolithic,monolithic,0,,0,Monolithic,2016,19.132601,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/1086,run-656eae3b,1771517822.341796,humaneval_monolithic,monolithic,0,,0,Monolithic,1602,15.125548,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/474,run-656eae3b,1771517838.902064,humaneval_monolithic,monolithic,0,,0,Monolithic,1960,16.547639,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_10 (builtins.TestCases.test_case_10)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 92, in test_case_10
+AssertionError: Exception not raised
+
+======================================================================
+FAIL: test_case_9 (builtins.TestCases.test_case_9)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 88, in test_case_9
+AssertionError: Exception not raised
+
+----------------------------------------------------------------------
+Ran 12 tests in 3.471s
+
+FAILED (failures=2)"
+bigcodebench,monolithic,BigCodeBench/231,run-656eae3b,1771517854.868572,humaneval_monolithic,monolithic,0,,0,Monolithic,1865,15.954735,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 9, in test_case_1
+AssertionError: '' != 'Fit results: mu = 10.76,  std = 39.42'
++ Fit results: mu = 10.76,  std = 39.42
+
+
+======================================================================
+FAIL: test_case_2 (builtins.TestCases.test_case_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 15, in test_case_2
+AssertionError: '' != 'Fit results: mu = 40.53,  std = 0.00'
++ Fit results: mu = 40.53,  std = 0.00
+
+
+======================================================================
+FAIL: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 21, in test_case_3
+AssertionError: '' != 'Fit results: mu = 27.52,  std = 32.92'
++ Fit results: mu = 27.52,  std = 32.92
+
+
+======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 27, in test_case_4
+AssertionError: '' != 'Fit results: mu = 0.00,  std = 0.00'
++ Fit results: mu = 0.00,  std = 0.00
+
+
+======================================================================
+FAIL: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 33, in test_case_5
+AssertionError: '' != 'Fit results: mu = -88.28,  std = 0.00'
++ Fit results: mu = -88.28,  std = 0.00
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.605s
+
+FAILED (failures=5)"
+bigcodebench,monolithic,BigCodeBench/945,run-656eae3b,1771517878.886936,humaneval_monolithic,monolithic,0,,0,Monolithic,2468,23.990774,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_forecasted_values_increasing (builtins.TestCases.test_forecasted_values_increasing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 26, in test_forecasted_values_increasing
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.011s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/50,run-656eae3b,1771517896.588104,humaneval_monolithic,monolithic,0,,0,Monolithic,2100,17.681137,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 6, in test_case_1
+  File ""<string>"", line 55, in validate_output
+AssertionError: dtype('O') != 'datetime64[ns]'
+
+======================================================================
+FAIL: test_case_2 (builtins.TestCases.test_case_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 9, in test_case_2
+  File ""<string>"", line 55, in validate_output
+AssertionError: dtype('O') != 'datetime64[ns]'
+
+======================================================================
+FAIL: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 12, in test_case_3
+  File ""<string>"", line 55, in validate_output
+AssertionError: dtype('O') != 'datetime64[ns]'
+
+======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 15, in test_case_4
+  File ""<string>"", line 55, in validate_output
+AssertionError: dtype('O') != 'datetime64[ns]'
+
+======================================================================
+FAIL: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 18, in test_case_5
+  File ""<string>"", line 55, in validate_output
+AssertionError: dtype('O') != 'datetime64[ns]'
+
+======================================================================
+FAIL: test_case_6 (builtins.TestCases.test_case_6)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 40, in test_case_6
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 1303, in assert_frame_equal
+    assert_series_equal(
+    ~~~~~~~~~~~~~~~~~~~^
+        lcol,
+        ^^^^^
+    ...<12 lines>...
+        check_flags=False,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 999, in assert_series_equal
+    assert_attr_equal(""dtype"", left, right, obj=f""Attributes of {obj}"")
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 421, in assert_attr_equal
+    raise_assert_detail(obj, msg, left_attr, right_attr)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\_testing\asserters.py"", line 620, in raise_assert_detail
+    raise AssertionError(msg)
+AssertionError: Attributes of DataFrame.iloc[:, 1] (column name=""Datetime"") are different
+
+Attribute ""dtype"" are different
+[left]:  object
+[right]: datetime64[ns]
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.742s
+
+FAILED (failures=6)"
+bigcodebench,monolithic,BigCodeBench/470,run-656eae3b,1771517910.747749,humaneval_monolithic,monolithic,0,,0,Monolithic,1931,14.140498,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_2 (builtins.TestCases.test_case_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 21, in test_case_2
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.184s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/725,run-656eae3b,1771517923.01918,humaneval_monolithic,monolithic,0,,0,Monolithic,1521,12.260752,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/867,run-656eae3b,1771517935.167652,humaneval_monolithic,monolithic,0,,0,Monolithic,1559,12.12813,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/171,run-656eae3b,1771517952.306896,humaneval_monolithic,monolithic,0,,0,Monolithic,1923,17.116459,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 21, in test_case_3
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\frame.py"", line 4113, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\indexes\range.py"", line 417, in get_loc
+    raise KeyError(key)
+KeyError: 'Percentage'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.101s
+
+FAILED (errors=1)"
+bigcodebench,monolithic,BigCodeBench/226,run-656eae3b,1771517968.779177,humaneval_monolithic,monolithic,0,,0,Monolithic,1740,16.461292,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 13, in test_case_1
+AssertionError: '' != 'x'
++ x
+
+
+======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 40, in test_case_4
+AssertionError: 112 != 210
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.603s
+
+FAILED (failures=2)"
+bigcodebench,monolithic,BigCodeBench/263,run-656eae3b,1771517987.203438,humaneval_monolithic,monolithic,0,,0,Monolithic,1830,18.403362,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/301,run-656eae3b,1771518054.942454,humaneval_monolithic,monolithic,0,,0,Monolithic,5602,67.724948,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 9, in test_case_1
+AssertionError: 0.9206267664155906 != 0.95949 within 5 places (0.03886323358440935 difference)
+
+======================================================================
+FAIL: test_case_2 (builtins.TestCases.test_case_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 15, in test_case_2
+AssertionError: 0.1725696330273575 != 0.415415 within 5 places (0.24284536697264247 difference)
+
+======================================================================
+FAIL: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 20, in test_case_3
+AssertionError: 0.9206267664155906 != 0.959492 within 5 places (0.03886523358440941 difference)
+
+======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 25, in test_case_4
+AssertionError: 0.42884258086335747 != 0.65486 within 5 places (0.22601741913664253 difference)
+
+======================================================================
+FAIL: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 30, in test_case_5
+AssertionError: 0.7077075065009433 != 0.841253 within 5 places (0.13354549349905676 difference)
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.050s
+
+FAILED (failures=5)"
+bigcodebench,monolithic,BigCodeBench/73,run-656eae3b,1771518072.347695,humaneval_monolithic,monolithic,0,,0,Monolithic,1963,17.385864,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/823,run-656eae3b,1771518074.822806,humaneval_monolithic,monolithic,0,,0,Monolithic,811,2.461649,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/504,run-656eae3b,1771518093.552841,humaneval_monolithic,monolithic,0,,0,Monolithic,1884,18.714985,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/772,run-656eae3b,1771518096.510221,humaneval_monolithic,monolithic,0,,0,Monolithic,991,2.938549,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/791,run-656eae3b,1771518114.854635,humaneval_monolithic,monolithic,0,,0,Monolithic,1638,18.33373,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_empty_list (builtins.TestCases.test_empty_list)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 33, in test_empty_list
+  File ""<string>"", line 13, in task_func
+StopIteration
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+FAILED (errors=1)"
+bigcodebench,monolithic,BigCodeBench/965,run-656eae3b,1771518129.202043,humaneval_monolithic,monolithic,0,,0,Monolithic,1734,14.335215,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/742,run-656eae3b,1771518145.979211,humaneval_monolithic,monolithic,0,,0,Monolithic,2228,16.759153,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/104,run-656eae3b,1771518162.870235,humaneval_monolithic,monolithic,0,,0,Monolithic,2001,16.873321,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/698,run-656eae3b,1771518179.422252,humaneval_monolithic,monolithic,0,,0,Monolithic,1701,16.538697,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/262,run-656eae3b,1771518182.302947,humaneval_monolithic,monolithic,0,,0,Monolithic,767,2.864095,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/987,run-f43ceaba,1771522082.014766,humaneval_monolithic,monolithic,0,,0,Monolithic,2419,21.51217,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/671,run-f43ceaba,1771522096.765976,humaneval_monolithic,monolithic,0,,0,Monolithic,1294,14.72334,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 10, in test_case_1
+  File ""<string>"", line 8, in task_func
+FileNotFoundError: [Errno 2] No such file or directory: './source\\file_0_7311.json'
+
+======================================================================
+ERROR: test_case_2 (builtins.TestCases.test_case_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 20, in test_case_2
+  File ""<string>"", line 8, in task_func
+FileNotFoundError: [Errno 2] No such file or directory: './src\\file_0_3201.json'
+
+======================================================================
+ERROR: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 29, in test_case_3
+  File ""<string>"", line 8, in task_func
+FileNotFoundError: [Errno 2] No such file or directory: './s\\file_0_2033.json'
+
+======================================================================
+ERROR: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 40, in test_case_5
+  File ""<string>"", line 8, in task_func
+FileNotFoundError: [Errno 2] No such file or directory: './source\\file_0_1926.json'
+
+======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 35, in test_case_4
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+FAILED (failures=1, errors=4)"
+bigcodebench,monolithic,BigCodeBench/344,run-f43ceaba,1771522113.382497,humaneval_monolithic,monolithic,0,,0,Monolithic,1626,16.595629,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 45, in test_case_5
+AssertionError: FileExistsError not raised
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.018s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/714,run-f43ceaba,1771522125.740129,humaneval_monolithic,monolithic,0,,0,Monolithic,1341,12.329928,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/690,run-f43ceaba,1771522139.647899,humaneval_monolithic,monolithic,0,,0,Monolithic,1245,13.889417,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/686,run-f43ceaba,1771522154.599085,humaneval_monolithic,monolithic,0,,0,Monolithic,1715,14.915814,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 4, in test_case_1
+  File ""<string>"", line 13, in task_func
+TypeError: OneHotEncoder.__init__() got an unexpected keyword argument 'sparse'
+
+======================================================================
+ERROR: test_case_2 (builtins.TestCases.test_case_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 6, in test_case_2
+  File ""<string>"", line 13, in task_func
+TypeError: OneHotEncoder.__init__() got an unexpected keyword argument 'sparse'
+
+======================================================================
+ERROR: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 11, in test_case_3
+  File ""<string>"", line 13, in task_func
+TypeError: OneHotEncoder.__init__() got an unexpected keyword argument 'sparse'
+
+======================================================================
+ERROR: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 23, in test_case_4
+  File ""<string>"", line 13, in task_func
+TypeError: OneHotEncoder.__init__() got an unexpected keyword argument 'sparse'
+
+======================================================================
+ERROR: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 34, in test_case_5
+  File ""<string>"", line 13, in task_func
+TypeError: OneHotEncoder.__init__() got an unexpected keyword argument 'sparse'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.002s
+
+FAILED (errors=5)"
+bigcodebench,monolithic,BigCodeBench/651,run-f43ceaba,1771522172.936995,humaneval_monolithic,monolithic,0,,0,Monolithic,1426,18.309104,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 49, in test_case_5
+AssertionError: np.int64(0) != 1
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.702s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/67,run-f43ceaba,1771522194.077439,humaneval_monolithic,monolithic,0,,0,Monolithic,1997,21.101542,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 48, in test_case_3
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.054s
+
+FAILED (failures=1)"
+bigcodebench,monolithic,BigCodeBench/493,run-f43ceaba,1771522217.269221,humaneval_monolithic,monolithic,0,,0,Monolithic,2097,23.154155,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_6 (builtins.TestCases.test_case_6)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 51, in test_case_6
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_case_7 (builtins.TestCases.test_case_7)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 55, in test_case_7
+AssertionError: TypeError not raised
+
+----------------------------------------------------------------------
+Ran 7 tests in 2.270s
+
+FAILED (failures=2)"
+bigcodebench,monolithic,BigCodeBench/160,run-f43ceaba,1771522237.319637,humaneval_monolithic,monolithic,0,,0,Monolithic,2036,19.954043,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/53,run-f43ceaba,1771522254.23595,humaneval_monolithic,monolithic,0,,0,Monolithic,1758,16.883491,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 33)",,,,,,,,,,,,,,,,,,2,2,1,1,False,SyntaxError,"invalid character '✓' (U+2713) (<unknown>, line 33)"
+bigcodebench,monolithic,BigCodeBench/767,run-f43ceaba,1771522268.071632,humaneval_monolithic,monolithic,0,,0,Monolithic,1273,13.80654,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/361,run-f43ceaba,1771522291.614141,humaneval_monolithic,monolithic,0,,0,Monolithic,2294,23.49567,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_empty_excel_file (builtins.TestCases.test_empty_excel_file)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 12, in setUp
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\util\_decorators.py"", line 333, in wrapper
+    return func(*args, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\generic.py"", line 2439, in to_excel
+    formatter.write(
+    ~~~~~~~~~~~~~~~^
+        excel_writer,
+        ^^^^^^^^^^^^^
+    ...<6 lines>...
+        engine_kwargs=engine_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\formats\excel.py"", line 943, in write
+    writer = ExcelWriter(
+        writer,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\excel\_openpyxl.py"", line 57, in __init__
+    from openpyxl.workbook import Workbook
+ModuleNotFoundError: No module named 'openpyxl'
+
+======================================================================
+ERROR: test_file_not_found (builtins.TestCases.test_file_not_found)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 12, in setUp
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\util\_decorators.py"", line 333, in wrapper
+    return func(*args, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\generic.py"", line 2439, in to_excel
+    formatter.write(
+    ~~~~~~~~~~~~~~~^
+        excel_writer,
+        ^^^^^^^^^^^^^
+    ...<6 lines>...
+        engine_kwargs=engine_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\formats\excel.py"", line 943, in write
+    writer = ExcelWriter(
+        writer,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\excel\_openpyxl.py"", line 57, in __init__
+    from openpyxl.workbook import Workbook
+ModuleNotFoundError: No module named 'openpyxl'
+
+======================================================================
+ERROR: test_normal_functionality (builtins.TestCases.test_normal_functionality)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 12, in setUp
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\util\_decorators.py"", line 333, in wrapper
+    return func(*args, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\generic.py"", line 2439, in to_excel
+    formatter.write(
+    ~~~~~~~~~~~~~~~^
+        excel_writer,
+        ^^^^^^^^^^^^^
+    ...<6 lines>...
+        engine_kwargs=engine_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\formats\excel.py"", line 943, in write
+    writer = ExcelWriter(
+        writer,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\excel\_openpyxl.py"", line 57, in __init__
+    from openpyxl.workbook import Workbook
+ModuleNotFoundError: No module named 'openpyxl'
+
+======================================================================
+ERROR: test_overwrite_existing_csv (builtins.TestCases.test_overwrite_existing_csv)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 12, in setUp
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\util\_decorators.py"", line 333, in wrapper
+    return func(*args, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\generic.py"", line 2439, in to_excel
+    formatter.write(
+    ~~~~~~~~~~~~~~~^
+        excel_writer,
+        ^^^^^^^^^^^^^
+    ...<6 lines>...
+        engine_kwargs=engine_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\formats\excel.py"", line 943, in write
+    writer = ExcelWriter(
+        writer,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\excel\_openpyxl.py"", line 57, in __init__
+    from openpyxl.workbook import Workbook
+ModuleNotFoundError: No module named 'openpyxl'
+
+======================================================================
+ERROR: test_sheet_not_found (builtins.TestCases.test_sheet_not_found)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 12, in setUp
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\util\_decorators.py"", line 333, in wrapper
+    return func(*args, **kwargs)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\generic.py"", line 2439, in to_excel
+    formatter.write(
+    ~~~~~~~~~~~~~~~^
+        excel_writer,
+        ^^^^^^^^^^^^^
+    ...<6 lines>...
+        engine_kwargs=engine_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\formats\excel.py"", line 943, in write
+    writer = ExcelWriter(
+        writer,
+    ...<2 lines>...
+        engine_kwargs=engine_kwargs,
+    )
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\excel\_openpyxl.py"", line 57, in __init__
+    from openpyxl.workbook import Workbook
+ModuleNotFoundError: No module named 'openpyxl'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.012s
+
+FAILED (errors=5)"
+bigcodebench,monolithic,BigCodeBench/286,run-f43ceaba,1771522312.270539,humaneval_monolithic,monolithic,0,,0,Monolithic,1860,20.623864,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/414,run-f43ceaba,1771522331.254969,humaneval_monolithic,monolithic,0,,0,Monolithic,1642,18.947826,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,
+bigcodebench,monolithic,BigCodeBench/363,run-f43ceaba,1771522346.702947,humaneval_monolithic,monolithic,0,,0,Monolithic,1535,15.408456,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_large_numbers (builtins.TestCases.test_large_numbers)
+Test function with large numbers.
+----------------------------------------------------------------------
+AttributeError: module '__mp_main__' has no attribute 'calculate_factorial'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File ""<string>"", line 22, in test_large_numbers
+  File ""<string>"", line 18, in task_func
+  File ""C:\Python314\Lib\multiprocessing\pool.py"", line 367, in map
+    return self._map_async(func, iterable, mapstar, chunksize).get()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File ""C:\Python314\Lib\multiprocessing\pool.py"", line 774, in get
+    raise self._value
+  File ""C:\Python314\Lib\multiprocessing\pool.py"", line 540, in _handle_tasks
+    put(task)
+    ~~~^^^^^^
+  File ""C:\Python314\Lib\multiprocessing\connection.py"", line 212, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+                     ~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File ""C:\Python314\Lib\multiprocessing\reduction.py"", line 51, in dumps
+    cls(buf, protocol).dump(obj)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+_pickle.PicklingError: Can't pickle <function calculate_factorial at 0x0000019A19AC2C40>: it's not found as __main__.calculate_factorial
+when serializing tuple item 0
+when serializing tuple item 0
+when serializing tuple item 3
+
+======================================================================
+ERROR: test_return_type (builtins.TestCases.test_return_type)
+Test that the function returns a dictionary.
+----------------------------------------------------------------------
+AttributeError: module '__mp_main__' has no attribute 'calculate_factorial'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File ""<string>"", line 6, in test_return_type
+  File ""<string>"", line 18, in task_func
+  File ""C:\Python314\Lib\multiprocessing\pool.py"", line 367, in map
+    return self._map_async(func, iterable, mapstar, chunksize).get()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File ""C:\Python314\Lib\multiprocessing\pool.py"", line 774, in get
+    raise self._value
+  File ""C:\Python314\Lib\multiprocessing\pool.py"", line 540, in _handle_tasks
+    put(task)
+    ~~~^^^^^^
+  File ""C:\Python314\Lib\multiprocessing\connection.py"", line 212, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+                     ~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File ""C:\Python314\Lib\multiprocessing\reduction.py"", line 51, in dumps
+    cls(buf, protocol).dump(obj)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+_pickle.PicklingError: Can't pickle <function calculate_factorial at 0x0000019A19AC2C40>: it's not found as __main__.calculate_factorial
+when serializing tuple item 0
+when serializing tuple item 0
+when serializing tuple item 3
+
+======================================================================
+ERROR: test_single_element (builtins.TestCases.test_single_element)
+Test function with a single-element list.
+----------------------------------------------------------------------
+AttributeError: module '__mp_main__' has no attribute 'calculate_factorial'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File ""<string>"", line 14, in test_single_element
+  File ""<string>"", line 18, in task_func
+  File ""C:\Python314\Lib\multiprocessing\pool.py"", line 367, in map
+    return self._map_async(func, iterable, mapstar, chunksize).get()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File ""C:\Python314\Lib\multiprocessing\pool.py"", line 774, in get
+    raise self._value
+  File ""C:\Python314\Lib\multiprocessing\pool.py"", line 540, in _handle_tasks
+    put(task)
+    ~~~^^^^^^
+  File ""C:\Python314\Lib\multiprocessing\connection.py"", line 212, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+                     ~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File ""C:\Python314\Lib\multiprocessing\reduction.py"", line 51, in dumps
+    cls(buf, protocol).dump(obj)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+_pickle.PicklingError: Can't pickle <function calculate_factorial at 0x0000019A19AC2C40>: it's not found as __main__.calculate_factorial
+when serializing tuple item 0
+when serializing tuple item 0
+when serializing tuple item 3
+
+======================================================================
+ERROR: test_very_large_number (builtins.TestCases.test_very_large_number)
+Test function with a very large number to check for performance or overflow issues.
+----------------------------------------------------------------------
+AttributeError: module '__mp_main__' has no attribute 'calculate_factorial'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File ""<string>"", line 31, in test_very_large_number
+  File ""<string>"", line 18, in task_func
+  File ""C:\Python314\Lib\multiprocessing\pool.py"", line 367, in map
+    return self._map_async(func, iterable, mapstar, chunksize).get()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File ""C:\Python314\Lib\multiprocessing\pool.py"", line 774, in get
+    raise self._value
+  File ""C:\Python314\Lib\multiprocessing\pool.py"", line 540, in _handle_tasks
+    put(task)
+    ~~~^^^^^^
+  File ""C:\Python314\Lib\multiprocessing\connection.py"", line 212, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+                     ~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File ""C:\Python314\Lib\multiprocessing\reduction.py"", line 51, in dumps
+    cls(buf, protocol).dump(obj)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+_pickle.PicklingError: Can't pickle <function calculate_factorial at 0x0000019A19AC2C40>: it's not found as __main__.calculate_factorial
+when serializing tuple item 0
+when serializing tuple item 0
+when serializing tuple item 3
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.552s
+
+FAILED (errors=4)"
+bigcodebench,monolithic,BigCodeBench/145,run-f43ceaba,1771522363.623247,humaneval_monolithic,monolithic,0,,0,Monolithic,1316,16.888587,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_csv_writer_usage (builtins.TestCases.test_csv_writer_usage)
+Test that csv.DictWriter is used correctly.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 29, in test_csv_writer_usage
+  File ""C:\Python314\Lib\unittest\mock.py"", line 954, in assert_called
+    raise AssertionError(msg)
+AssertionError: Expected 'DictWriter' to have been called.
+
+======================================================================
+FAIL: test_csv_writing (builtins.TestCases.test_csv_writing)
+Test that the CSV writer writes the expected number of rows.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 42, in test_csv_writing
+  File ""C:\Python314\Lib\unittest\mock.py"", line 964, in assert_called_once
+    raise AssertionError(msg)
+AssertionError: Expected 'writeheader' to have been called once. Called 0 times.
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.010s
+
+FAILED (failures=2)"
+bigcodebench,monolithic,BigCodeBench/348,run-f43ceaba,1771522380.186263,humaneval_monolithic,monolithic,0,,0,Monolithic,1592,16.53681,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 12, in test_case_1
+AssertionError: 0 != 3
+
+======================================================================
+FAIL: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 28, in test_case_3
+AssertionError: 0 != 2
+
+======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 36, in test_case_4
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 44, in test_case_5
+AssertionError: 0 != 4
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.024s
+
+FAILED (failures=4)"
+bigcodebench,monolithic,BigCodeBench/559,run-f43ceaba,1771522396.263246,humaneval_monolithic,monolithic,0,,0,Monolithic,1522,16.045774,,,,,,,,,,,,,,,,,,,,2,2,1,1,False,AssertionError,"======================================================================
+ERROR: test_case_2 (builtins.TestCases.test_case_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 19, in test_case_2
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\frame.py"", line 4113, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\indexes\range.py"", line 417, in get_loc
+    raise KeyError(key)
+KeyError: 'A'
+
+======================================================================
+ERROR: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 28, in test_case_3
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\frame.py"", line 4113, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\indexes\range.py"", line 417, in get_loc
+    raise KeyError(key)
+KeyError: 'A'
+
+======================================================================
+ERROR: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 37, in test_case_4
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\frame.py"", line 4113, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\indexes\range.py"", line 417, in get_loc
+    raise KeyError(key)
+KeyError: 'A'
+
+======================================================================
+ERROR: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 46, in test_case_5
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\frame.py"", line 4113, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\indexes\range.py"", line 417, in get_loc
+    raise KeyError(key)
+KeyError: 'A'
+
+======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 8, in test_case_1
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.461s
+
+FAILED (failures=1, errors=4)"
+bigcodebench,monolithic,BigCodeBench/297,run-f43ceaba,1771522411.112801,humaneval_monolithic,monolithic,0,,0,Monolithic,1276,14.814896,,,,,,,,,,,,,,,,,,,,2,2,1,1,True,,

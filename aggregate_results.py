@@ -10,6 +10,8 @@ from statistics import mean
 from typing import Any
 
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+
 EXPECTED_TASKS: dict[str, int] = {
     "bigcodebench": 200,
     "mbpp": 200,
@@ -42,16 +44,27 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--logs-root",
         type=Path,
-        default=Path("pipeline/logs"),
+        default=SCRIPT_DIR / "logs",
         help="Root directory containing <dataset>/<strategy>/ artifacts.",
     )
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("pipeline/aggregated"),
+        default=SCRIPT_DIR / "aggregated",
         help="Directory where aggregated CSV files will be written.",
     )
     return parser.parse_args()
+
+
+def resolve_input_path(path: Path) -> Path:
+    if path.is_absolute():
+        return path
+    if path.exists():
+        return path
+    txt = path.as_posix().lstrip("./")
+    if txt.startswith("pipeline/"):
+        return SCRIPT_DIR.parent / txt
+    return SCRIPT_DIR / path
 
 
 def parse_int(value: Any) -> int | None:
@@ -149,6 +162,26 @@ def write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> 
         for row in rows:
             out = {k: row.get(k, "") for k in fieldnames}
             writer.writerow(out)
+
+
+def write_scoped_csvs(
+    output_dir: Path,
+    file_name: str,
+    rows: list[dict[str, Any]],
+    fieldnames: list[str],
+) -> int:
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for row in rows:
+        dataset = str(row.get("dataset", "") or "").strip().lower()
+        strategy = str(row.get("strategy", "") or "").strip()
+        if not dataset or not strategy:
+            continue
+        grouped.setdefault((dataset, strategy), []).append(row)
+
+    for (dataset, strategy), scoped_rows in grouped.items():
+        write_csv(output_dir / dataset / strategy / file_name, scoped_rows, fieldnames)
+
+    return len(grouped)
 
 
 def iter_strategy_dirs(logs_root: Path) -> list[tuple[str, str, Path]]:
@@ -804,8 +837,8 @@ def round_numeric_fields(rows: list[dict[str, Any]], digits: int = 6) -> None:
 
 def main() -> int:
     args = parse_args()
-    logs_root: Path = args.logs_root
-    output_dir: Path = args.output_dir
+    logs_root: Path = resolve_input_path(args.logs_root)
+    output_dir: Path = resolve_input_path(args.output_dir)
 
     if not logs_root.exists():
         raise FileNotFoundError(f"Logs root not found: {logs_root.resolve()}")
@@ -1082,11 +1115,22 @@ def main() -> int:
     write_csv(output_dir / "accuracy_metrics.csv", accuracy_rows, accuracy_fieldnames)
     write_csv(output_dir / "token_stats_by_agent.csv", token_stats_rows, token_stats_fieldnames)
 
+    scoped_task = write_scoped_csvs(output_dir, "task_level.csv", all_task_rows, task_fieldnames)
+    scoped_summary = write_scoped_csvs(output_dir, "strategy_summary.csv", strategy_summary_rows, summary_fieldnames)
+    scoped_quality = write_scoped_csvs(output_dir, "data_quality_report.csv", quality_rows, quality_fieldnames)
+    scoped_accuracy = write_scoped_csvs(output_dir, "accuracy_metrics.csv", accuracy_rows, accuracy_fieldnames)
+    scoped_token = write_scoped_csvs(output_dir, "token_stats_by_agent.csv", token_stats_rows, token_stats_fieldnames)
+
     print(f"Wrote: {(output_dir / 'task_level.csv').as_posix()} ({len(all_task_rows)} rows)")
     print(f"Wrote: {(output_dir / 'strategy_summary.csv').as_posix()} ({len(strategy_summary_rows)} rows)")
     print(f"Wrote: {(output_dir / 'data_quality_report.csv').as_posix()} ({len(quality_rows)} rows)")
     print(f"Wrote: {(output_dir / 'accuracy_metrics.csv').as_posix()} ({len(accuracy_rows)} rows)")
     print(f"Wrote: {(output_dir / 'token_stats_by_agent.csv').as_posix()} ({len(token_stats_rows)} rows)")
+    print(f"Wrote scoped task_level.csv files for {scoped_task} dataset/strategy directories.")
+    print(f"Wrote scoped strategy_summary.csv files for {scoped_summary} dataset/strategy directories.")
+    print(f"Wrote scoped data_quality_report.csv files for {scoped_quality} dataset/strategy directories.")
+    print(f"Wrote scoped accuracy_metrics.csv files for {scoped_accuracy} dataset/strategy directories.")
+    print(f"Wrote scoped token_stats_by_agent.csv files for {scoped_token} dataset/strategy directories.")
     return 0
 
 

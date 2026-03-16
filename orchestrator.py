@@ -18,6 +18,7 @@ from .agents.security import SecurityAgent
 from .agents.qa import QAAgent
 from .agents.verifier import VerifierAgent
 from .utils.artifact_to_code import compose_humaneval_executable_code, extract_code_from_artifact_text
+from .checkpoint_eval import evaluate_pre_verifier_checkpoint
 
 
 def parse_qa_passfail(text: str) -> tuple[bool | None, str]:
@@ -230,29 +231,47 @@ class PipelineOrchestrator:
         verifier_completion_tokens = None
         verifier_total_tokens = None
         verifier_latency_s = None
+        pre_verifier_exec_invoked = 0
+        pre_verifier_exec_passed: int | None = None
+        pre_verifier_exec_error_type = None
+        pre_verifier_exec_error = None
+        pre_verifier_executable_code = None
+        verifier_pre_repair_exec_invoked = 0
+        verifier_pre_repair_exec_passed: int | None = None
+        verifier_pre_repair_exec_error_type = None
+        verifier_pre_repair_exec_error = None
+        verifier_post_repair_exec_invoked = 0
+        verifier_post_repair_exec_passed: int | None = None
+        verifier_post_repair_exec_error_type = None
+        verifier_post_repair_exec_error = None
+        architect_spec_text = task.problem or ""
 
         # 1) Architect
-        a_messages = None
-        try:
-            a_messages = self.architect.build_messages(problem=task.problem, repo_context=task.repo_context)
-            a = self.architect.run(problem=task.problem, repo_context=task.repo_context)
-            self._log_call_success(task.task_id, pipeline_config, "Architect", self.app.architect_model.model, a_messages, a)
-            total_tokens += (a.llm.total_tokens or 0)
-            architect_answer = a.output_text
-            architect_prompt_tokens = a.llm.prompt_tokens
-            architect_completion_tokens = a.llm.completion_tokens
-            architect_total_tokens = a.llm.total_tokens
-            architect_latency_s = a.llm.latency_s
-        except Exception as e:
-            architect_error_text = str(e)
-            self._log_call_error(task.task_id, pipeline_config, "Architect", self.app.architect_model.model, a_messages, str(e))
-            raise
+        if self.pipe.enable_planner:
+            a_messages = None
+            try:
+                a_messages = self.architect.build_messages(problem=task.problem, repo_context=task.repo_context)
+                a = self.architect.run(problem=task.problem, repo_context=task.repo_context)
+                self._log_call_success(task.task_id, pipeline_config, "Architect", self.app.architect_model.model, a_messages, a)
+                total_tokens += (a.llm.total_tokens or 0)
+                architect_answer = a.output_text
+                architect_spec_text = a.output_text
+                architect_prompt_tokens = a.llm.prompt_tokens
+                architect_completion_tokens = a.llm.completion_tokens
+                architect_total_tokens = a.llm.total_tokens
+                architect_latency_s = a.llm.latency_s
+            except Exception as e:
+                architect_error_text = str(e)
+                self._log_call_error(task.task_id, pipeline_config, "Architect", self.app.architect_model.model, a_messages, str(e))
+                raise
+        else:
+            architect_answer = "PLANNER_BYPASSED: direct prompt sent to Developer."
 
         # 2) Developer
         d_messages = None
         try:
-            d_messages = self.developer.build_messages(problem=task.problem, architect_spec=a.output_text, repo_context=task.repo_context)
-            d = self.developer.run(problem=task.problem, architect_spec=a.output_text, repo_context=task.repo_context)
+            d_messages = self.developer.build_messages(problem=task.problem, architect_spec=architect_spec_text, repo_context=task.repo_context)
+            d = self.developer.run(problem=task.problem, architect_spec=architect_spec_text, repo_context=task.repo_context)
             self._log_call_success(task.task_id, pipeline_config, "Developer", self.app.developer_model.model, d_messages, d)
             total_tokens += (d.llm.total_tokens or 0)
             developer_answer = d.output_text
@@ -317,6 +336,28 @@ class PipelineOrchestrator:
 
             qa_pass, qa_summary = parse_qa_passfail(q.output_text)
 
+        # 4b) Pre-verifier execution checkpoint (real executable test before verifier/repair)
+        if self.pipe.enable_pre_verifier_checkpoint:
+            try:
+                checkpoint = evaluate_pre_verifier_checkpoint(task=task, artifact_text=d.output_text, timeout_s=20.0)
+                pre_verifier_exec_invoked = 1 if checkpoint.get("invoked") else 0
+                ck_pass = checkpoint.get("passed")
+                if ck_pass is True:
+                    pre_verifier_exec_passed = 1
+                elif ck_pass is False:
+                    pre_verifier_exec_passed = 0
+                else:
+                    pre_verifier_exec_passed = None
+                pre_verifier_exec_error_type = checkpoint.get("error_type")
+                pre_verifier_exec_error = checkpoint.get("error")
+                pre_verifier_executable_code = checkpoint.get("completion")
+            except Exception as e:
+                # Checkpoint logging should not abort generation.
+                pre_verifier_exec_invoked = 0
+                pre_verifier_exec_passed = None
+                pre_verifier_exec_error_type = type(e).__name__
+                pre_verifier_exec_error = str(e)
+
         # --- Trigger policy ---
         disagreement = False
 
@@ -333,12 +374,14 @@ class PipelineOrchestrator:
         if fmt.get("has_markdown_fence") or (artifact_mode == "patch" and not fmt.get("looks_like_patch")):
             disagreement = True
 
-        should_invoke_verifier = (
-            self.pipe.enable_verifier
-            and (
-                self.pipe.trigger_policy == "always"
-                or (self.pipe.trigger_policy == "disagreement" and disagreement)
-            )
+        policy = (self.pipe.trigger_policy or "").strip().lower()
+        if policy not in {"always", "disagreement", "qa_fail"}:
+            policy = "disagreement"
+
+        should_invoke_verifier = self.pipe.enable_verifier and (
+            (policy == "always")
+            or (policy == "disagreement" and disagreement)
+            or (policy == "qa_fail" and qa_pass is False)
         )
 
         final_artifact = d.output_text
@@ -378,17 +421,35 @@ class PipelineOrchestrator:
 
             if verifier_decision == "REJECT" and self.pipe.allow_single_repair and repair_request:
                 repair_attempted = 1
+                if self.pipe.enable_verifier_repair_checkpoints:
+                    try:
+                        pre_rep = evaluate_pre_verifier_checkpoint(task=task, artifact_text=final_artifact, timeout_s=20.0)
+                        verifier_pre_repair_exec_invoked = 1 if pre_rep.get("invoked") else 0
+                        pre_rep_pass = pre_rep.get("passed")
+                        if pre_rep_pass is True:
+                            verifier_pre_repair_exec_passed = 1
+                        elif pre_rep_pass is False:
+                            verifier_pre_repair_exec_passed = 0
+                        else:
+                            verifier_pre_repair_exec_passed = None
+                        verifier_pre_repair_exec_error_type = pre_rep.get("error_type")
+                        verifier_pre_repair_exec_error = pre_rep.get("error")
+                    except Exception as e:
+                        verifier_pre_repair_exec_invoked = 0
+                        verifier_pre_repair_exec_passed = None
+                        verifier_pre_repair_exec_error_type = type(e).__name__
+                        verifier_pre_repair_exec_error = str(e)
 
                 d2_messages = None
                 try:
                     d2_messages = self.developer.build_messages(
                         problem=task.problem,
-                        architect_spec=a.output_text + "\n\nREPAIR REQUEST FROM VERIFIER:\n" + repair_request,
+                        architect_spec=architect_spec_text + "\n\nREPAIR REQUEST FROM VERIFIER:\n" + repair_request,
                         repo_context=task.repo_context,
                     )
                     d2 = self.developer.run(
                         problem=task.problem,
-                        architect_spec=a.output_text + "\n\nREPAIR REQUEST FROM VERIFIER:\n" + repair_request,
+                        architect_spec=architect_spec_text + "\n\nREPAIR REQUEST FROM VERIFIER:\n" + repair_request,
                         repo_context=task.repo_context,
                     )
                     self._log_call_success(task.task_id, pipeline_config, "Developer", self.app.developer_model.model, d2_messages, d2)
@@ -400,6 +461,24 @@ class PipelineOrchestrator:
                     developer_total_tokens_sum += int(d2.llm.total_tokens or 0)
                     developer_latency_s_sum += float(d2.llm.latency_s or 0.0)
                     final_artifact = d2.output_text
+                    if self.pipe.enable_verifier_repair_checkpoints:
+                        try:
+                            post_rep = evaluate_pre_verifier_checkpoint(task=task, artifact_text=final_artifact, timeout_s=20.0)
+                            verifier_post_repair_exec_invoked = 1 if post_rep.get("invoked") else 0
+                            post_rep_pass = post_rep.get("passed")
+                            if post_rep_pass is True:
+                                verifier_post_repair_exec_passed = 1
+                            elif post_rep_pass is False:
+                                verifier_post_repair_exec_passed = 0
+                            else:
+                                verifier_post_repair_exec_passed = None
+                            verifier_post_repair_exec_error_type = post_rep.get("error_type")
+                            verifier_post_repair_exec_error = post_rep.get("error")
+                        except Exception as e:
+                            verifier_post_repair_exec_invoked = 0
+                            verifier_post_repair_exec_passed = None
+                            verifier_post_repair_exec_error_type = type(e).__name__
+                            verifier_post_repair_exec_error = str(e)
                     if is_humaneval and task.test_harness:
                         # Re-run QA on the repaired executable artifact so QA and external eval align.
                         repaired_exec = (compose_humaneval_executable_code(task.problem, final_artifact).code or "").strip()
@@ -508,7 +587,7 @@ class PipelineOrchestrator:
                 config=pipeline_config,
                 prompt=prompt_text,
                 prompt_hash=prompt_hash,
-                architect=self.app.architect_model.model,
+                architect=(self.app.architect_model.model if self.pipe.enable_planner else None),
                 developer=self.app.developer_model.model,
                 qa=self.app.qa_model.model,
                 verifier=self.app.verifier_model.model if verifier_invoked else None,
@@ -543,6 +622,18 @@ class PipelineOrchestrator:
                 developer_harm=(1 if parse_error_type else 0),
                 verifier_repair=(1 if verifier_decision == "REJECT" else 0),
                 verifier_harm=(1 if (verifier_invoked and parse_error_type) else 0),
+                pre_verifier_exec_invoked=pre_verifier_exec_invoked,
+                pre_verifier_exec_passed=pre_verifier_exec_passed,
+                pre_verifier_exec_error_type=pre_verifier_exec_error_type,
+                pre_verifier_exec_error=pre_verifier_exec_error,
+                verifier_pre_repair_exec_invoked=verifier_pre_repair_exec_invoked,
+                verifier_pre_repair_exec_passed=verifier_pre_repair_exec_passed,
+                verifier_pre_repair_exec_error_type=verifier_pre_repair_exec_error_type,
+                verifier_pre_repair_exec_error=verifier_pre_repair_exec_error,
+                verifier_post_repair_exec_invoked=verifier_post_repair_exec_invoked,
+                verifier_post_repair_exec_passed=verifier_post_repair_exec_passed,
+                verifier_post_repair_exec_error_type=verifier_post_repair_exec_error_type,
+                verifier_post_repair_exec_error=verifier_post_repair_exec_error,
             )
         )
 
@@ -557,4 +648,10 @@ class PipelineOrchestrator:
             "parse_error_text": parse_error_text,
             "total_tokens": total_tokens,
             "end_to_end_latency_s": end_to_end,
+            "pre_verifier_exec_invoked": bool(pre_verifier_exec_invoked),
+            "pre_verifier_exec_passed": (None if pre_verifier_exec_passed is None else bool(pre_verifier_exec_passed)),
+            "pre_verifier_exec_error_type": pre_verifier_exec_error_type,
+            "pre_verifier_exec_error": pre_verifier_exec_error,
+            "pre_verifier_executable_code": pre_verifier_executable_code,
+            "pre_verifier_artifact": d.output_text,
         }
