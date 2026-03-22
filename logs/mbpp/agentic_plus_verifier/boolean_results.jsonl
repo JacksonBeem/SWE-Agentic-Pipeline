@@ -1,0 +1,62 @@
+{"task_id": "MBPP/102", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/103", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/106", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/11", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/117", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/131", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/145", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/167", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/172", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/234", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/249", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/251", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/260", "passed": false, "error_type": "AssertionError", "error": "AssertionError: "}
+{"task_id": "MBPP/267", "passed": false, "error_type": "AssertionError", "error": "AssertionError: "}
+{"task_id": "MBPP/277", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/280", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/281", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/282", "passed": false, "error_type": "AssertionError", "error": "AssertionError: "}
+{"task_id": "MBPP/287", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/311", "passed": false, "error_type": "AssertionError", "error": "AssertionError: "}
+{"task_id": "MBPP/312", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/400", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/404", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/425", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/428", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/433", "passed": false, "error_type": "AssertionError", "error": "AssertionError: "}
+{"task_id": "MBPP/434", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/439", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/450", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/455", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/476", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/557", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/558", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/568", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/57", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/577", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/594", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/599", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/604", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/606", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/615", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/62", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/635", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/68", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/722", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/724", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/726", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/730", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/74", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/740", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/744", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/753", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/772", "passed": false, "error_type": "AssertionError", "error": "AssertionError: "}
+{"task_id": "MBPP/776", "passed": false, "error_type": "AssertionError", "error": "AssertionError: "}
+{"task_id": "MBPP/796", "passed": false, "error_type": "AssertionError", "error": "AssertionError: "}
+{"task_id": "MBPP/84", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/87", "passed": false, "error_type": "AssertionError", "error": "AssertionError: "}
+{"task_id": "MBPP/89", "passed": false, "error_type": "AssertionError", "error": "AssertionError: "}
+{"task_id": "MBPP/91", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/92", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/93", "passed": true, "error_type": null, "error": null}
+{"task_id": "MBPP/97", "passed": true, "error_type": null, "error": null}

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+﻿from dataclasses import dataclass
 
 # =========================
 # HARD-CODED CONFIG
@@ -6,10 +6,9 @@ from dataclasses import dataclass
 
 OPENROUTER_API_KEY = 
 
-ARCHITECT_MODEL = "google/gemini-3-pro-preview"
-DEVELOPER_MODEL = "anthropic/claude-sonnet-4.5"
-SECURITY_MODEL  = "openai/gpt-4o-mini"
-QA_MODEL        = "openai/gpt-5.1"
+PLANNER_MODEL = "google/gemini-3-pro-preview"
+EXECUTOR_MODEL = "anthropic/claude-sonnet-4.5"
+CRITIC_MODEL        = "openai/gpt-5.1"
 VERIFIER_MODEL  = "google/gemini-3-pro-preview"
 
 # =========================
@@ -21,19 +20,19 @@ VERIFIER_MODEL  = "google/gemini-3-pro-preview"
 # - "agentic_plus_verifier"
 # - "agentic_no_planner"
 # - "agentic_no_planner_plus_verifier"
-WORKFLOW_PROFILE = "agentic_plus_verifier"
+WORKFLOW_PROFILE = "agentic"
 
 # Verifier trigger policy:
 # - "always": run verifier for every task (when verifier enabled)
-# - "disagreement": run verifier on QA fail, severe security issues, or format disagreement
-# - "qa_fail": run verifier only when QA explicitly returns FAIL
-VERIFIER_TRIGGER_POLICY = "qa_fail"
+# - "disagreement": run verifier on Critic fail or format disagreement
+# - "critic_fail": run verifier only when Critic explicitly returns FAIL
+VERIFIER_TRIGGER_POLICY = "critic_fail"
 
 # =========================
 # DATASET SELECTION
 # =========================
 # One of: "humaneval", "bigcodebench", "mbpp"
-ACTIVE_DATASET = "BigCodeBench"
+ACTIVE_DATASET = "mbpp"
 
 # Relative to pipeline/ directory.
 DATASET_PATHS = {
@@ -66,7 +65,6 @@ class PipelineConfig:
     trigger_policy: str = VERIFIER_TRIGGER_POLICY
     allow_single_repair: bool = True
     enable_planner: bool = True
-    enable_security: bool = False
     enable_verifier: bool = True
     enable_pre_verifier_checkpoint: bool = True
     enable_verifier_repair_checkpoints: bool = True
@@ -74,10 +72,9 @@ class PipelineConfig:
 @dataclass(frozen=True)
 class AppConfig:
     openrouter: OpenRouterConfig
-    architect_model: ModelConfig
-    developer_model: ModelConfig
-    security_model: ModelConfig
-    qa_model: ModelConfig
+    planner_model: ModelConfig
+    executor_model: ModelConfig
+    critic_model: ModelConfig
     verifier_model: ModelConfig
 
 
@@ -85,7 +82,6 @@ class AppConfig:
 class WorkflowDefaults:
     profile: str
     mode: str
-    enable_security: bool
     enable_verifier: bool
     predictions_path: str
     executable_predictions_path: str
@@ -105,10 +101,9 @@ def load_config(run_id: str) -> AppConfig:
             http_referer="http://localhost",
             x_title="Agentic Pipeline Experiment",
         ),
-        architect_model=ModelConfig(model=ARCHITECT_MODEL),
-        developer_model=ModelConfig(model=DEVELOPER_MODEL),
-        security_model=ModelConfig(model=SECURITY_MODEL),
-        qa_model=ModelConfig(model=QA_MODEL),
+        planner_model=ModelConfig(model=PLANNER_MODEL),
+        executor_model=ModelConfig(model=EXECUTOR_MODEL),
+        critic_model=ModelConfig(model=CRITIC_MODEL),
         verifier_model=ModelConfig(model=VERIFIER_MODEL),
     )
 
@@ -120,7 +115,6 @@ def get_workflow_defaults() -> WorkflowDefaults:
         return WorkflowDefaults(
             profile=profile,
             mode="monolithic",
-            enable_security=False,
             enable_verifier=False,
             predictions_path="pipeline/logs/predictions_mono.jsonl",
             executable_predictions_path="pipeline/logs/predictions_mono_executable.jsonl",
@@ -131,7 +125,6 @@ def get_workflow_defaults() -> WorkflowDefaults:
         return WorkflowDefaults(
             profile=profile,
             mode="pipeline",
-            enable_security=False,
             enable_verifier=True,
             predictions_path="pipeline/logs/predictions_agentic_plus_verifier.jsonl",
             executable_predictions_path="pipeline/logs/predictions_agentic_plus_verifier_executable.jsonl",
@@ -142,7 +135,6 @@ def get_workflow_defaults() -> WorkflowDefaults:
         return WorkflowDefaults(
             profile=profile,
             mode="pipeline",
-            enable_security=False,
             enable_verifier=False,
             predictions_path="pipeline/logs/predictions_agentic_no_planner.jsonl",
             executable_predictions_path="pipeline/logs/predictions_agentic_no_planner_executable.jsonl",
@@ -153,7 +145,6 @@ def get_workflow_defaults() -> WorkflowDefaults:
         return WorkflowDefaults(
             profile=profile,
             mode="pipeline",
-            enable_security=False,
             enable_verifier=True,
             predictions_path="pipeline/logs/predictions_agentic_no_planner_plus_verifier.jsonl",
             executable_predictions_path="pipeline/logs/predictions_agentic_no_planner_plus_verifier_executable.jsonl",
@@ -164,7 +155,6 @@ def get_workflow_defaults() -> WorkflowDefaults:
     return WorkflowDefaults(
         profile="agentic",
         mode="pipeline",
-        enable_security=False,
         enable_verifier=False,
         predictions_path="pipeline/logs/predictions_agentic_no_verifier.jsonl",
         executable_predictions_path="pipeline/logs/predictions_agentic_no_verifier_executable.jsonl",
@@ -200,3 +190,4 @@ def get_active_dataset_type() -> str:
 def get_active_dataset_path() -> str:
     ds = get_active_dataset_type()
     return f"pipeline/{DATASET_PATHS[ds]}"
+

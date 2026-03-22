@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import argparse
 import ast
@@ -445,11 +445,14 @@ def main() -> int:
         for k, v in bool_stats.items():
             print(f"{k}: {v}")
 
-    # Optional companion flow: convert/evaluate pre-verifier QA predictions if present.
-    pre_input = args.input.parent / "pre_verifier_qa_predictions.jsonl"
-    pre_output = args.input.parent / "pre_verifier_qa_predictions_executable.jsonl"
-    pre_bool_output = args.input.parent / "pre_verifier_qa_boolean_results.jsonl"
-    if pre_input.exists():
+    # Optional companion flow: convert/evaluate pre-verifier Critic predictions if present.
+    # Only apply this for verifier-enabled strategy directories.
+    strategy_name = args.input.parent.name.strip().lower()
+    verifier_strategy = "plus_verifier" in strategy_name
+    pre_input = args.input.parent / "pre_verifier_critic_predictions.jsonl"
+    pre_output = args.input.parent / "pre_verifier_critic_predictions_executable.jsonl"
+    pre_bool_output = args.input.parent / "pre_verifier_critic_boolean_results.jsonl"
+    if verifier_strategy and pre_input.exists():
         pre_converted, pre_stats = normalize_predictions(
             input_path=pre_input,
             dataset_by_task=dataset_by_task,
@@ -474,9 +477,14 @@ def main() -> int:
             print(f"Wrote pre-verifier boolean results: {pre_bool_output}")
             for k, v in pre_bool_stats.items():
                 print(f"pre_{k}: {v}")
+    elif (not verifier_strategy) and pre_input.exists():
+        print(
+            f"Skipping pre-verifier companion conversion for non-verifier strategy directory: {args.input.parent}"
+        )
 
     return 0
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

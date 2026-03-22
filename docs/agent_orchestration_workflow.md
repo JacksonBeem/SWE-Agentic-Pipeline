@@ -1,4 +1,4 @@
-# Agent Orchestration Workflow
+﻿# Agent Orchestration Workflow
 
 This document explains the multi-agent flow in plain language first, then maps each step to concrete function names.
 
@@ -14,13 +14,13 @@ Main code:
 
 For each task, the pipeline does this:
 
-1. Architect writes a structured plan.
-2. Developer writes the artifact (code or patch).
-4. QA optionally validates against a test harness.
-5. Verifier optionally decides ACCEPT or REJECT with a targeted repair request.
-6. Developer may do one repair pass.
-7. HumanEval tasks may get one extra syntax-only repair pass.
-8. Everything is logged, then final artifact is returned.
+1. Planner writes a structured plan.
+2. Executor writes the artifact (code or patch).
+3. Critic optionally validates against a test harness.
+4. Verifier optionally decides ACCEPT or REJECT with a targeted repair request.
+5. Executor may do one repair pass.
+6. HumanEval tasks may get one extra syntax-only repair pass.
+7. Everything is logged, then final artifact is returned.
 
 ## Where This Starts
 
@@ -41,55 +41,50 @@ Pipeline mode starts in [run_dataset_batch.main](/c:/VScode/pipeline/run_dataset
 
 Per task, `run_task(...)` executes this sequence in [orchestrator.py](/c:/VScode/pipeline/orchestrator.py):
 
-1. Architect stage
-- `architect.build_messages(problem, repo_context)`
-- `architect.run(problem, repo_context)`
-- `_log_call_success(..., agent="Architect", ...)`
+1. Planner stage
+- `planner.build_messages(problem, repo_context)`
+- `planner.run(problem, repo_context)`
+- `_log_call_success(..., agent="Planner", ...)`
 
-2. Developer stage
-- `developer.build_messages(problem, architect_spec, repo_context)`
-- `developer.run(...)`
-- `_log_call_success(..., agent="Developer", ...)`
+2. Executor stage
+- `executor.build_messages(problem, planner_spec, repo_context)`
+- `executor.run(...)`
+- `_log_call_success(..., agent="Executor", ...)`
 - `infer_artifact_mode(task)`
-- `patch_format_summary(developer_output)`
+- `patch_format_summary(executor_output)`
 
-3. Security stage (optional)
-- runs only if `self.pipe.enable_security`
-- `security.build_messages(code_artifact)`
-- `security.run(code_artifact)`
-
-4. QA stage (harness-gated)
+3. Critic stage (harness-gated)
 - runs only if `task.test_harness` exists
 - for HumanEval-tagged configs, code is first composed with `compose_humaneval_executable_code(...)`
-- `qa.build_messages(code_artifact, test_harness)`
-- `qa.run(...)`
-- `parse_qa_passfail(qa_output)`
+- `Critic.build_messages(code_artifact, test_harness)`
+- `Critic.run(...)`
+- `parse_critic_passfail(critic_output)`
 
-5. Verifier gating
-- compute `disagreement` from QA/security/format signals
+4. Verifier gating
+- compute `disagreement` from Critic/format signals
 - compute `should_invoke_verifier` from `enable_verifier` + `trigger_policy`
 
-6. Verifier stage (optional)
-- `verifier.build_messages(qa_summary, security_summary, disagreement, artifact_mode, format_checks)`
+5. Verifier stage (optional)
+- `verifier.build_messages(critic_summary, disagreement, artifact_mode, format_checks)`
 - `verifier.run(...)`
 - `parse_verifier(verifier_output)`
 
-7. Verifier-triggered repair (optional, single pass)
+6. Verifier-triggered repair (optional, single pass)
 - condition: `REJECT` + `allow_single_repair` + non-empty repair request
-- second Developer call with appended:
+- second Executor call with appended:
   - `REPAIR REQUEST FROM VERIFIER:\n<request>`
-- for HumanEval with harness, QA is re-run on repaired executable artifact
+- for HumanEval with harness, Critic is re-run on repaired executable artifact
 
-8. Final parse check
+7. Final parse check
 - build `final_executable_code`
 - `ast.parse(final_executable_code)`
 
-9. HumanEval syntax hardening (optional, single pass)
+8. HumanEval syntax hardening (optional, single pass)
 - if HumanEval-tagged config and parse fails:
-  - third Developer call with `SYNTAX REPAIR REQUEST (HumanEval)`
+  - third Executor call with `SYNTAX REPAIR REQUEST (HumanEval)`
   - parse repaired output again
 
-10. Final run summary and return
+9. Final run summary and return
 - `logger.log_run(RunRow(...))`
 - return dict with final artifact, parse status, verifier/repair flags, tokens, latency
 
@@ -110,9 +105,9 @@ All agent `run(...)` calls use [AgentBase.run](/c:/VScode/pipeline/agents/base.p
 4. enforce guardrails with `assert_no_prohibited(...)`
 5. return `AgentResult` with text, raw output, messages, tokens, latency
 
-### Architect message shape
+### Planner message shape
 
-Builder: [ArchitectAgent.build_messages](/c:/VScode/pipeline/agents/architect.py:25)
+Builder: [PlannerAgent.build_messages](/c:/VScode/pipeline/agents/planner.py:25)
 
 User content:
 
@@ -126,14 +121,14 @@ Repo context (if any):
 
 Expected output: non-code structured specification.
 
-### Developer message shape
+### Executor message shape
 
-Builder: [DeveloperAgent.build_messages](/c:/VScode/pipeline/agents/developer.py:20)
+Builder: [ExecutorAgent.build_messages](/c:/VScode/pipeline/agents/executor.py:20)
 
 User content includes:
 
 - Problem block
-- Architect spec block
+- Planner spec block
 - Repo context block
 - explicit output instruction:
   - patch-only if repo context exists
@@ -144,9 +139,9 @@ Expected output:
 - patch mode: unified diff (`diff --git ...`)
 - code mode: raw code artifact
 
-### QA message shape
+### Critic message shape
 
-Builder: [QAAgent.build_messages](/c:/VScode/pipeline/agents/qa.py:15)
+Builder: [CriticAgent.build_messages](/c:/VScode/pipeline/agents/critic.py:15)
 
 User content:
 
@@ -167,8 +162,7 @@ Builder: [VerifierAgent.build_messages](/c:/VScode/pipeline/agents/verifier.py:3
 
 User content includes:
 
-- QA summary
-- Security summary
+- Critic summary
 - disagreement flag
 - artifact mode (`code` or `patch`)
 - format checks JSON
@@ -187,9 +181,9 @@ Function: [infer_artifact_mode](/c:/VScode/pipeline/orchestrator.py:76)
 - if `repo_context` contains `repo=` -> treat as patch task
 - else -> treat as code task
 
-### 2) QA parsing
+### 2) Critic parsing
 
-Function: [parse_qa_passfail](/c:/VScode/pipeline/orchestrator.py:23)
+Function: [parse_critic_passfail](/c:/VScode/pipeline/orchestrator.py:23)
 
 - first line starts with `PASS` -> pass
 - first line starts with `FAIL` -> fail
@@ -227,8 +221,7 @@ Verifier runs only when:
 
 Disagreement is true when any of:
 
-- QA explicitly fails
-- security reports high/critical severity
+- Critic explicitly fails
 - artifact contains markdown fence
 - patch task does not look like a valid patch
 
@@ -279,6 +272,7 @@ Returned keys:
 
 - If a stage fails, error is logged and exception is re-raised.
 - `run_dataset_batch.py` catches task-level failures and continues with next task.
-- QA is intentionally skipped when no test harness is provided.
+- Critic is intentionally skipped when no test harness is provided.
 - In current batch pipeline mode, trigger policy is set to `"always"` ([run_dataset_batch.py](/c:/VScode/pipeline/run_dataset_batch.py:215)).
 - `origin_stage` is initialized in orchestrator but currently not populated with a non-`None` value.
+

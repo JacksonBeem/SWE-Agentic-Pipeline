@@ -1,3 +1,5 @@
 dataset,strategy,scope,run_id,rows,unique_task_ids,rows_with_boolean,rows_without_boolean,pass_count,fail_count,unknown_count,accuracy_eval_pct,accuracy_eval_ci95_low_pct,accuracy_eval_ci95_high_pct,fail_rate_eval_pct,unknown_rate_eval_pct,expected_task_count,accuracy_expected_pct,coverage_vs_expected_pct,missing_vs_expected
-mbpp,monolithic,unique_runs,,200,200,200,0,132,68,0,66.0,59.188367,72.208561,34.0,0.0,200,66.0,100.0,0
-mbpp,monolithic,run_id,run-9da7f070,200,200,200,0,132,68,0,66.0,59.188367,72.208561,34.0,0.0,200,66.0,100.0,0
+mbpp,monolithic,unique_runs,,50,50,10,40,9,1,0,90.0,59.584361,98.212425,10.0,0.0,200,4.5,25.0,150
+mbpp,monolithic,run_id,run-1903b2a1,22,22,0,22,0,0,0,,,,,,200,0.0,11.0,178
+mbpp,monolithic,run_id,run-35e17514,10,10,10,0,9,1,0,90.0,59.584361,98.212425,10.0,0.0,200,4.5,5.0,190
+mbpp,monolithic,run_id,run-466bf8ed,18,18,0,18,0,0,0,,,,,,200,0.0,9.0,182

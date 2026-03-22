@@ -1,0 +1,10 @@
+dataset,strategy,task_id,run_id,critic_verdict_first_pass,verifier_invoked,verifier_decision,repair_attempted,final_passed,pre_verifier_exec_invoked,pre_verifier_exec_passed,verifier_pre_repair_exec_passed,verifier_post_repair_exec_passed,critic_true_positive,critic_true_negative,blame_executor,blame_critic_false_fail,blame_critic_false_pass,verifier_strict_eligible,verifier_help,verifier_harm,executor_blame_from_critic,critic_blame_from_verifier,blame_basis,verifier_blame_basis
+humaneval,agentic_plus_verifier,HumanEval/1,run-6076e3a9,PASS,0,,0,True,True,True,,,0,1,0,0,0,0,0,0,0,,checkpoint_exec_only,not_applicable
+humaneval,agentic_plus_verifier,HumanEval/2,run-6076e3a9,PASS,0,,0,True,True,True,,,0,1,0,0,0,0,0,0,0,,checkpoint_exec_only,not_applicable
+humaneval,agentic_plus_verifier,HumanEval/3,run-6076e3a9,PASS,0,,0,True,True,True,,,0,1,0,0,0,0,0,0,0,,checkpoint_exec_only,not_applicable
+humaneval,agentic_plus_verifier,HumanEval/4,run-6076e3a9,PASS,0,,0,True,True,True,,,0,1,0,0,0,0,0,0,0,,checkpoint_exec_only,not_applicable
+humaneval,agentic_plus_verifier,HumanEval/5,run-6076e3a9,PASS,0,,0,True,True,True,,,0,1,0,0,0,0,0,0,0,,checkpoint_exec_only,not_applicable
+humaneval,agentic_plus_verifier,HumanEval/6,run-6076e3a9,PASS,0,,0,True,True,True,,,0,1,0,0,0,0,0,0,0,,checkpoint_exec_only,not_applicable
+humaneval,agentic_plus_verifier,HumanEval/7,run-6076e3a9,PASS,0,,0,True,True,True,,,0,1,0,0,0,0,0,0,0,,checkpoint_exec_only,not_applicable
+humaneval,agentic_plus_verifier,HumanEval/8,run-6076e3a9,PASS,0,,0,True,True,True,,,0,1,0,0,0,0,0,0,0,,checkpoint_exec_only,not_applicable
+humaneval,agentic_plus_verifier,HumanEval/9,run-6076e3a9,PASS,0,,0,True,True,True,,,0,1,0,0,0,0,0,0,0,,checkpoint_exec_only,not_applicable

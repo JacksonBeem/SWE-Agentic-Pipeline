@@ -1,0 +1,2 @@
+dataset,strategy,scope,run_id,rows,unique_task_ids,rows_with_boolean,rows_without_boolean,pass_count,fail_count,unknown_count,accuracy_eval_pct,accuracy_eval_ci95_low_pct,accuracy_eval_ci95_high_pct,fail_rate_eval_pct,unknown_rate_eval_pct,expected_task_count,accuracy_expected_pct,coverage_vs_expected_pct,missing_vs_expected
+bigcodebench,agentic_no_planner,all_runs,,53,53,53,0,29,24,0,54.716981,41.453743,67.342632,45.283019,0.0,200,14.5,26.5,147

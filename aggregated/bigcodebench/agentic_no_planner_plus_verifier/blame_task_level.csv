@@ -1,5 +1,0 @@
-dataset,strategy,task_id,run_id,qa_verdict_first_pass,verifier_invoked,verifier_decision,repair_attempted,final_passed,pre_verifier_exec_invoked,pre_verifier_exec_passed,verifier_pre_repair_exec_passed,verifier_post_repair_exec_passed,critic_true_positive,critic_true_negative,blame_executor,blame_critic_false_fail,blame_critic_false_pass,verifier_strict_eligible,verifier_help,verifier_harm,developer_blame_from_critic,critic_blame_from_verifier,blame_basis,verifier_blame_basis
-bigcodebench,agentic_no_planner_plus_verifier,BigCodeBench/213,run-5591b598,PASS,1,ACCEPT,0,True,True,True,,,0,1,0,0,0,0,0,0,0,0,checkpoint_exec_only,not_applicable
-bigcodebench,agentic_no_planner_plus_verifier,BigCodeBench/22,run-5591b598,PASS,1,ACCEPT,0,True,True,True,,,0,1,0,0,0,0,0,0,0,0,checkpoint_exec_only,not_applicable
-bigcodebench,agentic_no_planner_plus_verifier,BigCodeBench/479,run-5591b598,PASS,1,ACCEPT,0,True,True,True,,,0,1,0,0,0,0,0,0,0,0,checkpoint_exec_only,not_applicable
-bigcodebench,agentic_no_planner_plus_verifier,BigCodeBench/842,run-5591b598,PASS,1,ACCEPT,0,True,True,True,,,0,1,0,0,0,0,0,0,0,0,checkpoint_exec_only,not_applicable

@@ -67,10 +67,6 @@ What it does:
 - drops dataset-mismatched rows
 - counts data-quality issues (unknown event types, missing task IDs, mismatches)
 
-Special behavior:
-
-- security agent calls are excluded from token rollups (`EXCLUDED_AGENTS`)
-
 It also computes per-task run ordering:
 
 - `run_index_for_task`
@@ -186,7 +182,6 @@ Reliability signals:
 - This script is intentionally tolerant of partial data.
 - If `runs.csv` is incomplete, boolean-only rows can still appear via synthetic fallback rows.
 - If dataset sizes change, update `EXPECTED_TASKS` or coverage fields will be misleading.
-- Security calls are currently excluded from token stats by design.
 
 ## Typical Use
 

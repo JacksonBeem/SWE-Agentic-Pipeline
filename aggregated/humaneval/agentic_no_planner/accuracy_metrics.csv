@@ -1,0 +1,3 @@
+dataset,strategy,scope,run_id,rows,unique_task_ids,rows_with_boolean,rows_without_boolean,pass_count,fail_count,unknown_count,accuracy_eval_pct,accuracy_eval_ci95_low_pct,accuracy_eval_ci95_high_pct,fail_rate_eval_pct,unknown_rate_eval_pct,expected_task_count,accuracy_expected_pct,coverage_vs_expected_pct,missing_vs_expected
+humaneval,agentic_no_planner,unique_runs,,10,10,10,0,10,0,0,100.0,72.245983,100.0,0.0,0.0,164,6.097561,6.097561,154
+humaneval,agentic_no_planner,run_id,run-b40543ac,10,10,10,0,10,0,0,100.0,72.245983,100.0,0.0,0.0,164,6.097561,6.097561,154

@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import argparse
 import ast
@@ -215,9 +215,9 @@ def strip_trailing_analysis(text: str) -> str:
     if not text:
         return ""
     markers = (
-        "===QA===",
+        "===CRITIC===",
         "===FINAL_CODE===",
-        "QA:",
+        "CRITIC:",
         "FINAL_CODE",
         "FINAL CODE",
         "MENTAL SIMULATION:",
@@ -687,10 +687,20 @@ def summary_fieldnames() -> list[str]:
     ]
 
 
-def write_analysis_bundle(output_dir: Path, task_rows: list[dict[str, Any]], summary_rows: list[dict[str, Any]]) -> None:
-    write_csv(output_dir / "artifact_similarity_complexity_per_task.csv", task_rows, task_fieldnames())
-    write_jsonl(output_dir / "artifact_similarity_complexity_per_task.jsonl", task_rows)
-    write_csv(output_dir / "artifact_similarity_complexity_summary.csv", summary_rows, summary_fieldnames())
+def write_analysis_bundle(
+    output_dir: Path,
+    task_rows: list[dict[str, Any]],
+    summary_rows: list[dict[str, Any]],
+    file_prefix: str = "",
+) -> None:
+    prefix = str(file_prefix or "")
+    write_csv(output_dir / f"{prefix}artifact_similarity_complexity_per_task.csv", task_rows, task_fieldnames())
+    write_jsonl(output_dir / f"{prefix}artifact_similarity_complexity_per_task.jsonl", task_rows)
+    write_csv(
+        output_dir / f"{prefix}artifact_similarity_complexity_summary.csv",
+        summary_rows,
+        summary_fieldnames(),
+    )
 
 
 def select_summary_rows(
@@ -758,3 +768,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

@@ -157,12 +157,11 @@ Important optional fields consumed downstream:
 - `final_executable_code`
 - parse info (`parse_error_type`, `parse_error_text`)
 - model IDs and per-agent token/latency fields
-- helper flags (`architect_error`, `developer_repair`, etc.)
+- helper flags (`planner_error`, `executor_repair`, etc.)
 
 Notes:
 
 - unknown `event_type` rows are ignored and counted as quality issues
-- security calls are intentionally excluded from token rollups in aggregation
 
 ## Aggregated Output Contracts
 

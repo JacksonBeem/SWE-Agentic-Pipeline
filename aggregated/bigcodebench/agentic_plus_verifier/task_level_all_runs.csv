@@ -1,0 +1,506 @@
+dataset,strategy,task_id,run_id,ts_unix,pipeline_config,trigger_policy,verifier_invoked,verifier_decision,repair_attempted,origin_stage,run_total_tokens,end_to_end_latency_s,parse_error_type,parse_error_text,planner,executor,critic,verifier,planner_total_tokens,executor_total_tokens,critic_total_tokens,verifier_total_tokens,planner_latency_s,executor_latency_s,critic_latency_s,verifier_latency_s,planner_error,executor_repair,executor_harm,verifier_repair,verifier_harm,run_index_for_task,run_count_for_task,is_latest_for_task,has_boolean_result,passed,error_type,error
+bigcodebench,agentic_plus_verifier,BigCodeBench/842,run-ee9b2df7,1773677621.769044,bigcodebench,critic_fail,0,,0,,6515,29.93474,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,2274,1751,2490,,18.263044,8.250831,2.271278,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/213,run-ee9b2df7,1773677669.639208,bigcodebench,critic_fail,0,,0,,3675,47.834028,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1893,827,955,,38.633149,4.67053,2.273772,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/479,run-ee9b2df7,1773677712.169446,bigcodebench,critic_fail,0,,0,,4929,42.501671,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1981,1229,1719,,32.525139,6.2353,2.828521,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/22,run-ee9b2df7,1773677736.504308,bigcodebench,critic_fail,0,,0,,4406,24.301981,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,2014,1098,1294,,17.033027,4.947864,1.944458,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/645,run-ee9b2df7,1773677908.623745,bigcodebench,critic_fail,0,,0,,3668,29.341543,SyntaxError,"invalid syntax (<unknown>, line 1)",google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1591,1133,944,,20.123928,5.443495,2.919906,,0,0,1,0,0,1,1,1,1,False,AssertionError,"======================================================================
+ERROR: test_empty_csv (builtins.TestCases.test_empty_csv)
+Test reading an empty CSV file.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 30, in test_empty_csv
+  File ""<string>"", line 17, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\parsers\readers.py"", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\parsers\readers.py"", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\parsers\readers.py"", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\parsers\readers.py"", line 1898, in _make_engine
+    return mapping[engine](f, **self.options)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\io\parsers\c_parser_wrapper.py"", line 93, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File ""pandas/_libs/parsers.pyx"", line 581, in pandas._libs.parsers.TextReader.__cinit__
+pandas.errors.EmptyDataError: No columns to parse from file
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.098s
+
+FAILED (errors=1)"
+bigcodebench,agentic_plus_verifier,BigCodeBench/335,run-ee9b2df7,1773677940.765374,bigcodebench,critic_fail,0,,0,,4105,32.112333,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1928,1140,1037,,21.213424,6.909391,3.62485,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/33,run-ee9b2df7,1773677967.124154,bigcodebench,critic_fail,0,,0,,3663,26.328472,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1683,1209,771,,16.399818,6.691198,2.775345,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/942,run-ee9b2df7,1773678025.159965,bigcodebench,critic_fail,1,REJECT,1,,8796,58.001826,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,2248,4562,1337,649,20.4259,19.560643,4.299364,7.747001,0,1,0,1,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/200,run-ee9b2df7,1773678076.695637,bigcodebench,critic_fail,0,,0,,3762,51.498853,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1906,921,935,,22.484742,6.525538,2.295688,,0,0,0,0,0,1,1,1,1,False,TimeoutError,Timeout after 30.0s
+bigcodebench,agentic_plus_verifier,BigCodeBench/107,run-ee9b2df7,1773678110.411306,bigcodebench,critic_fail,0,,0,,5037,33.671383,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,2062,1923,1052,,17.278225,6.921502,2.121562,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/37,run-ee9b2df7,1773678190.330816,bigcodebench,critic_fail,1,REJECT,1,,8996,79.883635,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,2027,4272,1625,1072,25.27203,15.504127,2.568974,25.940411,0,1,0,1,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/908,run-ee9b2df7,1773678237.30107,bigcodebench,critic_fail,1,REJECT,1,,6532,46.856711,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,1940,2498,1138,956,16.040896,11.672031,2.34508,7.248733,0,1,0,1,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/587,run-6eaba5df,1773843454.093502,bigcodebench,critic_fail,1,REJECT,1,,7130,114.641604,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,2040,2795,1059,1236,19.551709,18.174212,2.764054,13.835706,0,1,0,1,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/1051,run-6eaba5df,1773843509.658462,bigcodebench,critic_fail,0,,0,,4576,55.554964,SyntaxError,"invalid decimal literal (<unknown>, line 3)",google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,2081,1405,1090,,36.520911,9.025154,2.602556,,0,0,1,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/458,run-6eaba5df,1773843707.723044,bigcodebench,critic_fail,1,REJECT,1,,7296,72.320213,SyntaxError,"invalid syntax (<unknown>, line 1)",google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,2066,2771,1424,1035,31.319963,18.448878,9.636001,7.87114,0,1,1,1,1,1,1,1,1,False,AssertionError,"======================================================================
+ERROR: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 24, in test_case_3
+  File ""<string>"", line 53, in task_func
+ValueError: could not convert string to float: 'appleapple'
+
+======================================================================
+ERROR: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 32, in test_case_5
+  File ""<string>"", line 53, in task_func
+TypeError: unsupported operand type(s) for *: 'dict' and 'int'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.005s
+
+FAILED (errors=2)"
+bigcodebench,agentic_plus_verifier,BigCodeBench/304,run-6eaba5df,1773843822.989044,bigcodebench,critic_fail,0,,0,,4468,115.254528,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,2029,1276,1163,,82.452162,10.403255,2.19093,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/798,run-6eaba5df,1773843979.336783,bigcodebench,critic_fail,1,REJECT,1,,6027,156.335188,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,1895,2051,1046,1035,124.980043,16.469226,2.956272,10.39779,0,1,0,1,0,1,1,1,1,False,AssertionError,"======================================================================
+FAIL: test_directory_does_not_exist (builtins.TestCases.test_directory_does_not_exist)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 37, in test_directory_does_not_exist
+AssertionError: 'No backup found for /tmp/nonexistent.' != '/tmp/nonexistent'
+- No backup found for /tmp/nonexistent.
++ /tmp/nonexistent
+
+
+======================================================================
+FAIL: test_erroneous_backup_content (builtins.TestCases.test_erroneous_backup_content)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 47, in test_erroneous_backup_content
+AssertionError: Exception not raised
+
+======================================================================
+FAIL: test_no_backups_in_backup_directory (builtins.TestCases.test_no_backups_in_backup_directory)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 28, in test_no_backups_in_backup_directory
+AssertionError: 'No backup found for /tmp/my_data.' != 'No backups found in /tmp/backup. Cannot rollback update.'
+- No backup found for /tmp/my_data.
++ No backups found in /tmp/backup. Cannot rollback update.
+
+
+======================================================================
+FAIL: test_successful_rollback (builtins.TestCases.test_successful_rollback)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 14, in test_successful_rollback
+AssertionError: 'No backup found for /tmp/my_data.' != '/tmp/my_data'
+- No backup found for /tmp/my_data.
++ /tmp/my_data
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.004s
+
+FAILED (failures=4)"
+bigcodebench,agentic_plus_verifier,BigCodeBench/328,run-6eaba5df,1773844031.856714,bigcodebench,critic_fail,0,,0,,3764,52.513604,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1927,927,910,,42.921994,6.150587,2.863842,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/487,run-67fd4b71,1774011027.826462,bigcodebench,critic_fail,1,REJECT,1,,8732,61.440969,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,2128,3868,1588,1148,18.323657,16.829504,3.135957,10.874896,0,1,0,1,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/89,run-67fd4b71,1774011077.558383,bigcodebench,critic_fail,0,,0,,4945,49.694757,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,2105,1508,1332,,17.913643,9.928759,1.664633,,0,0,0,0,0,1,1,1,1,False,TimeoutError,Timeout after 30.0s
+bigcodebench,agentic_plus_verifier,BigCodeBench/49,run-67fd4b71,1774011170.466028,bigcodebench,critic_fail,1,REJECT,1,,7006,92.857867,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,2083,2107,945,1871,18.822945,11.488306,2.479115,58.569957,0,1,0,1,0,1,1,1,1,False,AssertionError,"======================================================================
+ERROR: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 14, in test_case_1
+  File ""<string>"", line 50, in assert_function_output
+TypeError: 'Axes' object is not subscriptable
+
+======================================================================
+ERROR: test_case_2 (builtins.TestCases.test_case_2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 17, in test_case_2
+  File ""<string>"", line 50, in assert_function_output
+TypeError: 'Axes' object is not subscriptable
+
+======================================================================
+ERROR: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 28, in test_case_4
+  File ""<string>"", line 50, in assert_function_output
+TypeError: 'Axes' object is not subscriptable
+
+======================================================================
+ERROR: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 31, in test_case_5
+  File ""<string>"", line 50, in assert_function_output
+TypeError: 'Axes' object is not subscriptable
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.380s
+
+FAILED (errors=4)"
+bigcodebench,agentic_plus_verifier,BigCodeBench/157,run-67fd4b71,1774011218.507895,bigcodebench,critic_fail,1,REJECT,1,,7250,47.958445,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,1828,3381,1088,953,15.201747,13.939688,1.922404,9.265864,0,1,0,1,0,1,1,1,1,False,AssertionError,"======================================================================
+FAIL: test_correlation_calculation (builtins.TestCases.test_correlation_calculation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 32, in test_correlation_calculation
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\numpy\testing\_private\utils.py"", line 1222, in assert_array_almost_equal
+    assert_array_compare(compare, actual, desired, err_msg=err_msg,
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         verbose=verbose,
+                         ^^^^^^^^^^^^^^^^
+             header=('Arrays are not almost equal to %d decimals' % decimal),
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+             precision=decimal)
+             ^^^^^^^^^^^^^^^^^^
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\numpy\testing\_private\utils.py"", line 842, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Arrays are not almost equal to 6 decimals
+
+(shapes (8, 8), (64,) mismatch)
+ ACTUAL: MaskedArray([[ 1., inf, inf, inf, -1.,  1., -1., inf],
+             [inf, inf, inf, inf, inf, inf, inf, inf],
+             [inf, inf, inf, inf, inf, inf, inf, inf],...
+ DESIRED: array([ 1., nan, nan, nan, -1.,  1., -1., nan, nan, nan, nan, nan, nan,
+       nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan,
+       nan, nan, nan, nan, nan, nan, -1., nan, nan, nan,  1., -1.,  1.,...
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.446s
+
+FAILED (failures=1)"
+bigcodebench,agentic_plus_verifier,BigCodeBench/611,run-67fd4b71,1774011368.879028,bigcodebench,critic_fail,1,REJECT,1,,6927,150.34269,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,2000,2812,989,1126,65.233896,15.034772,1.856074,65.781184,0,1,0,1,0,1,1,1,1,False,AssertionError,"======================================================================
+FAIL: test_more_plots_than_data (builtins.TestCases.test_more_plots_than_data)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 27, in test_more_plots_than_data
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.058s
+
+FAILED (failures=1)"
+bigcodebench,agentic_plus_verifier,BigCodeBench/1071,run-67fd4b71,1774011415.217002,bigcodebench,critic_fail,1,REJECT,1,,8393,46.298774,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,2100,4005,1271,1017,16.407921,14.667569,2.103772,9.674695,0,1,0,1,0,1,1,1,1,False,AssertionError,"======================================================================
+FAIL: test_y_values (builtins.TestCases.test_y_values)
+Check that the y-values are shuffled.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 49, in test_y_values
+AssertionError: False is not true : The y-values should be shuffled numbers from the range [1, len(list)].
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.629s
+
+FAILED (failures=1)"
+bigcodebench,agentic_plus_verifier,BigCodeBench/499,run-67fd4b71,1774011469.452222,bigcodebench,critic_fail,0,,0,,4424,54.200491,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1786,1600,1038,,44.686183,6.486852,2.225037,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/617,run-67fd4b71,1774011611.53145,bigcodebench,critic_fail,1,REJECT,1,,7893,142.043648,SyntaxError,"invalid syntax (<unknown>, line 1)",google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,2072,2768,1158,1895,85.497144,22.307473,2.734601,17.803288,0,1,1,1,1,1,1,1,1,False,AssertionError,"======================================================================
+ERROR: test_no_teams (builtins.TestCases.test_no_teams)
+Test function with no teams.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 27, in test_no_teams
+  File ""<string>"", line 54, in task_func
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\frame.py"", line 4113, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File ""C:\Users\jbeem\AppData\Roaming\Python\Python314\site-packages\pandas\core\indexes\range.py"", line 417, in get_loc
+    raise KeyError(key)
+KeyError: 'Penalties'
+
+======================================================================
+FAIL: test_dataframe_structure (builtins.TestCases.test_dataframe_structure)
+Test if the DataFrame contains the expected structure.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 9, in test_dataframe_structure
+AssertionError: Lists differ: ['Team', 'Match Result', 'Goals', 'Penalties', 'Penalty Cost'] != ['Team', 'Match Result', 'Goals', 'Penalty Cost']
+
+First differing element 3:
+'Penalties'
+'Penalty Cost'
+
+First list contains 1 additional elements.
+First extra element 4:
+'Penalty Cost'
+
+- ['Team', 'Match Result', 'Goals', 'Penalties', 'Penalty Cost']
+?                                   -------------
+
++ ['Team', 'Match Result', 'Goals', 'Penalty Cost']
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.009s
+
+FAILED (failures=1, errors=1)"
+bigcodebench,agentic_plus_verifier,BigCodeBench/375,run-67fd4b71,1774011652.898511,bigcodebench,critic_fail,0,,0,,4359,41.321865,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1857,1317,1185,,15.65551,5.004162,2.436851,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/1042,run-67fd4b71,1774011742.411056,bigcodebench,critic_fail,1,REJECT,1,,7028,89.4862,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,1962,2916,1456,694,61.148742,16.593724,2.894916,6.490485,0,1,0,1,0,1,1,1,1,False,AssertionError,"======================================================================
+ERROR: test_smtp_server_connection_error (builtins.TestCases.test_smtp_server_connection_error)
+Test behavior when there is a network error (e.g., SMTP server unreachable).
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 67, in test_smtp_server_connection_error
+  File ""<string>"", line 52, in task_func
+EOFError: EOF when reading a line
+
+======================================================================
+ERROR: test_socket_closes_after_operation (builtins.TestCases.test_socket_closes_after_operation)
+Test if the socket is properly closed after the operation.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 83, in test_socket_closes_after_operation
+  File ""<string>"", line 52, in task_func
+EOFError: EOF when reading a line
+
+======================================================================
+ERROR: test_successful_email_dispatch (builtins.TestCases.test_successful_email_dispatch)
+Test if the email is successfully composed and sent with valid inputs.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 102, in test_successful_email_dispatch
+  File ""<string>"", line 52, in task_func
+EOFError: EOF when reading a line
+
+======================================================================
+ERROR: test_successful_email_send (builtins.TestCases.test_successful_email_send)
+Test if the email is successfully sent with valid inputs.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 23, in test_successful_email_send
+  File ""<string>"", line 52, in task_func
+EOFError: EOF when reading a line
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.009s
+
+FAILED (errors=4)"
+bigcodebench,agentic_plus_verifier,BigCodeBench/1127,run-67fd4b71,1774011768.55,bigcodebench,critic_fail,0,,0,,4264,26.08563,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1878,1180,1206,,15.842107,7.142092,2.623061,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/938,run-67fd4b71,1774011859.757933,bigcodebench,critic_fail,1,REJECT,1,,5657,91.174556,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,1937,1885,1066,769,64.606198,12.762673,2.208938,7.646904,0,1,0,1,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/953,run-67fd4b71,1774011893.003596,bigcodebench,critic_fail,0,,0,,4957,33.202877,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,2113,1471,1373,,18.45118,9.419396,3.22225,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/624,run-67fd4b71,1774011921.19838,bigcodebench,critic_fail,0,,0,,4142,28.157877,SyntaxError,"invalid syntax (<unknown>, line 1)",google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1882,1338,922,,15.919888,5.652727,2.4082,,0,0,1,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/820,run-67fd4b71,1774011973.022743,bigcodebench,critic_fail,1,REJECT,1,,5774,51.790713,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,1658,2373,956,787,28.602784,10.021131,4.847942,7.191754,0,1,0,1,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/895,run-67fd4b71,1774012044.732617,bigcodebench,critic_fail,1,REJECT,1,,5752,71.686984,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,1939,2017,935,861,19.692697,12.766994,2.39313,33.142876,0,1,0,1,0,1,1,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_1 (builtins.TestCases.test_case_1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 8, in test_case_1
+AssertionError: np.float64(251.1735) != 250.7154
+
+======================================================================
+FAIL: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 19, in test_case_3
+AssertionError: np.int32(414) != 474
+
+======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 27, in test_case_4
+AssertionError: np.int32(236) != 113
+
+======================================================================
+FAIL: test_case_5 (builtins.TestCases.test_case_5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 34, in test_case_5
+AssertionError: np.int32(55) != 190
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.448s
+
+FAILED (failures=4)"
+bigcodebench,agentic_plus_verifier,BigCodeBench/464,run-67fd4b71,1774012070.612611,bigcodebench,critic_fail,0,,0,,3948,25.847926,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1986,927,1035,,17.682408,5.202514,2.509383,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/48,run-67fd4b71,1774012121.551251,bigcodebench,critic_fail,0,,0,,3795,50.909042,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1966,991,838,,20.270093,6.750566,3.57526,,0,0,0,0,0,1,1,1,1,False,TimeoutError,Timeout after 30.0s
+bigcodebench,agentic_plus_verifier,BigCodeBench/12,run-67fd4b71,1774012256.22922,bigcodebench,critic_fail,1,REJECT,1,,7168,134.642516,SyntaxError,"invalid syntax (<unknown>, line 1)",google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,2051,2791,1465,861,74.065486,23.644788,2.283289,8.954212,0,1,1,1,1,1,1,1,1,False,AssertionError,"======================================================================
+ERROR: test_custom_values_successful_script (builtins.TestCases.test_custom_values_successful_script)
+Test the function with custom script name and log file with successful execution
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 32, in test_custom_values_successful_script
+  File ""<string>"", line 37, in task_func
+FileNotFoundError: Script file 'custom_backup.sh' does not exist.
+
+======================================================================
+ERROR: test_default_values_successful_script (builtins.TestCases.test_default_values_successful_script)
+Test the function with default parameters and successful execution
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 10, in test_default_values_successful_script
+  File ""<string>"", line 37, in task_func
+FileNotFoundError: Script file 'backup.sh' does not exist.
+
+======================================================================
+ERROR: test_log_data_format (builtins.TestCases.test_log_data_format)
+Test that the timestamps are in the correct format
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 41, in test_log_data_format
+  File ""<string>"", line 37, in task_func
+FileNotFoundError: Script file 'backup.sh' does not exist.
+
+======================================================================
+ERROR: test_non_zero_exit_status (builtins.TestCases.test_non_zero_exit_status)
+Test the function with a non-zero exit status
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 49, in test_non_zero_exit_status
+  File ""<string>"", line 37, in task_func
+FileNotFoundError: Script file 'backup.sh' does not exist.
+
+======================================================================
+ERROR: test_script_execution_failure (builtins.TestCases.test_script_execution_failure)
+Test the function raising RuntimeError on script execution failure
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 24, in test_script_execution_failure
+  File ""<string>"", line 37, in task_func
+FileNotFoundError: Script file 'backup.sh' does not exist.
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.010s
+
+FAILED (errors=5)"
+bigcodebench,agentic_plus_verifier,BigCodeBench/1095,run-67fd4b71,1774012383.416123,bigcodebench,critic_fail,0,,0,,4322,127.153966,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1929,1018,1375,,111.491896,7.897463,3.087742,,0,0,0,0,0,1,1,1,1,False,AssertionError,"======================================================================
+FAIL: test_case_3 (builtins.TestCases.test_case_3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 42, in test_case_3
+AssertionError: Lists differ: ['$abc$', '$def'] != ['$abc', '$def']
+
+First differing element 0:
+'$abc$'
+'$abc'
+
+- ['$abc$', '$def']
+?       -
+
++ ['$abc', '$def']
+
+======================================================================
+FAIL: test_case_4 (builtins.TestCases.test_case_4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 52, in test_case_4
+AssertionError: Lists differ: ['$hello', '$world!', '$test.'] != ['$hello', '$world', '$test']
+
+First differing element 1:
+'$world!'
+'$world'
+
+- ['$hello', '$world!', '$test.']
+?                   -         -
+
++ ['$hello', '$world', '$test']
+
+======================================================================
+FAIL: test_save_dollar_prefixed_words_to_file (builtins.TestCases.test_save_dollar_prefixed_words_to_file)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""<string>"", line 80, in test_save_dollar_prefixed_words_to_file
+AssertionError: '$example\n$valid\n$!invalid\n$1234\n' != '$example\n$valid\n$1234\n'
+  $example
+  $valid
+- $!invalid
+  $1234
+
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.042s
+
+FAILED (failures=3)"
+bigcodebench,agentic_plus_verifier,BigCodeBench/384,run-67fd4b71,1774012487.509339,bigcodebench,critic_fail,1,REJECT,1,,7541,104.069061,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,2209,2643,812,1877,17.501056,14.25569,2.956077,68.647692,0,1,0,1,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/557,run-67fd4b71,1774012544.897568,bigcodebench,critic_fail,1,REJECT,1,,7248,57.351747,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,2095,2658,1104,1391,16.42195,16.321744,8.027908,12.944059,0,1,0,1,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/149,run-67fd4b71,1774012585.730469,bigcodebench,critic_fail,0,,0,,3997,40.792487,SyntaxError,"invalid decimal literal (<unknown>, line 3)",google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1677,1548,772,,30.481834,6.511747,2.770849,,0,0,1,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/937,run-67fd4b71,1774012616.337679,bigcodebench,critic_fail,1,REJECT,1,,4966,30.574865,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,1455,2280,691,540,11.844369,10.051683,2.143368,5.390044,0,1,0,1,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/718,run-67fd4b71,1774012679.980207,bigcodebench,critic_fail,1,REJECT,1,,5370,63.60806,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,1903,1815,859,793,31.590772,12.468408,5.634558,8.425204,0,1,0,1,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/973,run-67fd4b71,1774012734.178461,bigcodebench,critic_fail,1,REJECT,1,,7712,54.140535,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,1996,2516,1962,1238,18.310777,18.77707,5.279411,10.216745,0,1,0,1,0,1,1,1,1,False,AssertionError,"======================================================================
+ERROR: test_nonexist_path (builtins.TestCases.test_nonexist_path)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 30, in test_nonexist_path
+  File ""<string>"", line 62, in task_func
+  File ""C:\Python314\Lib\shutil.py"", line 1466, in disk_usage
+    total, free = nt._getdiskusage(path)
+                  ~~~~~~~~~~~~~~~~^^^^^^
+OSError: [WinError 123] The filename, directory name, or volume label syntax is incorrect
+
+======================================================================
+ERROR: test_path_with_trailing_delimiter (builtins.TestCases.test_path_with_trailing_delimiter)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 114, in test_path_with_trailing_delimiter
+  File ""<string>"", line 44, in task_func
+ValueError: Path contains invalid empty components
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.010s
+
+FAILED (errors=2)"
+bigcodebench,agentic_plus_verifier,BigCodeBench/956,run-67fd4b71,1774012777.868043,bigcodebench,critic_fail,0,,0,,4411,43.656959,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1923,945,1543,,29.126928,6.637382,2.789916,,0,0,0,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/17,run-67fd4b71,1774012806.011758,bigcodebench,critic_fail,0,,0,,4299,28.108216,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,1895,1512,892,,17.971416,6.701349,2.429666,,0,0,0,0,0,1,1,1,1,False,AssertionError,"======================================================================
+FAIL: test_process_found_restarts_process (builtins.TestCases.test_process_found_restarts_process)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 20, in test_process_found_restarts_process
+AssertionError: 'Process not found. Starting notepad.' != 'Process found. Restarting notepad.'
+- Process not found. Starting notepad.
+?         ----       ^
++ Process found. Restarting notepad.
+?                ^^^
+
+
+======================================================================
+FAIL: test_process_terminates_and_restarts_multiple_instances (builtins.TestCases.test_process_terminates_and_restarts_multiple_instances)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""C:\Python314\Lib\unittest\mock.py"", line 1432, in patched
+    return func(*newargs, **newkeywargs)
+  File ""<string>"", line 34, in test_process_terminates_and_restarts_multiple_instances
+AssertionError: 'Process not found. Starting multi_instance.' != 'Process found. Restarting multi_instance.'
+- Process not found. Starting multi_instance.
+?         ----       ^
++ Process found. Restarting multi_instance.
+?                ^^^
+
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.005s
+
+FAILED (failures=2)"
+bigcodebench,agentic_plus_verifier,BigCodeBench/886,run-67fd4b71,1774012836.58618,bigcodebench,critic_fail,0,,0,,4673,30.538674,SyntaxError,"invalid decimal literal (<unknown>, line 3)",google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,2179,1250,1244,,17.330348,8.216174,3.331569,,0,0,1,0,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/92,run-67fd4b71,1774012916.752984,bigcodebench,critic_fail,1,REJECT,1,,7544,80.135118,,,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,google/gemini-3-pro-preview,1980,3803,1086,675,36.276576,17.415434,2.464273,5.912982,0,1,0,1,0,1,1,1,1,True,,
+bigcodebench,agentic_plus_verifier,BigCodeBench/833,run-67fd4b71,1774012945.645726,bigcodebench,critic_fail,0,,0,,4986,28.758522,SyntaxError,"invalid syntax (<unknown>, line 1)",google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,2222,1421,1343,,17.454242,8.593854,2.184504,,0,0,1,0,0,1,1,1,1,True,,

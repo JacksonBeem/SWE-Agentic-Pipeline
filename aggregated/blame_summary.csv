@@ -1,3 +1,13 @@
-dataset,strategy,rows,qa_known_count,final_known_count,critic_true_positive_count,critic_true_negative_count,blame_executor_count,blame_critic_false_fail_count,blame_critic_false_pass_count,verifier_strict_eligible_count,verifier_help_count,verifier_harm_count,developer_blame_from_critic_count,critic_blame_from_verifier_count
-bigcodebench,agentic_no_planner_plus_verifier,4,4,4,0,4,0,0,0,0,0,0,0,0
-bigcodebench,agentic_plus_verifier,22,22,22,5,10,5,2,5,7,2,0,7,0
+dataset,strategy,rows,critic_known_count,final_known_count,critic_true_positive_count,critic_true_negative_count,blame_executor_count,blame_critic_false_fail_count,blame_critic_false_pass_count,verifier_strict_eligible_count,verifier_help_count,verifier_harm_count,executor_blame_from_critic_count,critic_blame_from_verifier_count
+bigcodebench,agentic,50,50,50,3,7,3,0,0,0,0,0,26,0
+bigcodebench,agentic_no_planner,53,53,53,2,3,2,3,2,0,0,0,28,0
+bigcodebench,agentic_plus_verifier,49,49,49,17,19,17,6,7,23,5,0,23,0
+bigcodebench,monolithic,57,0,57,0,0,0,0,0,0,0,0,0,0
+humaneval,agentic,10,10,10,0,10,0,0,0,0,0,0,0,0
+humaneval,agentic_no_planner,10,10,10,0,10,0,0,0,0,0,0,0,0
+humaneval,agentic_plus_verifier,9,9,9,0,9,0,0,0,0,0,0,0,0
+humaneval,monolithic,16,0,16,0,0,0,0,0,0,0,0,0,0
+mbpp,agentic,50,50,10,1,5,1,4,0,0,0,0,20,0
+mbpp,agentic_no_planner,50,50,50,1,6,1,4,0,0,0,0,17,0
+mbpp,agentic_plus_verifier,62,62,62,7,39,7,13,3,20,6,6,20,0
+mbpp,monolithic,50,0,10,0,0,0,0,0,0,0,0,0,0

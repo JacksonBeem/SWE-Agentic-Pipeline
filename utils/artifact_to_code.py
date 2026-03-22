@@ -1,4 +1,4 @@
-# pipeline/utils/runs_csv_to_code.py
+﻿# pipeline/utils/runs_csv_to_code.py
 from __future__ import annotations
 
 import ast
@@ -67,27 +67,27 @@ def _trim_to_python_start(text: str) -> str:
 def _truncate_at_noncode_section(text: str) -> str:
     """
     Keep the leading code block and drop common analysis/trailer sections
-    emitted by instruction-following models (QA:, FINAL_CODE, XML role tags, etc.).
+    emitted by instruction-following models (Critic:, FINAL_CODE, XML role tags, etc.).
     """
     markers = (
-        "QA:",
-        "ARCHITECT:",
-        "DEVELOPER:",
+        "CRITIC:",
+        "PLANNER:",
+        "EXECUTOR:",
         "VERIFIER:",
         "FINAL_CODE",
         "FINAL CODE",
         "# FINAL_CODE",
         "<FINAL_CODE>",
         "</FINAL_CODE>",
-        "QA PHASE",
-        "# QA",
-        "## QA",
+        "CRITIC PHASE",
+        "# CRITIC",
+        "## CRITIC",
         "**MENTAL EXECUTION",
         "MENTAL EXECUTION:",
-        "</DEVELOPER>",
-        "</ARCHITECT>",
-        "<QA>",
-        "</QA>",
+        "</EXECUTOR>",
+        "</PLANNER>",
+        "<CRITIC>",
+        "</CRITIC>",
         "</VERIFIER>",
     )
     out: List[str] = []
@@ -298,3 +298,4 @@ def extract_code_from_runs_csv(
     extracted = extract_code_from_artifact_text(str(artifact_text))
     extracted.row = row
     return extracted
+

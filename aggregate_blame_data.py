@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import argparse
 import csv
@@ -13,12 +13,13 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 
 DATASETS = ("mbpp", "bigcodebench", "humaneval")
 DEFAULT_STRATEGIES = ("agentic_plus_verifier", "agentic_no_planner_plus_verifier")
+CRITIC_AGENT_ALIASES = {"critic", "qa", "quality assurance", "quality_assurance"}
 TASK_FIELDNAMES = [
     "dataset",
     "strategy",
     "task_id",
     "run_id",
-    "qa_verdict_first_pass",
+    "critic_verdict_first_pass",
     "verifier_invoked",
     "verifier_decision",
     "repair_attempted",
@@ -35,7 +36,7 @@ TASK_FIELDNAMES = [
     "verifier_strict_eligible",
     "verifier_help",
     "verifier_harm",
-    "developer_blame_from_critic",
+    "executor_blame_from_critic",
     "critic_blame_from_verifier",
     "blame_basis",
     "verifier_blame_basis",
@@ -44,7 +45,7 @@ SUMMARY_FIELDNAMES = [
     "dataset",
     "strategy",
     "rows",
-    "qa_known_count",
+    "critic_known_count",
     "final_known_count",
     "critic_true_positive_count",
     "critic_true_negative_count",
@@ -54,7 +55,7 @@ SUMMARY_FIELDNAMES = [
     "verifier_strict_eligible_count",
     "verifier_help_count",
     "verifier_harm_count",
-    "developer_blame_from_critic_count",
+    "executor_blame_from_critic_count",
     "critic_blame_from_verifier_count",
 ]
 
@@ -112,7 +113,7 @@ def parse_bool_like(value: Any) -> bool | None:
     return None
 
 
-def parse_qa_verdict(text: str | None) -> str:
+def parse_critic_verdict(text: str | None) -> str:
     if not text:
         return "UNKNOWN"
 
@@ -120,7 +121,7 @@ def parse_qa_verdict(text: str | None) -> str:
     if not lines:
         return "UNKNOWN"
 
-    # Primary: match first non-empty line, mirroring orchestrator first-line QA semantics.
+    # Primary: match first non-empty line, mirroring orchestrator first-line Critic semantics.
     first = lines[0]
     first_up = first.upper().strip()
     # Remove common markdown wrappers.
@@ -224,19 +225,19 @@ def compute_task_blame_row(
     verifier_decision = (run_summary.get("verifier_decision") or "").strip().upper() or None
     repair_attempted = parse_bool_like(run_summary.get("repair_attempted"))
 
-    qa_rows = [
+    critic_rows = [
         r
         for r in run_events
         if r.get("event_type") == "AGENT_CALL"
-        and (r.get("agent") or "").strip() == "QA"
+        and (r.get("agent") or "").strip().lower() in CRITIC_AGENT_ALIASES
         and str(r.get("task_id", "")).strip() == task_id
     ]
-    qa_rows.sort(key=lambda r: parse_float(r.get("ts_unix")))
-    first_qa = qa_rows[0] if qa_rows else None
-    qa_text = None
-    if first_qa:
-        qa_text = (first_qa.get("clean_output") or first_qa.get("raw_output") or "").strip()
-    qa_verdict = parse_qa_verdict(qa_text)
+    critic_rows.sort(key=lambda r: parse_float(r.get("ts_unix")))
+    first_critic = critic_rows[0] if critic_rows else None
+    critic_text = None
+    if first_critic:
+        critic_text = (first_critic.get("clean_output") or first_critic.get("raw_output") or "").strip()
+    critic_verdict = parse_critic_verdict(critic_text)
 
     final_passed = parse_bool_like((final_bool or {}).get("passed"))
     pre_verifier_exec_passed_raw = run_summary.get("pre_verifier_exec_passed")
@@ -245,8 +246,8 @@ def compute_task_blame_row(
     verifier_pre_repair_exec_passed = parse_bool_like(run_summary.get("verifier_pre_repair_exec_passed"))
     verifier_post_repair_exec_passed = parse_bool_like(run_summary.get("verifier_post_repair_exec_passed"))
 
-    critic_fail = qa_verdict == "FAIL"
-    critic_pass = qa_verdict == "PASS"
+    critic_fail = critic_verdict == "FAIL"
+    critic_pass = critic_verdict == "PASS"
     verifier_used = verifier_invoked is True
 
     # Critic blame should be execution-backed: use pre-verifier execution only.
@@ -292,19 +293,19 @@ def compute_task_blame_row(
         verifier_harm = 0
 
     # Explicit requested attribution:
-    # - Developer blame from Critic verdict alone.
+    # - Executor blame from Critic verdict alone.
     # - Critic blame from Verifier adjudication.
-    if qa_verdict == "FAIL":
-        developer_blame_from_critic = 1
-    elif qa_verdict == "PASS":
-        developer_blame_from_critic = 0
+    if critic_verdict == "FAIL":
+        executor_blame_from_critic = 1
+    elif critic_verdict == "PASS":
+        executor_blame_from_critic = 0
     else:
-        developer_blame_from_critic = ""
+        executor_blame_from_critic = ""
 
-    if verifier_decision in {"ACCEPT", "REJECT"} and qa_verdict in {"PASS", "FAIL"}:
+    if verifier_decision in {"ACCEPT", "REJECT"} and critic_verdict in {"PASS", "FAIL"}:
         critic_blame_from_verifier = int(
-            (qa_verdict == "FAIL" and verifier_decision == "ACCEPT")
-            or (qa_verdict == "PASS" and verifier_decision == "REJECT")
+            (critic_verdict == "FAIL" and verifier_decision == "ACCEPT")
+            or (critic_verdict == "PASS" and verifier_decision == "REJECT")
         )
     else:
         critic_blame_from_verifier = ""
@@ -314,7 +315,7 @@ def compute_task_blame_row(
         "strategy": strategy,
         "task_id": task_id,
         "run_id": run_id,
-        "qa_verdict_first_pass": qa_verdict,
+        "critic_verdict_first_pass": critic_verdict,
         "verifier_invoked": int(verifier_used),
         "verifier_decision": verifier_decision or "",
         "repair_attempted": int(repair_attempted is True),
@@ -335,7 +336,7 @@ def compute_task_blame_row(
         "verifier_strict_eligible": verifier_strict_eligible,
         "verifier_help": verifier_help,
         "verifier_harm": verifier_harm,
-        "developer_blame_from_critic": developer_blame_from_critic,
+        "executor_blame_from_critic": executor_blame_from_critic,
         "critic_blame_from_verifier": critic_blame_from_verifier,
         "blame_basis": blame_basis,
         "verifier_blame_basis": verifier_blame_basis,
@@ -352,14 +353,14 @@ def summarize(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     for dataset, strategy in sorted(by_scope.keys()):
         grp = by_scope[(dataset, strategy)]
         n = len(grp)
-        qa_known = sum(1 for r in grp if r["qa_verdict_first_pass"] != "UNKNOWN")
+        critic_known = sum(1 for r in grp if r["critic_verdict_first_pass"] != "UNKNOWN")
         final_known = sum(1 for r in grp if r["final_passed"] in {"True", "False"})
         out.append(
             {
                 "dataset": dataset,
                 "strategy": strategy,
                 "rows": n,
-                "qa_known_count": qa_known,
+                "critic_known_count": critic_known,
                 "final_known_count": final_known,
                 "critic_true_positive_count": sum(int(r["critic_true_positive"]) for r in grp),
                 "critic_true_negative_count": sum(int(r["critic_true_negative"]) for r in grp),
@@ -369,10 +370,10 @@ def summarize(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "verifier_strict_eligible_count": sum(int(r["verifier_strict_eligible"]) for r in grp),
                 "verifier_help_count": sum(int(r["verifier_help"]) for r in grp),
                 "verifier_harm_count": sum(int(r["verifier_harm"]) for r in grp),
-                "developer_blame_from_critic_count": sum(
-                    int(r["developer_blame_from_critic"])
+                "executor_blame_from_critic_count": sum(
+                    int(r["executor_blame_from_critic"])
                     for r in grp
-                    if str(r["developer_blame_from_critic"]).strip() != ""
+                    if str(r["executor_blame_from_critic"]).strip() != ""
                 ),
                 "critic_blame_from_verifier_count": sum(
                     int(r["critic_blame_from_verifier"])
@@ -497,3 +498,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

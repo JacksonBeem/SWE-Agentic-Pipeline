@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import argparse
 import csv
@@ -17,9 +17,6 @@ EXPECTED_TASKS: dict[str, int] = {
     "mbpp": 200,
     "humaneval": 164,
 }
-
-EXCLUDED_AGENTS = {"security"}
-
 
 def task_id_matches_dataset(dataset: str, task_id: str) -> bool:
     tid = (task_id or "").strip()
@@ -289,8 +286,6 @@ def load_run_summaries(path: Path, dataset: str, strategy: str) -> dict[str, Any
             if event_type == "AGENT_CALL":
                 agent_call_rows += 1
                 agent_name = str(row.get("agent", "") or "").strip()
-                if agent_name.lower() in EXCLUDED_AGENTS:
-                    continue
                 task_id_raw = str(row.get("task_id", "") or "").strip()
                 if task_id_raw and not task_id_matches_dataset(dataset, task_id_raw):
                     agent_call_dataset_mismatch_rows += 1
@@ -342,21 +337,21 @@ def load_run_summaries(path: Path, dataset: str, strategy: str) -> dict[str, Any
                     "end_to_end_latency_s": parse_float(row.get("end_to_end_latency_s")),
                     "parse_error_type": str(row.get("parse_error_type", "") or "").strip() or None,
                     "parse_error_text": str(row.get("parse_error_text", "") or "").strip() or None,
-                    "architect": str(row.get("architect", "") or "").strip() or None,
-                    "developer": str(row.get("developer", "") or "").strip() or None,
-                    "qa": str(row.get("qa", "") or "").strip() or None,
+                    "planner": str(row.get("planner", "") or "").strip() or None,
+                    "executor": str(row.get("executor", "") or "").strip() or None,
+                    "critic": str(row.get("critic", row.get("Critic", "")) or "").strip() or None,
                     "verifier": str(row.get("verifier", "") or "").strip() or None,
-                    "architect_total_tokens": parse_int(row.get("architect_total_tokens")),
-                    "developer_total_tokens": parse_int(row.get("developer_total_tokens")),
-                    "qa_total_tokens": parse_int(row.get("qa_total_tokens")),
+                    "planner_total_tokens": parse_int(row.get("planner_total_tokens")),
+                    "executor_total_tokens": parse_int(row.get("executor_total_tokens")),
+                    "critic_total_tokens": parse_int(row.get("critic_total_tokens")),
                     "verifier_total_tokens": parse_int(row.get("verifier_total_tokens")),
-                    "architect_latency_s": parse_float(row.get("architect_latency_s")),
-                    "developer_latency_s": parse_float(row.get("developer_latency_s")),
-                    "qa_latency_s": parse_float(row.get("qa_latency_s")),
+                    "planner_latency_s": parse_float(row.get("planner_latency_s")),
+                    "executor_latency_s": parse_float(row.get("executor_latency_s")),
+                    "critic_latency_s": parse_float(row.get("critic_latency_s")),
                     "verifier_latency_s": parse_float(row.get("verifier_latency_s")),
-                    "architect_error": parse_int(row.get("architect_error")),
-                    "developer_repair": parse_int(row.get("developer_repair")),
-                    "developer_harm": parse_int(row.get("developer_harm")),
+                    "planner_error": parse_int(row.get("planner_error")),
+                    "executor_repair": parse_int(row.get("executor_repair")),
+                    "executor_harm": parse_int(row.get("executor_harm")),
                     "verifier_repair": parse_int(row.get("verifier_repair")),
                     "verifier_harm": parse_int(row.get("verifier_harm")),
                     "_input_order": idx,
@@ -453,21 +448,21 @@ def attach_boolean_results(
                 "end_to_end_latency_s": None,
                 "parse_error_type": None,
                 "parse_error_text": None,
-                "architect": None,
-                "developer": None,
-                "qa": None,
+                "planner": None,
+                "executor": None,
+                "critic": None,
                 "verifier": None,
-                "architect_total_tokens": None,
-                "developer_total_tokens": None,
-                "qa_total_tokens": None,
+                "planner_total_tokens": None,
+                "executor_total_tokens": None,
+                "critic_total_tokens": None,
                 "verifier_total_tokens": None,
-                "architect_latency_s": None,
-                "developer_latency_s": None,
-                "qa_latency_s": None,
+                "planner_latency_s": None,
+                "executor_latency_s": None,
+                "critic_latency_s": None,
                 "verifier_latency_s": None,
-                "architect_error": None,
-                "developer_repair": None,
-                "developer_harm": None,
+                "planner_error": None,
+                "executor_repair": None,
+                "executor_harm": None,
                 "verifier_repair": None,
                 "verifier_harm": None,
                 "run_index_for_task": 1,
@@ -844,10 +839,13 @@ def main() -> int:
         raise FileNotFoundError(f"Logs root not found: {logs_root.resolve()}")
 
     all_task_rows: list[dict[str, Any]] = []
+    all_task_rows_all_runs: list[dict[str, Any]] = []
     all_agent_calls: list[dict[str, Any]] = []
     strategy_summary_rows: list[dict[str, Any]] = []
+    strategy_summary_all_runs_rows: list[dict[str, Any]] = []
     quality_rows: list[dict[str, Any]] = []
     accuracy_rows: list[dict[str, Any]] = []
+    accuracy_all_runs_rows: list[dict[str, Any]] = []
     selected_run_task_keys: set[tuple[str, str, str, str]] = set()
 
     strategy_dirs = iter_strategy_dirs(logs_root)
@@ -871,6 +869,12 @@ def main() -> int:
             dataset=dataset,
             strategy=strategy,
         )
+        all_run_task_rows = [
+            r
+            for r in task_rows
+            if str(r.get("task_id", "") or "").strip() and "_input_order" in r
+        ]
+        all_task_rows_all_runs.extend(all_run_task_rows)
         unique_task_rows = [
             r
             for r in task_rows
@@ -887,12 +891,24 @@ def main() -> int:
         strategy_summary_rows.append(
             summarize_rows(dataset, strategy, unique_task_rows, "unique_runs", expected_task_count)
         )
+        strategy_summary_all_runs_rows.append(
+            summarize_rows(dataset, strategy, all_run_task_rows, "all_runs", expected_task_count)
+        )
         accuracy_rows.append(
             summarize_accuracy_scope(
                 dataset=dataset,
                 strategy=strategy,
                 scope="unique_runs",
                 rows=unique_task_rows,
+                expected_task_count=expected_task_count,
+            )
+        )
+        accuracy_all_runs_rows.append(
+            summarize_accuracy_scope(
+                dataset=dataset,
+                strategy=strategy,
+                scope="all_runs",
+                rows=all_run_task_rows,
                 expected_task_count=expected_task_count,
             )
         )
@@ -922,7 +938,12 @@ def main() -> int:
         agent_calls=all_agent_calls,
         keep_run_task_keys=selected_run_task_keys,
     )
+    deduped_agent_calls_all_runs = dedupe_agent_calls(
+        agent_calls=all_agent_calls,
+        keep_run_task_keys=set(),
+    )
     token_stats_rows = summarize_token_stats(deduped_agent_calls)
+    token_stats_all_runs_rows = summarize_token_stats(deduped_agent_calls_all_runs)
 
     task_fieldnames = [
         "dataset",
@@ -940,21 +961,21 @@ def main() -> int:
         "end_to_end_latency_s",
         "parse_error_type",
         "parse_error_text",
-        "architect",
-        "developer",
-        "qa",
+        "planner",
+        "executor",
+        "critic",
         "verifier",
-        "architect_total_tokens",
-        "developer_total_tokens",
-        "qa_total_tokens",
+        "planner_total_tokens",
+        "executor_total_tokens",
+        "critic_total_tokens",
         "verifier_total_tokens",
-        "architect_latency_s",
-        "developer_latency_s",
-        "qa_latency_s",
+        "planner_latency_s",
+        "executor_latency_s",
+        "critic_latency_s",
         "verifier_latency_s",
-        "architect_error",
-        "developer_repair",
-        "developer_harm",
+        "planner_error",
+        "executor_repair",
+        "executor_harm",
         "verifier_repair",
         "verifier_harm",
         "run_index_for_task",
@@ -1104,35 +1125,99 @@ def main() -> int:
     ]
 
     round_numeric_fields(all_task_rows)
+    round_numeric_fields(all_task_rows_all_runs)
     round_numeric_fields(strategy_summary_rows)
+    round_numeric_fields(strategy_summary_all_runs_rows)
     round_numeric_fields(quality_rows)
     round_numeric_fields(accuracy_rows)
+    round_numeric_fields(accuracy_all_runs_rows)
     round_numeric_fields(token_stats_rows)
+    round_numeric_fields(token_stats_all_runs_rows)
 
     write_csv(output_dir / "task_level.csv", all_task_rows, task_fieldnames)
+    write_csv(output_dir / "task_level_all_runs.csv", all_task_rows_all_runs, task_fieldnames)
     write_csv(output_dir / "strategy_summary.csv", strategy_summary_rows, summary_fieldnames)
+    write_csv(
+        output_dir / "strategy_summary_all_runs.csv",
+        strategy_summary_all_runs_rows,
+        summary_fieldnames,
+    )
     write_csv(output_dir / "data_quality_report.csv", quality_rows, quality_fieldnames)
     write_csv(output_dir / "accuracy_metrics.csv", accuracy_rows, accuracy_fieldnames)
+    write_csv(output_dir / "accuracy_metrics_all_runs.csv", accuracy_all_runs_rows, accuracy_fieldnames)
     write_csv(output_dir / "token_stats_by_agent.csv", token_stats_rows, token_stats_fieldnames)
+    write_csv(
+        output_dir / "token_stats_by_agent_all_runs.csv",
+        token_stats_all_runs_rows,
+        token_stats_fieldnames,
+    )
 
     scoped_task = write_scoped_csvs(output_dir, "task_level.csv", all_task_rows, task_fieldnames)
+    scoped_task_all_runs = write_scoped_csvs(
+        output_dir,
+        "task_level_all_runs.csv",
+        all_task_rows_all_runs,
+        task_fieldnames,
+    )
     scoped_summary = write_scoped_csvs(output_dir, "strategy_summary.csv", strategy_summary_rows, summary_fieldnames)
+    scoped_summary_all_runs = write_scoped_csvs(
+        output_dir,
+        "strategy_summary_all_runs.csv",
+        strategy_summary_all_runs_rows,
+        summary_fieldnames,
+    )
     scoped_quality = write_scoped_csvs(output_dir, "data_quality_report.csv", quality_rows, quality_fieldnames)
     scoped_accuracy = write_scoped_csvs(output_dir, "accuracy_metrics.csv", accuracy_rows, accuracy_fieldnames)
+    scoped_accuracy_all_runs = write_scoped_csvs(
+        output_dir,
+        "accuracy_metrics_all_runs.csv",
+        accuracy_all_runs_rows,
+        accuracy_fieldnames,
+    )
     scoped_token = write_scoped_csvs(output_dir, "token_stats_by_agent.csv", token_stats_rows, token_stats_fieldnames)
+    scoped_token_all_runs = write_scoped_csvs(
+        output_dir,
+        "token_stats_by_agent_all_runs.csv",
+        token_stats_all_runs_rows,
+        token_stats_fieldnames,
+    )
 
     print(f"Wrote: {(output_dir / 'task_level.csv').as_posix()} ({len(all_task_rows)} rows)")
+    print(f"Wrote: {(output_dir / 'task_level_all_runs.csv').as_posix()} ({len(all_task_rows_all_runs)} rows)")
     print(f"Wrote: {(output_dir / 'strategy_summary.csv').as_posix()} ({len(strategy_summary_rows)} rows)")
+    print(
+        f"Wrote: {(output_dir / 'strategy_summary_all_runs.csv').as_posix()} "
+        f"({len(strategy_summary_all_runs_rows)} rows)"
+    )
     print(f"Wrote: {(output_dir / 'data_quality_report.csv').as_posix()} ({len(quality_rows)} rows)")
     print(f"Wrote: {(output_dir / 'accuracy_metrics.csv').as_posix()} ({len(accuracy_rows)} rows)")
+    print(f"Wrote: {(output_dir / 'accuracy_metrics_all_runs.csv').as_posix()} ({len(accuracy_all_runs_rows)} rows)")
     print(f"Wrote: {(output_dir / 'token_stats_by_agent.csv').as_posix()} ({len(token_stats_rows)} rows)")
+    print(
+        f"Wrote: {(output_dir / 'token_stats_by_agent_all_runs.csv').as_posix()} "
+        f"({len(token_stats_all_runs_rows)} rows)"
+    )
     print(f"Wrote scoped task_level.csv files for {scoped_task} dataset/strategy directories.")
+    print(f"Wrote scoped task_level_all_runs.csv files for {scoped_task_all_runs} dataset/strategy directories.")
     print(f"Wrote scoped strategy_summary.csv files for {scoped_summary} dataset/strategy directories.")
+    print(
+        f"Wrote scoped strategy_summary_all_runs.csv files for {scoped_summary_all_runs} "
+        "dataset/strategy directories."
+    )
     print(f"Wrote scoped data_quality_report.csv files for {scoped_quality} dataset/strategy directories.")
     print(f"Wrote scoped accuracy_metrics.csv files for {scoped_accuracy} dataset/strategy directories.")
+    print(
+        f"Wrote scoped accuracy_metrics_all_runs.csv files for {scoped_accuracy_all_runs} "
+        "dataset/strategy directories."
+    )
     print(f"Wrote scoped token_stats_by_agent.csv files for {scoped_token} dataset/strategy directories.")
+    print(
+        f"Wrote scoped token_stats_by_agent_all_runs.csv files for {scoped_token_all_runs} "
+        "dataset/strategy directories."
+    )
     return 0
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

@@ -86,10 +86,10 @@ Pipeline with verifier enabled:
 python run_dataset_batch.py --no-skip-verifier
 ```
 
-Pipeline with verifier and security disabled:
+Pipeline with verifier disabled:
 
 ```powershell
-python run_dataset_batch.py --skip-verifier --skip-security
+python run_dataset_batch.py --skip-verifier
 ```
 
 ## Evaluation Recipes

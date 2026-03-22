@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
@@ -10,7 +10,7 @@ class TaskInput:
     test_harness: str | None = None
 
 @dataclass
-class ArchitectSpec:
+class PlannerSpec:
     text: str
 
 @dataclass
@@ -18,11 +18,7 @@ class CodeArtifact:
     text: str
 
 @dataclass
-class SecurityFindings:
-    text: str
-
-@dataclass
-class QAResult:
+class CriticResult:
     passed: bool
     summary: str
 
@@ -34,14 +30,11 @@ class VerifierDecision:
 # --- Leakage barriers (simple v1 heuristics; tighten later) ---
 
 PROHIBITED = {
-    # Architect must never emit code or patch syntax.
-    "Architect": ["diff --git", "def "],
+    # Planner must never emit code or patch syntax.
+    "Planner": ["diff --git", "def "],
 
-    # Developer shouldn't claim QA/security outcomes.
-    "Developer": ["REJECT", "unit test", "qa result", "security finding"],
-
-    # Security must not propose or apply fixes.
-    "Security":  ["apply patch", "here is the fix", "I changed"],
+    # Executor shouldn't claim Critic outcomes.
+    "Executor": ["REJECT", "unit test", "Critic result"],
 
     # Verifier is allowed to mention patch format (diff --git) but still must not emit code.
     "Verifier":  ["import ", "def ", "class "],
@@ -49,7 +42,7 @@ PROHIBITED = {
 
 def sanitize_output(agent: str, text: str) -> str:
     # Strip markdown code fences for non-verifier agents that should not emit fenced blocks.
-    if agent in {"Architect", "Developer", "QA", "Security"}:
+    if agent in {"Planner", "Executor", "Critic"}:
         lines = text.splitlines()
         out = []
         in_fence = False
@@ -65,3 +58,4 @@ def assert_no_prohibited(agent: str, text: str) -> None:
     for pat in PROHIBITED.get(agent, []):
         if pat.lower() in (text or "").lower():
             raise ValueError(f"Leakage/prohibition hit for {agent}: contains '{pat}'")
+

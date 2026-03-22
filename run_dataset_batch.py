@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import argparse
 import ast
@@ -50,14 +50,25 @@ def resolve_path_from_config(path_str: str) -> Path:
     return SCRIPT_DIR / p
 
 
-def derive_profile_for_flags(skip_architect: bool, skip_verifier: bool) -> str:
-    if skip_architect and (not skip_verifier):
-        return "agentic_no_planner_plus_verifier"
-    if skip_architect and skip_verifier:
+def derive_profile_for_flags(skip_planner: bool, skip_verifier: bool) -> str:
+    if skip_planner:
         return "agentic_no_planner"
-    if (not skip_architect) and (not skip_verifier):
+    if (not skip_planner) and (not skip_verifier):
         return "agentic_plus_verifier"
     return "agentic"
+
+
+def derive_profile_for_mode(mode: str, skip_planner: bool, skip_verifier: bool) -> str:
+    m = (mode or "").strip().lower()
+    if m == "monolithic":
+        return "monolithic"
+    return derive_profile_for_flags(skip_planner=skip_planner, skip_verifier=skip_verifier)
+
+
+def default_predictions_path_for(dataset_type: str, profile: str) -> Path:
+    ds = (dataset_type or "").strip().lower()
+    pf = (profile or "").strip().lower()
+    return SCRIPT_DIR / "logs" / ds / pf / "predictions.jsonl"
 
 
 DEFAULT_DATASET_PATH = resolve_path_from_config(get_active_dataset_path())
@@ -102,28 +113,22 @@ def parse_args() -> argparse.Namespace:
         help="pipeline=multi-agent orchestrator, monolithic=single LLM call per task.",
     )
     p.add_argument(
-        "--skip-security",
-        action=argparse.BooleanOptionalAction,
-        default=(not WORKFLOW_DEFAULTS.enable_security),
-        help="When mode=pipeline, skip the Security agent stage.",
-    )
-    p.add_argument(
         "--skip-verifier",
         action=argparse.BooleanOptionalAction,
         default=(not WORKFLOW_DEFAULTS.enable_verifier),
         help="When mode=pipeline, skip the Verifier stage.",
     )
     p.add_argument(
-        "--skip-architect",
+        "--skip-planner",
         action=argparse.BooleanOptionalAction,
         default=WORKFLOW_DEFAULTS.profile.startswith("agentic_no_planner"),
-        help="When mode=pipeline, bypass Architect and send prompt directly to Developer.",
+        help="When mode=pipeline, bypass Planner and send prompt directly to Executor.",
     )
     p.add_argument(
         "--enable-pre-verifier-checkpoint",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="When mode=pipeline, run local execution checkpoint after QA and before Verifier.",
+        help="When mode=pipeline, run local execution checkpoint after Critic and before Verifier.",
     )
     p.add_argument(
         "--enable-verifier-repair-checkpoints",
@@ -133,7 +138,7 @@ def parse_args() -> argparse.Namespace:
     )
     p.add_argument(
         "--trigger-policy",
-        choices=["always", "disagreement", "qa_fail"],
+        choices=["always", "disagreement", "critic_fail"],
         default=VERIFIER_TRIGGER_POLICY,
         help="When mode=pipeline, controls when Verifier is invoked.",
     )
@@ -148,15 +153,15 @@ def parse_args() -> argparse.Namespace:
 
 MONOLITHIC_SYSTEM_PROMPT = """You are a disciplined software engineering system operating in three internal roles:
 
-1) ARCHITECT
-2) DEVELOPER
-3) QA
+1) PLANNER
+2) EXECUTOR
+3) Critic
 
 You must execute these roles sequentially and strictly.
 
 ROLE DEFINITIONS:
 
-ARCHITECT:
+PLANNER:
 - Interpret the problem.
 - Define intent.
 - Identify constraints.
@@ -164,14 +169,14 @@ ARCHITECT:
 - Define acceptance criteria.
 - Do NOT write code.
 
-DEVELOPER:
-- Implement executable Python code that satisfies the ARCHITECT specification.
+EXECUTOR:
+- Implement executable Python code that satisfies the PLANNER specification.
 - Follow constraints strictly.
 - Avoid unnecessary complexity.
 - Do NOT reference ground truth solutions.
 - Output must define exactly one function matching the ENTRY_POINT.
 
-QA:
+Critic:
 - Simulate execution of the function mentally.
 - Test the function against acceptance criteria.
 - Check edge cases.
@@ -179,8 +184,8 @@ QA:
 - If the implementation is incorrect, minimally repair it.
 - If repaired, re-evaluate mentally.
 - Repeat until the solution satisfies the acceptance criteria.
-- QA may only modify code to fix correctness errors.
-- QA must not redesign the algorithm.
+- Critic may only modify code to fix correctness errors.
+- Critic must not redesign the algorithm.
 
 CRITICAL RULES:
 
@@ -207,7 +212,7 @@ def build_monolithic_messages(prompt: str, entry_point: str | None = None) -> li
                 f"{ep_line}"
                 "Problem:\n\n"
                 f"{prompt}\n\n"
-                "Now execute ARCHITECT -> DEVELOPER -> QA internally.\n"
+                "Now execute PLANNER -> EXECUTOR -> Critic internally.\n"
                 "Output only FINAL_CODE as raw executable Python (no markdown fences, no extra text)."
             ),
         },
@@ -222,11 +227,13 @@ def normalize_generated_code(text: str) -> str:
 def main() -> int:
     args = parse_args()
 
+    # No-planner experiments are defined as Executor+Critic only.
+    # Force verifier off whenever Planner is bypassed.
+    if args.mode == "pipeline" and bool(args.skip_planner):
+        args.skip_verifier = True
+
     if not args.dataset.exists():
         raise FileNotFoundError(f"Dataset not found: {args.dataset.resolve()}")
-
-    if args.reset_predictions and args.predictions.exists():
-        args.predictions.unlink()
 
     rows = list(iter_jsonl(args.dataset))
     if args.start_idx < 0:
@@ -234,35 +241,44 @@ def main() -> int:
     if args.end_idx is not None and args.end_idx < args.start_idx:
         raise ValueError("--end-idx must be >= --start-idx")
 
-    completed = load_completed_task_ids(args.predictions) if args.skip_existing else set()
+    predictions_user_set = any(
+        a == "--predictions" or a.startswith("--predictions=")
+        for a in sys.argv[1:]
+    )
+
+    completed: set[str] = set()
     if rows:
         inferred_type = detect_dataset_type(rows[0])
-        default_pred, _, _ = get_default_paths_for_dataset(inferred_type)
-        configured_default_pred = DEFAULT_PREDICTIONS_PATH
-        if args.predictions == configured_default_pred:
-            args.predictions = resolve_path_from_config(default_pred)
-            completed = load_completed_task_ids(args.predictions) if args.skip_existing else set()
-
-        # If user enabled no-architect mode and left predictions at default,
-        # route outputs into explicit no-planner strategy directories.
-        current_profile = (WORKFLOW_DEFAULTS.profile or "").strip().lower()
-        target_profile = derive_profile_for_flags(
-            skip_architect=bool(args.skip_architect),
+        target_profile = derive_profile_for_mode(
+            mode=args.mode,
+            skip_planner=bool(args.skip_planner),
             skip_verifier=bool(args.skip_verifier),
         )
-        if (
-            args.predictions == resolve_path_from_config(default_pred)
-            and current_profile != target_profile
-        ):
-            args.predictions = SCRIPT_DIR / "logs" / inferred_type / target_profile / "predictions.jsonl"
-            completed = load_completed_task_ids(args.predictions) if args.skip_existing else set()
+        if not predictions_user_set:
+            args.predictions = default_predictions_path_for(inferred_type, target_profile)
+
+    if args.reset_predictions and args.predictions.exists():
+        args.predictions.unlink()
+
+    completed = load_completed_task_ids(args.predictions) if args.skip_existing else set()
 
     run_id = f"run-{uuid.uuid4().hex[:8]}"
     app = load_config(run_id=run_id)
-    pre_verifier_pred_output = args.predictions.parent / "pre_verifier_qa_predictions.jsonl"
+    collect_pre_verifier_preds = args.mode == "pipeline" and (not args.skip_verifier)
+    pre_verifier_pred_output = (
+        args.predictions.parent / "pre_verifier_critic_predictions.jsonl"
+        if collect_pre_verifier_preds
+        else None
+    )
     if args.reset_predictions:
-        if pre_verifier_pred_output.exists():
-            pre_verifier_pred_output.unlink()
+        for fname in (
+            "pre_verifier_critic_predictions.jsonl",
+            "pre_verifier_critic_predictions_executable.jsonl",
+            "pre_verifier_critic_boolean_results.jsonl",
+        ):
+            p = args.predictions.parent / fname
+            if p.exists():
+                p.unlink()
     pipe_cfg = None
     logger = CSVLogger(out_dir=str(args.predictions.parent))
     orch = None
@@ -273,8 +289,7 @@ def main() -> int:
             traceable=True,
             trigger_policy=args.trigger_policy,
             allow_single_repair=True,
-            enable_planner=(not args.skip_architect),
-            enable_security=(not args.skip_security),
+            enable_planner=(not args.skip_planner),
             enable_verifier=(not args.skip_verifier),
             enable_pre_verifier_checkpoint=bool(args.enable_pre_verifier_checkpoint),
             enable_verifier_repair_checkpoints=bool(args.enable_verifier_repair_checkpoints),
@@ -323,9 +338,9 @@ def main() -> int:
         try:
             attempted = True
             if args.mode == "pipeline":
-                if args.skip_architect and args.skip_verifier:
+                if args.skip_planner and args.skip_verifier:
                     pipe_name = f"{dataset_type}_no_planner_no_verifier"
-                elif args.skip_architect:
+                elif args.skip_planner:
                     pipe_name = f"{dataset_type}_no_planner"
                 elif args.skip_verifier:
                     pipe_name = f"{dataset_type}_no_verifier"
@@ -334,11 +349,12 @@ def main() -> int:
                 out = orch.run_task(task, pipeline_config=pipe_name)
                 completion = out.get("final_executable_code", "") or out.get("final_artifact", "") or ""
             else:
+                mono_pipe_name = f"{dataset_type}_monolithic"
                 messages = build_monolithic_messages(prompt=prompt, entry_point=entry_point)
                 # BigCodeBench completions can be long; give monolithic extra budget to avoid truncation.
                 mono_cfg = ModelConfig(
-                    model=app.developer_model.model,
-                    temperature=app.developer_model.temperature,
+                    model=app.executor_model.model,
+                    temperature=app.executor_model.temperature,
                     max_tokens=6000,
                 )
                 llm = mono_client.chat(mono_cfg, messages)
@@ -355,9 +371,9 @@ def main() -> int:
                         ts_unix=now_ts(),
                         run_id=run_id,
                         task_id=task_id,
-                        pipeline_config="humaneval_monolithic",
+                        pipeline_config=mono_pipe_name,
                         agent="Monolithic",
-                        model=app.developer_model.model,
+                        model=app.executor_model.model,
                         messages=json.dumps(messages, ensure_ascii=False),
                         raw_output=json.dumps(llm.raw, ensure_ascii=False),
                         clean_output=completion,
@@ -372,9 +388,9 @@ def main() -> int:
                 path=args.predictions,
                 task_id=task_id,
                 completion=completion,
-                model_name=app.developer_model.model,
+                model_name=app.executor_model.model,
             )
-            if args.mode == "pipeline":
+            if collect_pre_verifier_preds:
                 pre_artifact = (out.get("pre_verifier_artifact") or "").strip()
                 if pre_artifact:
                     append_jsonl(
@@ -392,7 +408,7 @@ def main() -> int:
                         ts_unix=now_ts(),
                         run_id=run_id,
                         task_id=task_id,
-                        pipeline_config="humaneval_monolithic",
+                        pipeline_config=mono_pipe_name,
                         trigger_policy="monolithic",
                         verifier_invoked=0,
                         verifier_decision=None,
@@ -417,9 +433,9 @@ def main() -> int:
                         ts_unix=now_ts(),
                         run_id=run_id,
                         task_id=task_id,
-                        pipeline_config="humaneval_monolithic",
+                        pipeline_config=mono_pipe_name,
                         agent="Monolithic",
-                        model=app.developer_model.model,
+                        model=app.executor_model.model,
                         messages=json.dumps(messages, ensure_ascii=False),
                         raw_output="",
                         clean_output="",
@@ -435,7 +451,7 @@ def main() -> int:
                         ts_unix=now_ts(),
                         run_id=run_id,
                         task_id=task_id,
-                        pipeline_config="humaneval_monolithic",
+                        pipeline_config=mono_pipe_name,
                         trigger_policy="monolithic",
                         verifier_invoked=0,
                         verifier_decision=None,
@@ -456,10 +472,11 @@ def main() -> int:
     print(f"skipped_existing: {skipped_existing}")
     print(f"failures: {failures}")
     print(f"predictions_file: {args.predictions}")
-    if args.mode == "pipeline":
+    if collect_pre_verifier_preds and pre_verifier_pred_output is not None:
         print(f"pre_verifier_predictions_file: {pre_verifier_pred_output}")
     return 0 if failures == 0 else 1
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

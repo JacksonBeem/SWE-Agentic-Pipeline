@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import csv
 import os
@@ -49,39 +49,39 @@ class RunRow:
     config: str | None = None
     prompt: str | None = None
     prompt_hash: str | None = None
-    architect: str | None = None
-    developer: str | None = None
-    qa: str | None = None
+    planner: str | None = None
+    executor: str | None = None
+    critic: str | None = None
     verifier: str | None = None
     final_answer: str | None = None
-    architect_prompt_tokens: int | None = None
-    architect_completion_tokens: int | None = None
-    architect_total_tokens: int | None = None
-    architect_latency_s: float | None = None
-    developer_prompt_tokens: int | None = None
-    developer_completion_tokens: int | None = None
-    developer_total_tokens: int | None = None
-    developer_latency_s: float | None = None
-    qa_prompt_tokens: int | None = None
-    qa_completion_tokens: int | None = None
-    qa_total_tokens: int | None = None
-    qa_latency_s: float | None = None
+    planner_prompt_tokens: int | None = None
+    planner_completion_tokens: int | None = None
+    planner_total_tokens: int | None = None
+    planner_latency_s: float | None = None
+    executor_prompt_tokens: int | None = None
+    executor_completion_tokens: int | None = None
+    executor_total_tokens: int | None = None
+    executor_latency_s: float | None = None
+    critic_prompt_tokens: int | None = None
+    critic_completion_tokens: int | None = None
+    critic_total_tokens: int | None = None
+    critic_latency_s: float | None = None
     verifier_prompt_tokens: int | None = None
     verifier_completion_tokens: int | None = None
     verifier_total_tokens: int | None = None
     verifier_latency_s: float | None = None
-    architect_answer: str | None = None
-    developer_answer: str | None = None
-    qa_answer: str | None = None
+    planner_answer: str | None = None
+    executor_answer: str | None = None
+    critic_answer: str | None = None
     verifier_answer: str | None = None
-    architect_error_text: str | None = None
-    developer_error_text: str | None = None
-    qa_error_text: str | None = None
+    planner_error_text: str | None = None
+    executor_error_text: str | None = None
+    critic_error_text: str | None = None
     verifier_error_text: str | None = None
     correct_answer: str | None = None
-    architect_error: int | None = None
-    developer_repair: int | None = None
-    developer_harm: int | None = None
+    planner_error: int | None = None
+    executor_repair: int | None = None
+    executor_harm: int | None = None
     verifier_repair: int | None = None
     verifier_harm: int | None = None
     pre_verifier_exec_invoked: int | None = None
@@ -146,39 +146,39 @@ class CSVLogger:
         "config",
         "prompt",
         "prompt_hash",
-        "architect",
-        "developer",
-        "qa",
+        "planner",
+        "executor",
+        "critic",
         "verifier",
         "final_answer",
-        "architect_prompt_tokens",
-        "architect_completion_tokens",
-        "architect_total_tokens",
-        "architect_latency_s",
-        "developer_prompt_tokens",
-        "developer_completion_tokens",
-        "developer_total_tokens",
-        "developer_latency_s",
-        "qa_prompt_tokens",
-        "qa_completion_tokens",
-        "qa_total_tokens",
-        "qa_latency_s",
+        "planner_prompt_tokens",
+        "planner_completion_tokens",
+        "planner_total_tokens",
+        "planner_latency_s",
+        "executor_prompt_tokens",
+        "executor_completion_tokens",
+        "executor_total_tokens",
+        "executor_latency_s",
+        "critic_prompt_tokens",
+        "critic_completion_tokens",
+        "critic_total_tokens",
+        "critic_latency_s",
         "verifier_prompt_tokens",
         "verifier_completion_tokens",
         "verifier_total_tokens",
         "verifier_latency_s",
-        "architect_answer",
-        "developer_answer",
-        "qa_answer",
+        "planner_answer",
+        "executor_answer",
+        "critic_answer",
         "verifier_answer",
-        "architect_error_text",
-        "developer_error_text",
-        "qa_error_text",
+        "planner_error_text",
+        "executor_error_text",
+        "critic_error_text",
         "verifier_error_text",
         "correct_answer",
-        "architect_error",
-        "developer_repair",
-        "developer_harm",
+        "planner_error",
+        "executor_repair",
+        "executor_harm",
         "verifier_repair",
         "verifier_harm",
         "pre_verifier_exec_invoked",
@@ -282,39 +282,39 @@ class CSVLogger:
             "config": d.get("config"),
             "prompt": d.get("prompt"),
             "prompt_hash": d.get("prompt_hash"),
-            "architect": d.get("architect"),
-            "developer": d.get("developer"),
-            "qa": d.get("qa"),
+            "planner": d.get("planner"),
+            "executor": d.get("executor"),
+            "critic": d.get("critic"),
             "verifier": d.get("verifier"),
             "final_answer": d.get("final_answer"),
-            "architect_prompt_tokens": d.get("architect_prompt_tokens"),
-            "architect_completion_tokens": d.get("architect_completion_tokens"),
-            "architect_total_tokens": d.get("architect_total_tokens"),
-            "architect_latency_s": d.get("architect_latency_s"),
-            "developer_prompt_tokens": d.get("developer_prompt_tokens"),
-            "developer_completion_tokens": d.get("developer_completion_tokens"),
-            "developer_total_tokens": d.get("developer_total_tokens"),
-            "developer_latency_s": d.get("developer_latency_s"),
-            "qa_prompt_tokens": d.get("qa_prompt_tokens"),
-            "qa_completion_tokens": d.get("qa_completion_tokens"),
-            "qa_total_tokens": d.get("qa_total_tokens"),
-            "qa_latency_s": d.get("qa_latency_s"),
+            "planner_prompt_tokens": d.get("planner_prompt_tokens"),
+            "planner_completion_tokens": d.get("planner_completion_tokens"),
+            "planner_total_tokens": d.get("planner_total_tokens"),
+            "planner_latency_s": d.get("planner_latency_s"),
+            "executor_prompt_tokens": d.get("executor_prompt_tokens"),
+            "executor_completion_tokens": d.get("executor_completion_tokens"),
+            "executor_total_tokens": d.get("executor_total_tokens"),
+            "executor_latency_s": d.get("executor_latency_s"),
+            "critic_prompt_tokens": d.get("critic_prompt_tokens"),
+            "critic_completion_tokens": d.get("critic_completion_tokens"),
+            "critic_total_tokens": d.get("critic_total_tokens"),
+            "critic_latency_s": d.get("critic_latency_s"),
             "verifier_prompt_tokens": d.get("verifier_prompt_tokens"),
             "verifier_completion_tokens": d.get("verifier_completion_tokens"),
             "verifier_total_tokens": d.get("verifier_total_tokens"),
             "verifier_latency_s": d.get("verifier_latency_s"),
-            "architect_answer": d.get("architect_answer"),
-            "developer_answer": d.get("developer_answer"),
-            "qa_answer": d.get("qa_answer"),
+            "planner_answer": d.get("planner_answer"),
+            "executor_answer": d.get("executor_answer"),
+            "critic_answer": d.get("critic_answer"),
             "verifier_answer": d.get("verifier_answer"),
-            "architect_error_text": d.get("architect_error_text"),
-            "developer_error_text": d.get("developer_error_text"),
-            "qa_error_text": d.get("qa_error_text"),
+            "planner_error_text": d.get("planner_error_text"),
+            "executor_error_text": d.get("executor_error_text"),
+            "critic_error_text": d.get("critic_error_text"),
             "verifier_error_text": d.get("verifier_error_text"),
             "correct_answer": d.get("correct_answer"),
-            "architect_error": d.get("architect_error"),
-            "developer_repair": d.get("developer_repair"),
-            "developer_harm": d.get("developer_harm"),
+            "planner_error": d.get("planner_error"),
+            "executor_repair": d.get("executor_repair"),
+            "executor_harm": d.get("executor_harm"),
             "verifier_repair": d.get("verifier_repair"),
             "verifier_harm": d.get("verifier_harm"),
             "pre_verifier_exec_invoked": d.get("pre_verifier_exec_invoked"),
@@ -330,3 +330,4 @@ class CSVLogger:
             "verifier_post_repair_exec_error_type": d.get("verifier_post_repair_exec_error_type"),
             "verifier_post_repair_exec_error": d.get("verifier_post_repair_exec_error"),
         })
+

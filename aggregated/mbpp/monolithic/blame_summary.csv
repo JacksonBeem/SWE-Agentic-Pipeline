@@ -1,2 +1,2 @@
-dataset,strategy,rows,qa_known_count,final_known_count,blame_executor_count,blame_critic_false_fail_count,blame_critic_false_pass_count,verifier_help_count,verifier_harm_count,developer_blame_from_critic_count,critic_blame_from_verifier_count
-mbpp,monolithic,200,0,200,0,0,0,0,0,0,0
+dataset,strategy,rows,critic_known_count,final_known_count,critic_true_positive_count,critic_true_negative_count,blame_executor_count,blame_critic_false_fail_count,blame_critic_false_pass_count,verifier_strict_eligible_count,verifier_help_count,verifier_harm_count,executor_blame_from_critic_count,critic_blame_from_verifier_count
+mbpp,monolithic,50,0,10,0,0,0,0,0,0,0,0,0,0

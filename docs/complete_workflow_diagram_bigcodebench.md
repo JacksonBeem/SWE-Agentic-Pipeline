@@ -1,4 +1,4 @@
-# Complete Workflow Diagram (BigCodeBench)
+﻿# Complete Workflow Diagram (BigCodeBench)
 
 This diagram shows the full pipeline from generation to evaluation to aggregation to similarity/complexity analysis, using real column names from BigCodeBench artifacts.
 
@@ -33,7 +33,7 @@ flowchart TD
     - run_total_tokens, end_to_end_latency_s
     - final_executable_code
     - parse_error_type, parse_error_text
-    - architect_answer, developer_answer, qa_answer, verifier_answer
+    - planner_answer, executor_answer, critic_answer, verifier_answer
     - error_text / *_error_text"]
 
     C --> E["Conversion + Local Eval
@@ -66,10 +66,10 @@ flowchart TD
     dataset,strategy,task_id,run_id,ts_unix,pipeline_config,trigger_policy,
     verifier_invoked,verifier_decision,repair_attempted,origin_stage,
     run_total_tokens,end_to_end_latency_s,parse_error_type,parse_error_text,
-    architect,developer,qa,verifier,
-    architect_total_tokens,developer_total_tokens,qa_total_tokens,verifier_total_tokens,
-    architect_latency_s,developer_latency_s,qa_latency_s,verifier_latency_s,
-    architect_error,developer_repair,developer_harm,verifier_repair,verifier_harm,
+    planner,executor,Critic,verifier,
+    planner_total_tokens,executor_total_tokens,critic_total_tokens,verifier_total_tokens,
+    planner_latency_s,executor_latency_s,critic_latency_s,verifier_latency_s,
+    planner_error,executor_repair,executor_harm,verifier_repair,verifier_harm,
     run_index_for_task,run_count_for_task,is_latest_for_task,
     has_boolean_result,passed,error_type,error"]
 
@@ -136,7 +136,7 @@ These are the actual current headers from your files.
 
 ### `runs.csv` header
 
-- `event_type,ts_unix,run_id,task_id,pipeline_config,agent,model,messages,raw_output,clean_output,prompt_tokens,completion_tokens,total_tokens,latency_s,error_text,trigger_policy,verifier_invoked,verifier_decision,repair_attempted,final_correct,origin_stage,run_total_tokens,end_to_end_latency_s,final_executable_code,parse_error_type,parse_error_text,config,prompt,prompt_hash,architect,developer,qa,verifier,final_answer,architect_prompt_tokens,architect_completion_tokens,architect_total_tokens,architect_latency_s,developer_prompt_tokens,developer_completion_tokens,developer_total_tokens,developer_latency_s,qa_prompt_tokens,qa_completion_tokens,qa_total_tokens,qa_latency_s,verifier_prompt_tokens,verifier_completion_tokens,verifier_total_tokens,verifier_latency_s,architect_answer,developer_answer,qa_answer,verifier_answer,architect_error_text,developer_error_text,qa_error_text,verifier_error_text,correct_answer,architect_error,developer_repair,developer_harm,verifier_repair,verifier_harm`
+- `event_type,ts_unix,run_id,task_id,pipeline_config,agent,model,messages,raw_output,clean_output,prompt_tokens,completion_tokens,total_tokens,latency_s,error_text,trigger_policy,verifier_invoked,verifier_decision,repair_attempted,final_correct,origin_stage,run_total_tokens,end_to_end_latency_s,final_executable_code,parse_error_type,parse_error_text,config,prompt,prompt_hash,planner,executor,Critic,verifier,final_answer,planner_prompt_tokens,planner_completion_tokens,planner_total_tokens,planner_latency_s,executor_prompt_tokens,executor_completion_tokens,executor_total_tokens,executor_latency_s,critic_prompt_tokens,critic_completion_tokens,critic_total_tokens,critic_latency_s,verifier_prompt_tokens,verifier_completion_tokens,verifier_total_tokens,verifier_latency_s,planner_answer,executor_answer,critic_answer,verifier_answer,planner_error_text,executor_error_text,critic_error_text,verifier_error_text,correct_answer,planner_error,executor_repair,executor_harm,verifier_repair,verifier_harm`
 
 ## Script Mapping
 
@@ -149,3 +149,4 @@ These are the actual current headers from your files.
   - [aggregate_results.py](/c:/VScode/pipeline/aggregate_results.py)
 - Similarity/complexity:
   - [analyze_artifact_similarity_complexity.py](/c:/VScode/pipeline/analyze_artifact_similarity_complexity.py)
+

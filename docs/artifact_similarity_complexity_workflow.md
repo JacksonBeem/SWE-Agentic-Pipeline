@@ -1,4 +1,4 @@
-# Artifact Similarity and Complexity Workflow
+﻿# Artifact Similarity and Complexity Workflow
 
 This document explains `analyze_artifact_similarity_complexity.py` in plain language: what it compares, how it computes metrics, and how to interpret the outputs.
 
@@ -66,7 +66,7 @@ Function: [normalize_code](/c:/VScode/pipeline/analyze_artifact_similarity_compl
 
 Steps:
 
-1. remove trailing analysis text (`QA`, `FINAL_CODE`, etc.)
+1. remove trailing analysis text (`Critic`, `FINAL_CODE`, etc.)
 2. extract code from diffs/fences/wrappers
 3. try parse-and-unparse normalization (`ast.parse` + `ast.unparse`)
 4. if parse fails, keep extracted text and record parse error
@@ -175,3 +175,4 @@ If complexity deltas are strongly negative:
 - This script does not run tests; it uses existing boolean results when present.
 - All expected tasks are included, even if artifacts are missing, so coverage gaps are explicit.
 - MBPP task IDs are normalized to `MBPP/<id>` where needed.
+

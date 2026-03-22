@@ -1,0 +1,1108 @@
+event_type,ts_unix,run_id,task_id,pipeline_config,agent,model,messages,raw_output,clean_output,prompt_tokens,completion_tokens,total_tokens,latency_s,error_text,trigger_policy,verifier_invoked,verifier_decision,repair_attempted,final_correct,origin_stage,run_total_tokens,end_to_end_latency_s,final_executable_code,parse_error_type,parse_error_text,config,prompt,prompt_hash,planner,executor,critic,verifier,final_answer,planner_prompt_tokens,planner_completion_tokens,planner_total_tokens,planner_latency_s,executor_prompt_tokens,executor_completion_tokens,executor_total_tokens,executor_latency_s,critic_prompt_tokens,critic_completion_tokens,critic_total_tokens,critic_latency_s,verifier_prompt_tokens,verifier_completion_tokens,verifier_total_tokens,verifier_latency_s,planner_answer,executor_answer,critic_answer,verifier_answer,planner_error_text,executor_error_text,critic_error_text,verifier_error_text,correct_answer,planner_error,executor_repair,executor_harm,verifier_repair,verifier_harm,pre_verifier_exec_invoked,pre_verifier_exec_passed,pre_verifier_exec_error_type,pre_verifier_exec_error,verifier_pre_repair_exec_invoked,verifier_pre_repair_exec_passed,verifier_pre_repair_exec_error_type,verifier_pre_repair_exec_error,verifier_post_repair_exec_invoked,verifier_post_repair_exec_passed,verifier_post_repair_exec_error_type,verifier_post_repair_exec_error
+AGENT_CALL,1773679999.6868954,run-b40543ac,HumanEval/0,humaneval_no_planner_no_verifier,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n    \""\""\"" Check if in given list of numbers, are any two numbers closer to each other than\n    given threshold.\n    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)\n    False\n    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)\n    True\n    \""\""\""\n\n\nPlanner spec:\nfrom typing import List\n\n\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n    \""\""\"" Check if in given list of numbers, are any two numbers closer to each other than\n    given threshold.\n    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)\n    False\n    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)\n    True\n    \""\""\""\n\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List
+
+
+def has_close_elements(numbers: List[float], threshold: float) -> bool:
+    """""" Check if in given list of numbers, are any two numbers closer to each other than
+    given threshold.
+    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)
+    False
+    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
+    True
+    """"""
+    for i in range(len(numbers)):
+        for j in range(i + 1, len(numbers)):
+            if abs(numbers[i] - numbers[j]) < threshold:
+                return True
+    return False
+```","from typing import List
+
+
+def has_close_elements(numbers: List[float], threshold: float) -> bool:
+    """""" Check if in given list of numbers, are any two numbers closer to each other than
+    given threshold.
+    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)
+    False
+    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
+    True
+    """"""
+    for i in range(len(numbers)):
+        for j in range(i + 1, len(numbers)):
+            if abs(numbers[i] - numbers[j]) < threshold:
+                return True
+    return False",408,190,598,3.868699789047241,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773680001.2784016,run-b40543ac,HumanEval/0,humaneval_no_planner_no_verifier,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate([1.0, 2.0, 3.9, 4.0, 5.0, 2.2], 0.3) == True\n    assert candidate([1.0, 2.0, 3.9, 4.0, 5.0, 2.2], 0.05) == False\n    assert candidate([1.0, 2.0, 5.9, 4.0, 5.0], 0.95) == True\n    assert candidate([1.0, 2.0, 5.9, 4.0, 5.0], 0.8) == False\n    assert candidate([1.0, 2.0, 3.0, 4.0, 5.0, 2.0], 0.1) == True\n    assert candidate([1.1, 2.2, 3.1, 4.1, 5.1], 1.0) == True\n    assert candidate([1.1, 2.2, 3.1, 4.1, 5.1], 0.5) == False\n\nCode artifact:\nfrom typing import List\n\n\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n    \""\""\"" Check if in given list of numbers, are any two numbers closer to each other than\n    given threshold.\n    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)\n    False\n    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)\n    True\n    \""\""\""\n    for i in range(len(numbers)):\n        for j in range(i + 1, len(numbers)):\n            if abs(numbers[i] - numbers[j]) < threshold:\n                return True\n    return False""}]","PASS
+All provided tests satisfied: function correctly detects whether any pair of numbers is closer than the threshold for the given cases.
+Run summary: Brute-force O(n²) pairwise distance check; behavior matches test harness expectations.","PASS
+All provided tests satisfied: function correctly detects whether any pair of numbers is closer than the threshold for the given cases.
+Run summary: Brute-force O(n²) pairwise distance check; behavior matches test harness expectations.",532,56,588,1.582747220993042,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773680001.6242726,run-b40543ac,HumanEval/0,humaneval_no_planner_no_verifier,,,,,,,,,,,critic_fail,0,,0,,,1186,5.807553768157959,"from typing import List
+
+
+def has_close_elements(numbers: List[float], threshold: float) -> bool:
+    """""" Check if in given list of numbers, are any two numbers closer to each other than
+    given threshold.
+    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)
+    False
+    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
+    True
+    """"""
+    for i in range(len(numbers)):
+        for j in range(i + 1, len(numbers)):
+            if abs(numbers[i] - numbers[j]) < threshold:
+                return True
+    return False",,,humaneval_no_planner_no_verifier,"from typing import List
+
+
+def has_close_elements(numbers: List[float], threshold: float) -> bool:
+    """""" Check if in given list of numbers, are any two numbers closer to each other than
+    given threshold.
+    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)
+    False
+    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
+    True
+    """"""
+",00b2e074e127a6a9d1376278bef732933760ab706057ec755a8c2642217b557a,,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List
+
+
+def has_close_elements(numbers: List[float], threshold: float) -> bool:
+    """""" Check if in given list of numbers, are any two numbers closer to each other than
+    given threshold.
+    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)
+    False
+    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
+    True
+    """"""
+    for i in range(len(numbers)):
+        for j in range(i + 1, len(numbers)):
+            if abs(numbers[i] - numbers[j]) < threshold:
+                return True
+    return False",,,,,408,190,598,3.868699789047241,532,56,588,1.582747220993042,,,,,PLANNER_BYPASSED: direct prompt sent to Executor.,"from typing import List
+
+
+def has_close_elements(numbers: List[float], threshold: float) -> bool:
+    """""" Check if in given list of numbers, are any two numbers closer to each other than
+    given threshold.
+    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)
+    False
+    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
+    True
+    """"""
+    for i in range(len(numbers)):
+        for j in range(i + 1, len(numbers)):
+            if abs(numbers[i] - numbers[j]) < threshold:
+                return True
+    return False","PASS
+All provided tests satisfied: function correctly detects whether any pair of numbers is closer than the threshold for the given cases.
+Run summary: Brute-force O(n²) pairwise distance check; behavior matches test harness expectations.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773680005.3662322,run-b40543ac,HumanEval/1,humaneval_no_planner_no_verifier,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef separate_paren_groups(paren_string: str) -> List[str]:\n    \""\""\"" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to\n    separate those group into separate strings and return the list of those.\n    Separate groups are balanced (each open brace is properly closed) and not nested within each other\n    Ignore any spaces in the input string.\n    >>> separate_paren_groups('( ) (( )) (( )( ))')\n    ['()', '(())', '(()())']\n    \""\""\""\n\n\nPlanner spec:\nfrom typing import List\n\n\ndef separate_paren_groups(paren_string: str) -> List[str]:\n    \""\""\"" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to\n    separate those group into separate strings and return the list of those.\n    Separate groups are balanced (each open brace is properly closed) and not nested within each other\n    Ignore any spaces in the input string.\n    >>> separate_paren_groups('( ) (( )) (( )( ))')\n    ['()', '(())', '(()())']\n    \""\""\""\n\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """""" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """"""
+    result = []
+    current_group = []
+    depth = 0
+    
+    for char in paren_string:
+        if char == ' ':
+            continue
+        
+        if char == '(':
+            current_group.append(char)
+            depth += 1
+        elif char == ')':
+            current_group.append(char)
+            depth -= 1
+            
+            if depth == 0:
+                result.append(''.join(current_group))
+                current_group = []
+    
+    return result
+```","from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """""" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """"""
+    result = []
+    current_group = []
+    depth = 0
+    
+    for char in paren_string:
+        if char == ' ':
+            continue
+        
+        if char == '(':
+            current_group.append(char)
+            depth += 1
+        elif char == ')':
+            current_group.append(char)
+            depth -= 1
+            
+            if depth == 0:
+                result.append(''.join(current_group))
+                current_group = []
+    
+    return result",418,267,685,3.714289903640747,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773680007.0562158,run-b40543ac,HumanEval/1,humaneval_no_planner_no_verifier,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate('(()()) ((())) () ((())()())') == [\n        '(()())', '((()))', '()', '((())()())'\n    ]\n    assert candidate('() (()) ((())) (((())))') == [\n        '()', '(())', '((()))', '(((())))'\n    ]\n    assert candidate('(()(())((())))') == [\n        '(()(())((())))'\n    ]\n    assert candidate('( ) (( )) (( )( ))') == ['()', '(())', '(()())']\n\nCode artifact:\nfrom typing import List\n\n\ndef separate_paren_groups(paren_string: str) -> List[str]:\n    \""\""\"" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to\n    separate those group into separate strings and return the list of those.\n    Separate groups are balanced (each open brace is properly closed) and not nested within each other\n    Ignore any spaces in the input string.\n    >>> separate_paren_groups('( ) (( )) (( )( ))')\n    ['()', '(())', '(()())']\n    \""\""\""\n    result = []\n    current_group = []\n    depth = 0\n    \n    for char in paren_string:\n        if char == ' ':\n            continue\n        \n        if char == '(':\n            current_group.append(char)\n            depth += 1\n        elif char == ')':\n            current_group.append(char)\n            depth -= 1\n            \n            if depth == 0:\n                result.append(''.join(current_group))\n                current_group = []\n    \n    return result""}]","PASS
+All tests passed; function correctly groups balanced, non-nested parenthesis substrings while ignoring spaces.
+Run summary: 4/4 assertions succeeded with expected outputs.","PASS
+All tests passed; function correctly groups balanced, non-nested parenthesis substrings while ignoring spaces.
+Run summary: 4/4 assertions succeeded with expected outputs.",417,45,462,1.6644346714019775,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773680007.4220526,run-b40543ac,HumanEval/1,humaneval_no_planner_no_verifier,,,,,,,,,,,critic_fail,0,,0,,,1147,5.772085189819336,"from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """""" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """"""
+    result = []
+    current_group = []
+    depth = 0
+    
+    for char in paren_string:
+        if char == ' ':
+            continue
+        
+        if char == '(':
+            current_group.append(char)
+            depth += 1
+        elif char == ')':
+            current_group.append(char)
+            depth -= 1
+            
+            if depth == 0:
+                result.append(''.join(current_group))
+                current_group = []
+    
+    return result",,,humaneval_no_planner_no_verifier,"from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """""" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """"""
+",ba4d0641a184fb3cdd632060a25d6408a7e91fe9d79b5c341407e74b80536327,,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """""" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """"""
+    result = []
+    current_group = []
+    depth = 0
+    
+    for char in paren_string:
+        if char == ' ':
+            continue
+        
+        if char == '(':
+            current_group.append(char)
+            depth += 1
+        elif char == ')':
+            current_group.append(char)
+            depth -= 1
+            
+            if depth == 0:
+                result.append(''.join(current_group))
+                current_group = []
+    
+    return result",,,,,418,267,685,3.714289903640747,417,45,462,1.6644346714019775,,,,,PLANNER_BYPASSED: direct prompt sent to Executor.,"from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """""" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """"""
+    result = []
+    current_group = []
+    depth = 0
+    
+    for char in paren_string:
+        if char == ' ':
+            continue
+        
+        if char == '(':
+            current_group.append(char)
+            depth += 1
+        elif char == ')':
+            current_group.append(char)
+            depth -= 1
+            
+            if depth == 0:
+                result.append(''.join(current_group))
+                current_group = []
+    
+    return result","PASS
+All tests passed; function correctly groups balanced, non-nested parenthesis substrings while ignoring spaces.
+Run summary: 4/4 assertions succeeded with expected outputs.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773680010.435412,run-b40543ac,HumanEval/2,humaneval_no_planner_no_verifier,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\n\n\ndef truncate_number(number: float) -> float:\n    \""\""\"" Given a positive floating point number, it can be decomposed into\n    and integer part (largest integer smaller than given number) and decimals\n    (leftover part always smaller than 1).\n\n    Return the decimal part of the number.\n    >>> truncate_number(3.5)\n    0.5\n    \""\""\""\n\n\nPlanner spec:\n\n\ndef truncate_number(number: float) -> float:\n    \""\""\"" Given a positive floating point number, it can be decomposed into\n    and integer part (largest integer smaller than given number) and decimals\n    (leftover part always smaller than 1).\n\n    Return the decimal part of the number.\n    >>> truncate_number(3.5)\n    0.5\n    \""\""\""\n\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+def truncate_number(number: float) -> float:
+    """""" Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """"""
+    return number % 1
+```","def truncate_number(number: float) -> float:
+    """""" Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """"""
+    return number % 1",322,102,424,2.98897385597229,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773680012.132872,run-b40543ac,HumanEval/2,humaneval_no_planner_no_verifier,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate(3.5) == 0.5\n    assert abs(candidate(1.33) - 0.33) < 1e-6\n    assert abs(candidate(123.456) - 0.456) < 1e-6\n\nCode artifact:\ndef truncate_number(number: float) -> float:\n    \""\""\"" Given a positive floating point number, it can be decomposed into\n    and integer part (largest integer smaller than given number) and decimals\n    (leftover part always smaller than 1).\n\n    Return the decimal part of the number.\n    >>> truncate_number(3.5)\n    0.5\n    \""\""\""\n    return number % 1""}]","PASS
+All tests passed; function correctly returns the fractional part using `number % 1`.
+Run summary: candidate(3.5)=0.5, candidate(1.33)≈0.33, candidate(123.456)≈0.456, all within tolerance.","PASS
+All tests passed; function correctly returns the fractional part using `number % 1`.
+Run summary: candidate(3.5)=0.5, candidate(1.33)≈0.33, candidate(123.456)≈0.456, all within tolerance.",247,68,315,1.676034688949585,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773680012.4945502,run-b40543ac,HumanEval/2,humaneval_no_planner_no_verifier,,,,,,,,,,,critic_fail,0,,0,,,739,5.049829959869385,"def truncate_number(number: float) -> float:
+    """""" Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """"""
+    return number % 1",,,humaneval_no_planner_no_verifier,"
+
+def truncate_number(number: float) -> float:
+    """""" Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """"""
+",fecb9ddd4f103f1c3e9d9c7d6c3b948a4b1285b50c3498437c85a9d604d957eb,,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"def truncate_number(number: float) -> float:
+    """""" Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """"""
+    return number % 1",,,,,322,102,424,2.98897385597229,247,68,315,1.676034688949585,,,,,PLANNER_BYPASSED: direct prompt sent to Executor.,"def truncate_number(number: float) -> float:
+    """""" Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """"""
+    return number % 1","PASS
+All tests passed; function correctly returns the fractional part using `number % 1`.
+Run summary: candidate(3.5)=0.5, candidate(1.33)≈0.33, candidate(123.456)≈0.456, all within tolerance.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773680016.5280447,run-b40543ac,HumanEval/3,humaneval_no_planner_no_verifier,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef below_zero(operations: List[int]) -> bool:\n    \""\""\"" You're given a list of deposit and withdrawal operations on a bank account that starts with\n    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and\n    at that point function should return True. Otherwise it should return False.\n    >>> below_zero([1, 2, 3])\n    False\n    >>> below_zero([1, 2, -4, 5])\n    True\n    \""\""\""\n\n\nPlanner spec:\nfrom typing import List\n\n\ndef below_zero(operations: List[int]) -> bool:\n    \""\""\"" You're given a list of deposit and withdrawal operations on a bank account that starts with\n    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and\n    at that point function should return True. Otherwise it should return False.\n    >>> below_zero([1, 2, 3])\n    False\n    >>> below_zero([1, 2, -4, 5])\n    True\n    \""\""\""\n\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """""" You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """"""
+    balance = 0
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            return True
+    return False","from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """""" You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """"""
+    balance = 0
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            return True
+    return False",390,158,548,4.002813816070557,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773680017.8886826,run-b40543ac,HumanEval/3,humaneval_no_planner_no_verifier,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate([]) == False\n    assert candidate([1, 2, -3, 1, 2, -3]) == False\n    assert candidate([1, 2, -4, 5, 6]) == True\n    assert candidate([1, -1, 2, -2, 5, -5, 4, -4]) == False\n    assert candidate([1, -1, 2, -2, 5, -5, 4, -5]) == True\n    assert candidate([1, -2, 2, -2, 5, -5, 4, -4]) == True\n\nCode artifact:\nfrom typing import List\n\n\ndef below_zero(operations: List[int]) -> bool:\n    \""\""\"" You're given a list of deposit and withdrawal operations on a bank account that starts with\n    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and\n    at that point function should return True. Otherwise it should return False.\n    >>> below_zero([1, 2, 3])\n    False\n    >>> below_zero([1, 2, -4, 5])\n    True\n    \""\""\""\n    balance = 0\n    for operation in operations:\n        balance += operation\n        if balance < 0:\n            return True\n    return False""}]","PASS
+All provided tests satisfied.
+
+Run summary: below_zero correctly tracks running balance and returns True iff it ever goes below zero, including edge cases like empty lists and sequences that recover after dipping below zero.","PASS
+All provided tests satisfied.
+
+Run summary: below_zero correctly tracks running balance and returns True iff it ever goes below zero, including edge cases like empty lists and sequences that recover after dipping below zero.",391,51,442,1.3392021656036377,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773680018.213503,run-b40543ac,HumanEval/3,humaneval_no_planner_no_verifier,,,,,,,,,,,critic_fail,0,,0,,,990,5.6906116008758545,"from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """""" You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """"""
+    balance = 0
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            return True
+    return False",,,humaneval_no_planner_no_verifier,"from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """""" You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """"""
+",430706f794ffabb60ec5818ca7c9fdbd281b97ef9d3ac6d6ba140a7a2498f5a5,,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """""" You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """"""
+    balance = 0
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            return True
+    return False",,,,,390,158,548,4.002813816070557,391,51,442,1.3392021656036377,,,,,PLANNER_BYPASSED: direct prompt sent to Executor.,"from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """""" You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """"""
+    balance = 0
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            return True
+    return False","PASS
+All provided tests satisfied.
+
+Run summary: below_zero correctly tracks running balance and returns True iff it ever goes below zero, including edge cases like empty lists and sequences that recover after dipping below zero.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773680021.295163,run-b40543ac,HumanEval/4,humaneval_no_planner_no_verifier,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef mean_absolute_deviation(numbers: List[float]) -> float:\n    \""\""\"" For a given list of input numbers, calculate Mean Absolute Deviation\n    around the mean of this dataset.\n    Mean Absolute Deviation is the average absolute difference between each\n    element and a centerpoint (mean in this case):\n    MAD = average | x - x_mean |\n    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])\n    1.0\n    \""\""\""\n\n\nPlanner spec:\nfrom typing import List\n\n\ndef mean_absolute_deviation(numbers: List[float]) -> float:\n    \""\""\"" For a given list of input numbers, calculate Mean Absolute Deviation\n    around the mean of this dataset.\n    Mean Absolute Deviation is the average absolute difference between each\n    element and a centerpoint (mean in this case):\n    MAD = average | x - x_mean |\n    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])\n    1.0\n    \""\""\""\n\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """""" For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """"""
+    mean = sum(numbers) / len(numbers)
+    return sum(abs(x - mean) for x in numbers) / len(numbers)
+```","from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """""" For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """"""
+    mean = sum(numbers) / len(numbers)
+    return sum(abs(x - mean) for x in numbers) / len(numbers)",394,165,559,3.0479538440704346,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773680022.81271,run-b40543ac,HumanEval/4,humaneval_no_planner_no_verifier,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert abs(candidate([1.0, 2.0, 3.0]) - 2.0/3.0) < 1e-6\n    assert abs(candidate([1.0, 2.0, 3.0, 4.0]) - 1.0) < 1e-6\n    assert abs(candidate([1.0, 2.0, 3.0, 4.0, 5.0]) - 6.0/5.0) < 1e-6\n\nCode artifact:\nfrom typing import List\n\n\ndef mean_absolute_deviation(numbers: List[float]) -> float:\n    \""\""\"" For a given list of input numbers, calculate Mean Absolute Deviation\n    around the mean of this dataset.\n    Mean Absolute Deviation is the average absolute difference between each\n    element and a centerpoint (mean in this case):\n    MAD = average | x - x_mean |\n    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])\n    1.0\n    \""\""\""\n    mean = sum(numbers) / len(numbers)\n    return sum(abs(x - mean) for x in numbers) / len(numbers)""}]","PASS
+All tests satisfied: function returns correct mean absolute deviation for provided lists.
+Run summary: Computed mean, then average absolute deviation; outputs match expected values within tolerance.","PASS
+All tests satisfied: function returns correct mean absolute deviation for provided lists.
+Run summary: Computed mean, then average absolute deviation; outputs match expected values within tolerance.",363,45,408,1.4951181411743164,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773680023.1446004,run-b40543ac,HumanEval/4,humaneval_no_planner_no_verifier,,,,,,,,,,,critic_fail,0,,0,,,967,4.900973796844482,"from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """""" For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """"""
+    mean = sum(numbers) / len(numbers)
+    return sum(abs(x - mean) for x in numbers) / len(numbers)",,,humaneval_no_planner_no_verifier,"from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """""" For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """"""
+",2717edd5d203ea22a6eebf62263effd9b792e1a2ef93e017868cedaac7b5ef10,,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """""" For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """"""
+    mean = sum(numbers) / len(numbers)
+    return sum(abs(x - mean) for x in numbers) / len(numbers)",,,,,394,165,559,3.0479538440704346,363,45,408,1.4951181411743164,,,,,PLANNER_BYPASSED: direct prompt sent to Executor.,"from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """""" For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """"""
+    mean = sum(numbers) / len(numbers)
+    return sum(abs(x - mean) for x in numbers) / len(numbers)","PASS
+All tests satisfied: function returns correct mean absolute deviation for provided lists.
+Run summary: Computed mean, then average absolute deviation; outputs match expected values within tolerance.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773680026.183878,run-b40543ac,HumanEval/5,humaneval_no_planner_no_verifier,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef intersperse(numbers: List[int], delimeter: int) -> List[int]:\n    \""\""\"" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n    >>> intersperse([], 4)\n    []\n    >>> intersperse([1, 2, 3], 4)\n    [1, 4, 2, 4, 3]\n    \""\""\""\n\n\nPlanner spec:\nfrom typing import List\n\n\ndef intersperse(numbers: List[int], delimeter: int) -> List[int]:\n    \""\""\"" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n    >>> intersperse([], 4)\n    []\n    >>> intersperse([1, 2, 3], 4)\n    [1, 4, 2, 4, 3]\n    \""\""\""\n\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """""" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    for i, num in enumerate(numbers):
+        result.append(num)
+        if i < len(numbers) - 1:
+            result.append(delimeter)
+    
+    return result
+```","from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """""" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    for i, num in enumerate(numbers):
+        result.append(num)
+        if i < len(numbers) - 1:
+            result.append(delimeter)
+    
+    return result",348,172,520,3.012387990951538,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773680028.0702229,run-b40543ac,HumanEval/5,humaneval_no_planner_no_verifier,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate([], 7) == []\n    assert candidate([5, 6, 3, 2], 8) == [5, 8, 6, 8, 3, 8, 2]\n    assert candidate([2, 2, 2], 2) == [2, 2, 2, 2, 2]\n\nCode artifact:\nfrom typing import List\n\n\ndef intersperse(numbers: List[int], delimeter: int) -> List[int]:\n    \""\""\"" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n    >>> intersperse([], 4)\n    []\n    >>> intersperse([1, 2, 3], 4)\n    [1, 4, 2, 4, 3]\n    \""\""\""\n    if not numbers:\n        return []\n    \n    result = []\n    for i, num in enumerate(numbers):\n        result.append(num)\n        if i < len(numbers) - 1:\n            result.append(delimeter)\n    \n    return result""}]","PASS
+All provided tests pass; delimiter is correctly interspersed between list elements, including edge case of empty list.
+Run summary: Function returns [] for empty input; correctly inserts delimiter between elements for non-empty lists, matching expected outputs.","PASS
+All provided tests pass; delimiter is correctly interspersed between list elements, including edge case of empty list.
+Run summary: Function returns [] for empty input; correctly inserts delimiter between elements for non-empty lists, matching expected outputs.",325,58,383,1.865959644317627,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773680028.4182425,run-b40543ac,HumanEval/5,humaneval_no_planner_no_verifier,,,,,,,,,,,critic_fail,0,,0,,,903,5.2486631870269775,"from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """""" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    for i, num in enumerate(numbers):
+        result.append(num)
+        if i < len(numbers) - 1:
+            result.append(delimeter)
+    
+    return result",,,humaneval_no_planner_no_verifier,"from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """""" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """"""
+",388474ac71e5b893802f5971102df2e4ea82ddf2f916a4a55361c19370f54012,,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """""" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    for i, num in enumerate(numbers):
+        result.append(num)
+        if i < len(numbers) - 1:
+            result.append(delimeter)
+    
+    return result",,,,,348,172,520,3.012387990951538,325,58,383,1.865959644317627,,,,,PLANNER_BYPASSED: direct prompt sent to Executor.,"from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """""" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    for i, num in enumerate(numbers):
+        result.append(num)
+        if i < len(numbers) - 1:
+            result.append(delimeter)
+    
+    return result","PASS
+All provided tests pass; delimiter is correctly interspersed between list elements, including edge case of empty list.
+Run summary: Function returns [] for empty input; correctly inserts delimiter between elements for non-empty lists, matching expected outputs.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773680031.993855,run-b40543ac,HumanEval/6,humaneval_no_planner_no_verifier,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef parse_nested_parens(paren_string: str) -> List[int]:\n    \""\""\"" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\n    For each of the group, output the deepest level of nesting of parentheses.\n    E.g. (()()) has maximum two levels of nesting while ((())) has three.\n\n    >>> parse_nested_parens('(()()) ((())) () ((())()())')\n    [2, 3, 1, 3]\n    \""\""\""\n\n\nPlanner spec:\nfrom typing import List\n\n\ndef parse_nested_parens(paren_string: str) -> List[int]:\n    \""\""\"" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\n    For each of the group, output the deepest level of nesting of parentheses.\n    E.g. (()()) has maximum two levels of nesting while ((())) has three.\n\n    >>> parse_nested_parens('(()()) ((())) () ((())()())')\n    [2, 3, 1, 3]\n    \""\""\""\n\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """""" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """"""
+    groups = paren_string.split()
+    result = []
+    
+    for group in groups:
+        max_depth = 0
+        current_depth = 0
+        
+        for char in group:
+            if char == '(':
+                current_depth += 1
+                max_depth = max(max_depth, current_depth)
+            elif char == ')':
+                current_depth -= 1
+        
+        result.append(max_depth)
+    
+    return result
+```","from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """""" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """"""
+    groups = paren_string.split()
+    result = []
+    
+    for group in groups:
+        max_depth = 0
+        current_depth = 0
+        
+        for char in group:
+            if char == '(':
+                current_depth += 1
+                max_depth = max(max_depth, current_depth)
+            elif char == ')':
+                current_depth -= 1
+        
+        result.append(max_depth)
+    
+    return result",408,252,660,3.5469603538513184,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773680033.7382925,run-b40543ac,HumanEval/6,humaneval_no_planner_no_verifier,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate('(()()) ((())) () ((())()())') == [2, 3, 1, 3]\n    assert candidate('() (()) ((())) (((())))') == [1, 2, 3, 4]\n    assert candidate('(()(())((())))') == [4]\n\nCode artifact:\nfrom typing import List\n\n\ndef parse_nested_parens(paren_string: str) -> List[int]:\n    \""\""\"" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\n    For each of the group, output the deepest level of nesting of parentheses.\n    E.g. (()()) has maximum two levels of nesting while ((())) has three.\n\n    >>> parse_nested_parens('(()()) ((())) () ((())()())')\n    [2, 3, 1, 3]\n    \""\""\""\n    groups = paren_string.split()\n    result = []\n    \n    for group in groups:\n        max_depth = 0\n        current_depth = 0\n        \n        for char in group:\n            if char == '(':\n                current_depth += 1\n                max_depth = max(max_depth, current_depth)\n            elif char == ')':\n                current_depth -= 1\n        \n        result.append(max_depth)\n    \n    return result""}]","PASS
+All provided test cases produce the expected outputs.  
+Run summary: Function correctly splits groups, tracks current and maximum parenthesis depth per group, and returns the correct nesting levels for all tested inputs.","PASS
+All provided test cases produce the expected outputs.  
+Run summary: Function correctly splits groups, tracks current and maximum parenthesis depth per group, and returns the correct nesting levels for all tested inputs.",361,51,412,1.7216122150421143,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773680034.0572968,run-b40543ac,HumanEval/6,humaneval_no_planner_no_verifier,,,,,,,,,,,critic_fail,0,,0,,,1072,5.614236831665039,"from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """""" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """"""
+    groups = paren_string.split()
+    result = []
+    
+    for group in groups:
+        max_depth = 0
+        current_depth = 0
+        
+        for char in group:
+            if char == '(':
+                current_depth += 1
+                max_depth = max(max_depth, current_depth)
+            elif char == ')':
+                current_depth -= 1
+        
+        result.append(max_depth)
+    
+    return result",,,humaneval_no_planner_no_verifier,"from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """""" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """"""
+",39b4ae7cbb22820ff04ffe8a3cbe4bd4332d16046130335d78f36d75a5c3cf4c,,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """""" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """"""
+    groups = paren_string.split()
+    result = []
+    
+    for group in groups:
+        max_depth = 0
+        current_depth = 0
+        
+        for char in group:
+            if char == '(':
+                current_depth += 1
+                max_depth = max(max_depth, current_depth)
+            elif char == ')':
+                current_depth -= 1
+        
+        result.append(max_depth)
+    
+    return result",,,,,408,252,660,3.5469603538513184,361,51,412,1.7216122150421143,,,,,PLANNER_BYPASSED: direct prompt sent to Executor.,"from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """""" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """"""
+    groups = paren_string.split()
+    result = []
+    
+    for group in groups:
+        max_depth = 0
+        current_depth = 0
+        
+        for char in group:
+            if char == '(':
+                current_depth += 1
+                max_depth = max(max_depth, current_depth)
+            elif char == ')':
+                current_depth -= 1
+        
+        result.append(max_depth)
+    
+    return result","PASS
+All provided test cases produce the expected outputs.  
+Run summary: Function correctly splits groups, tracks current and maximum parenthesis depth per group, and returns the correct nesting levels for all tested inputs.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773680037.1789923,run-b40543ac,HumanEval/7,humaneval_no_planner_no_verifier,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef filter_by_substring(strings: List[str], substring: str) -> List[str]:\n    \""\""\"" Filter an input list of strings only for ones that contain given substring\n    >>> filter_by_substring([], 'a')\n    []\n    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')\n    ['abc', 'bacd', 'array']\n    \""\""\""\n\n\nPlanner spec:\nfrom typing import List\n\n\ndef filter_by_substring(strings: List[str], substring: str) -> List[str]:\n    \""\""\"" Filter an input list of strings only for ones that contain given substring\n    >>> filter_by_substring([], 'a')\n    []\n    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')\n    ['abc', 'bacd', 'array']\n    \""\""\""\n\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """""" Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """"""
+    return [s for s in strings if substring in s]","from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """""" Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """"""
+    return [s for s in strings if substring in s]",360,123,483,3.083284854888916,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773680038.8625221,run-b40543ac,HumanEval/7,humaneval_no_planner_no_verifier,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate([], 'john') == []\n    assert candidate(['xxx', 'asd', 'xxy', 'john doe', 'xxxAAA', 'xxx'], 'xxx') == ['xxx', 'xxxAAA', 'xxx']\n    assert candidate(['xxx', 'asd', 'aaaxxy', 'john doe', 'xxxAAA', 'xxx'], 'xx') == ['xxx', 'aaaxxy', 'xxxAAA', 'xxx']\n    assert candidate(['grunt', 'trumpet', 'prune', 'gruesome'], 'run') == ['grunt', 'prune']\n\nCode artifact:\nfrom typing import List\n\n\ndef filter_by_substring(strings: List[str], substring: str) -> List[str]:\n    \""\""\"" Filter an input list of strings only for ones that contain given substring\n    >>> filter_by_substring([], 'a')\n    []\n    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')\n    ['abc', 'bacd', 'array']\n    \""\""\""\n    return [s for s in strings if substring in s]""}]","PASS
+All given tests pass; function correctly filters strings containing the substring.
+Run summary: Implemented list comprehension `substring in s` matches expected outputs for all provided cases, including empty input.","PASS
+All given tests pass; function correctly filters strings containing the substring.
+Run summary: Implemented list comprehension `substring in s` matches expected outputs for all provided cases, including empty input.",327,49,376,1.6559972763061523,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773680039.2795284,run-b40543ac,HumanEval/7,humaneval_no_planner_no_verifier,,,,,,,,,,,critic_fail,0,,0,,,859,5.187062978744507,"from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """""" Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """"""
+    return [s for s in strings if substring in s]",,,humaneval_no_planner_no_verifier,"from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """""" Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """"""
+",5eecb2c6bb2b4fcd70989d66291a7c4c02d3afbf31591ad684e926a1e60ee969,,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """""" Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """"""
+    return [s for s in strings if substring in s]",,,,,360,123,483,3.083284854888916,327,49,376,1.6559972763061523,,,,,PLANNER_BYPASSED: direct prompt sent to Executor.,"from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """""" Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """"""
+    return [s for s in strings if substring in s]","PASS
+All given tests pass; function correctly filters strings containing the substring.
+Run summary: Implemented list comprehension `substring in s` matches expected outputs for all provided cases, including empty input.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773680042.5830734,run-b40543ac,HumanEval/8,humaneval_no_planner_no_verifier,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List, Tuple\n\n\ndef sum_product(numbers: List[int]) -> Tuple[int, int]:\n    \""\""\"" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\n    Empty sum should be equal to 0 and empty product should be equal to 1.\n    >>> sum_product([])\n    (0, 1)\n    >>> sum_product([1, 2, 3, 4])\n    (10, 24)\n    \""\""\""\n\n\nPlanner spec:\nfrom typing import List, Tuple\n\n\ndef sum_product(numbers: List[int]) -> Tuple[int, int]:\n    \""\""\"" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\n    Empty sum should be equal to 0 and empty product should be equal to 1.\n    >>> sum_product([])\n    (0, 1)\n    >>> sum_product([1, 2, 3, 4])\n    (10, 24)\n    \""\""\""\n\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """""" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """"""
+    sum_result = 0
+    product_result = 1
+    
+    for num in numbers:
+        sum_result += num
+        product_result *= num
+    
+    return (sum_result, product_result)
+```","from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """""" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """"""
+    sum_result = 0
+    product_result = 1
+    
+    for num in numbers:
+        sum_result += num
+        product_result *= num
+    
+    return (sum_result, product_result)",390,182,572,3.2716610431671143,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773680044.3086827,run-b40543ac,HumanEval/8,humaneval_no_planner_no_verifier,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate([]) == (0, 1)\n    assert candidate([1, 1, 1]) == (3, 1)\n    assert candidate([100, 0]) == (100, 0)\n    assert candidate([3, 5, 7]) == (3 + 5 + 7, 3 * 5 * 7)\n    assert candidate([10]) == (10, 10)\n\nCode artifact:\nfrom typing import List, Tuple\n\n\ndef sum_product(numbers: List[int]) -> Tuple[int, int]:\n    \""\""\"" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\n    Empty sum should be equal to 0 and empty product should be equal to 1.\n    >>> sum_product([])\n    (0, 1)\n    >>> sum_product([1, 2, 3, 4])\n    (10, 24)\n    \""\""\""\n    sum_result = 0\n    product_result = 1\n    \n    for num in numbers:\n        sum_result += num\n        product_result *= num\n    \n    return (sum_result, product_result)""}]","PASS
+All provided test cases pass; sum and product logic for lists (including empty list) is correct.
+Run summary: Function returns (0,1) for empty list, handles single and multiple integers correctly, matching harness expectations.","PASS
+All provided test cases pass; sum and product logic for lists (including empty list) is correct.
+Run summary: Function returns (0,1) for empty list, handles single and multiple integers correctly, matching harness expectations.",341,57,398,1.7043225765228271,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773680044.6170514,run-b40543ac,HumanEval/8,humaneval_no_planner_no_verifier,,,,,,,,,,,critic_fail,0,,0,,,970,5.307229518890381,"from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """""" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """"""
+    sum_result = 0
+    product_result = 1
+    
+    for num in numbers:
+        sum_result += num
+        product_result *= num
+    
+    return (sum_result, product_result)",,,humaneval_no_planner_no_verifier,"from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """""" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """"""
+",84dc98e731928675a91c68cbff1f89d0677596f849fa0e6b34fa9b40335fce03,,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """""" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """"""
+    sum_result = 0
+    product_result = 1
+    
+    for num in numbers:
+        sum_result += num
+        product_result *= num
+    
+    return (sum_result, product_result)",,,,,390,182,572,3.2716610431671143,341,57,398,1.7043225765228271,,,,,PLANNER_BYPASSED: direct prompt sent to Executor.,"from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """""" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """"""
+    sum_result = 0
+    product_result = 1
+    
+    for num in numbers:
+        sum_result += num
+        product_result *= num
+    
+    return (sum_result, product_result)","PASS
+All provided test cases pass; sum and product logic for lists (including empty list) is correct.
+Run summary: Function returns (0,1) for empty list, handles single and multiple integers correctly, matching harness expectations.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773680048.3269188,run-b40543ac,HumanEval/9,humaneval_no_planner_no_verifier,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List, Tuple\n\n\ndef rolling_max(numbers: List[int]) -> List[int]:\n    \""\""\"" From a given list of integers, generate a list of rolling maximum element found until given moment\n    in the sequence.\n    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])\n    [1, 2, 3, 3, 3, 4, 4]\n    \""\""\""\n\n\nPlanner spec:\nfrom typing import List, Tuple\n\n\ndef rolling_max(numbers: List[int]) -> List[int]:\n    \""\""\"" From a given list of integers, generate a list of rolling maximum element found until given moment\n    in the sequence.\n    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])\n    [1, 2, 3, 3, 3, 4, 4]\n    \""\""\""\n\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List, Tuple
+
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """""" From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    current_max = numbers[0]
+    
+    for num in numbers:
+        if num > current_max:
+            current_max = num
+        result.append(current_max)
+    
+    return result
+```","from typing import List, Tuple
+
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """""" From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    current_max = numbers[0]
+    
+    for num in numbers:
+        if num > current_max:
+            current_max = num
+        result.append(current_max)
+    
+    return result",356,180,536,3.678814172744751,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773680049.898674,run-b40543ac,HumanEval/9,humaneval_no_planner_no_verifier,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate([]) == []\n    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]\n    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]\n    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]\n\nCode artifact:\nfrom typing import List, Tuple\n\n\ndef rolling_max(numbers: List[int]) -> List[int]:\n    \""\""\"" From a given list of integers, generate a list of rolling maximum element found until given moment\n    in the sequence.\n    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])\n    [1, 2, 3, 3, 3, 4, 4]\n    \""\""\""\n    if not numbers:\n        return []\n    \n    result = []\n    current_max = numbers[0]\n    \n    for num in numbers:\n        if num > current_max:\n            current_max = num\n        result.append(current_max)\n    \n    return result""}]","PASS
+All provided test cases pass; rolling maximum behavior matches expectations.
+Run summary: Correctly returns empty list for [], maintains non-decreasing rolling max for increasing/mixed inputs, and propagates max-so-far for decreasing suffixes.","PASS
+All provided test cases pass; rolling maximum behavior matches expectations.
+Run summary: Correctly returns empty list for [], maintains non-decreasing rolling max for increasing/mixed inputs, and propagates max-so-far for decreasing suffixes.",347,58,405,1.5378353595733643,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773680050.2444263,run-b40543ac,HumanEval/9,humaneval_no_planner_no_verifier,,,,,,,,,,,critic_fail,0,,0,,,941,5.598259449005127,"from typing import List, Tuple
+
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """""" From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    current_max = numbers[0]
+    
+    for num in numbers:
+        if num > current_max:
+            current_max = num
+        result.append(current_max)
+    
+    return result",,,humaneval_no_planner_no_verifier,"from typing import List, Tuple
+
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """""" From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """"""
+",583b281fbe1bf261fbade6e1a03119de96084ac87b508387f0d23c3b0cfdbbdb,,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List, Tuple
+
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """""" From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    current_max = numbers[0]
+    
+    for num in numbers:
+        if num > current_max:
+            current_max = num
+        result.append(current_max)
+    
+    return result",,,,,356,180,536,3.678814172744751,347,58,405,1.5378353595733643,,,,,PLANNER_BYPASSED: direct prompt sent to Executor.,"from typing import List, Tuple
+
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """""" From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    current_max = numbers[0]
+    
+    for num in numbers:
+        if num > current_max:
+            current_max = num
+        result.append(current_max)
+    
+    return result","PASS
+All provided test cases pass; rolling maximum behavior matches expectations.
+Run summary: Correctly returns empty list for [], maintains non-decreasing rolling max for increasing/mixed inputs, and propagates max-so-far for decreasing suffixes.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,

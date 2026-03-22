@@ -1,0 +1,1701 @@
+event_type,ts_unix,run_id,task_id,pipeline_config,agent,model,messages,raw_output,clean_output,prompt_tokens,completion_tokens,total_tokens,latency_s,error_text,trigger_policy,verifier_invoked,verifier_decision,repair_attempted,final_correct,origin_stage,run_total_tokens,end_to_end_latency_s,final_executable_code,parse_error_type,parse_error_text,config,prompt,prompt_hash,planner,executor,critic,verifier,final_answer,planner_prompt_tokens,planner_completion_tokens,planner_total_tokens,planner_latency_s,executor_prompt_tokens,executor_completion_tokens,executor_total_tokens,executor_latency_s,critic_prompt_tokens,critic_completion_tokens,critic_total_tokens,critic_latency_s,verifier_prompt_tokens,verifier_completion_tokens,verifier_total_tokens,verifier_latency_s,planner_answer,executor_answer,critic_answer,verifier_answer,planner_error_text,executor_error_text,critic_error_text,verifier_error_text,correct_answer,planner_error,executor_repair,executor_harm,verifier_repair,verifier_harm,pre_verifier_exec_invoked,pre_verifier_exec_passed,pre_verifier_exec_error_type,pre_verifier_exec_error,verifier_pre_repair_exec_invoked,verifier_pre_repair_exec_passed,verifier_pre_repair_exec_error_type,verifier_pre_repair_exec_error,verifier_post_repair_exec_invoked,verifier_post_repair_exec_passed,verifier_post_repair_exec_error_type,verifier_post_repair_exec_error
+AGENT_CALL,1773678289.5069077,run-6076e3a9,HumanEval/0,humaneval,Planner,google/gemini-3-pro-preview,"[{""role"": ""system"", ""content"": ""You are the Planner in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\n\nYour responsibility is to define intent, structure, and constraints WITHOUT producing executable artifacts.\n\nHard rules:\n- Do NOT write code, pseudocode, tests, or patches.\n- Do NOT use code formatting or code syntax such as: def, class, import, ``` or \""diff --git\"".\n- When describing interfaces, use plain English signatures like:\n  - function_name(arg1, arg2) -> return_type\n  NOT Python syntax like: def function_name(...):\n\nOutput a structured specification:\n1) Functional requirements (numbered)\n2) Constraints/assumptions\n3) Interfaces (signatures / I/O)\n4) Acceptance criteria (testable conditions)\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n    \""\""\"" Check if in given list of numbers, are any two numbers closer to each other than\n    given threshold.\n    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)\n    False\n    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)\n    True\n    \""\""\""\n\n\nRepo context (if any):\n""}]",,,,,,0.0,Planner failed after LLM call: 'choices',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678310.4424574,run-6076e3a9,HumanEval/1,humaneval,Planner,google/gemini-3-pro-preview,"[{""role"": ""system"", ""content"": ""You are the Planner in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\n\nYour responsibility is to define intent, structure, and constraints WITHOUT producing executable artifacts.\n\nHard rules:\n- Do NOT write code, pseudocode, tests, or patches.\n- Do NOT use code formatting or code syntax such as: def, class, import, ``` or \""diff --git\"".\n- When describing interfaces, use plain English signatures like:\n  - function_name(arg1, arg2) -> return_type\n  NOT Python syntax like: def function_name(...):\n\nOutput a structured specification:\n1) Functional requirements (numbered)\n2) Constraints/assumptions\n3) Interfaces (signatures / I/O)\n4) Acceptance criteria (testable conditions)\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef separate_paren_groups(paren_string: str) -> List[str]:\n    \""\""\"" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to\n    separate those group into separate strings and return the list of those.\n    Separate groups are balanced (each open brace is properly closed) and not nested within each other\n    Ignore any spaces in the input string.\n    >>> separate_paren_groups('( ) (( )) (( )( ))')\n    ['()', '(())', '(()())']\n    \""\""\""\n\n\nRepo context (if any):\n""}]","Here is the implementation plan for the `separate_paren_groups` function.
+
+### 1. Functional Requirements
+1.  **Input Cleaning**: The function must remove all spaces from the input string. The resulting substrings in the output list must not contain any whitespace.
+2.  **Group Identification**: The function must iterate through the cleaned string to identify distinct, top-level groups of parentheses.
+3.  **Balance Tracking**: A group is defined as starting with an opening parenthesis `(` and ending when the net count of open parentheses equals the net count of closed parentheses `)`.
+4.  **Output Generation**: The function must return a list of strings, where each string represents","Here is the implementation plan for the `separate_paren_groups` function.
+
+### 1. Functional Requirements
+1.  **Input Cleaning**: The function must remove all spaces from the input string. The resulting substrings in the output list must not contain any whitespace.
+2.  **Group Identification**: The function must iterate through the cleaned string to identify distinct, top-level groups of parentheses.
+3.  **Balance Tracking**: A group is defined as starting with an opening parenthesis `(` and ending when the net count of open parentheses equals the net count of closed parentheses `)`.
+4.  **Output Generation**: The function must return a list of strings, where each string represents",297,1496,1793,20.92588448524475,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678314.8499787,run-6076e3a9,HumanEval/1,humaneval,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef separate_paren_groups(paren_string: str) -> List[str]:\n    \""\""\"" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to\n    separate those group into separate strings and return the list of those.\n    Separate groups are balanced (each open brace is properly closed) and not nested within each other\n    Ignore any spaces in the input string.\n    >>> separate_paren_groups('( ) (( )) (( )( ))')\n    ['()', '(())', '(()())']\n    \""\""\""\n\n\nPlanner spec:\nHere is the implementation plan for the `separate_paren_groups` function.\n\n### 1. Functional Requirements\n1.  **Input Cleaning**: The function must remove all spaces from the input string. The resulting substrings in the output list must not contain any whitespace.\n2.  **Group Identification**: The function must iterate through the cleaned string to identify distinct, top-level groups of parentheses.\n3.  **Balance Tracking**: A group is defined as starting with an opening parenthesis `(` and ending when the net count of open parentheses equals the net count of closed parentheses `)`.\n4.  **Output Generation**: The function must return a list of strings, where each string represents\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """""" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """"""
+    # Remove all spaces from the input string
+    cleaned_string = paren_string.replace(' ', '')
+    
+    result = []
+    current_group = []
+    balance = 0
+    
+    # Iterate through each character in the cleaned string
+    for char in cleaned_string:
+        if char == '(':
+            current_group.append(char)
+            balance += 1
+        elif char == ')':
+            current_group.append(char)
+            balance -= 1
+            
+            # When balance reaches 0, we have a complete group
+            if balance == 0:
+                result.append(''.join(current_group))
+                current_group = []
+    
+    return result
+```","from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """""" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """"""
+    # Remove all spaces from the input string
+    cleaned_string = paren_string.replace(' ', '')
+    
+    result = []
+    current_group = []
+    balance = 0
+    
+    # Iterate through each character in the cleaned string
+    for char in cleaned_string:
+        if char == '(':
+            current_group.append(char)
+            balance += 1
+        elif char == ')':
+            current_group.append(char)
+            balance -= 1
+            
+            # When balance reaches 0, we have a complete group
+            if balance == 0:
+                result.append(''.join(current_group))
+                current_group = []
+    
+    return result",442,307,749,4.385846138000488,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678316.3533552,run-6076e3a9,HumanEval/1,humaneval,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate('(()()) ((())) () ((())()())') == [\n        '(()())', '((()))', '()', '((())()())'\n    ]\n    assert candidate('() (()) ((())) (((())))') == [\n        '()', '(())', '((()))', '(((())))'\n    ]\n    assert candidate('(()(())((())))') == [\n        '(()(())((())))'\n    ]\n    assert candidate('( ) (( )) (( )( ))') == ['()', '(())', '(()())']\n\nCode artifact:\nfrom typing import List\n\n\ndef separate_paren_groups(paren_string: str) -> List[str]:\n    \""\""\"" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to\n    separate those group into separate strings and return the list of those.\n    Separate groups are balanced (each open brace is properly closed) and not nested within each other\n    Ignore any spaces in the input string.\n    >>> separate_paren_groups('( ) (( )) (( )( ))')\n    ['()', '(())', '(()())']\n    \""\""\""\n    # Remove all spaces from the input string\n    cleaned_string = paren_string.replace(' ', '')\n    \n    result = []\n    current_group = []\n    balance = 0\n    \n    # Iterate through each character in the cleaned string\n    for char in cleaned_string:\n        if char == '(':\n            current_group.append(char)\n            balance += 1\n        elif char == ')':\n            current_group.append(char)\n            balance -= 1\n            \n            # When balance reaches 0, we have a complete group\n            if balance == 0:\n                result.append(''.join(current_group))\n                current_group = []\n    \n    return result""}]","PASS
+All tests passed; groups correctly separated and spaces ignored.  
+Run summary: Function removes spaces, tracks balance of parentheses, and slices groups when balance returns to zero; behavior matches all provided test cases.","PASS
+All tests passed; groups correctly separated and spaces ignored.  
+Run summary: Function removes spaces, tracks balance of parentheses, and slices groups when balance returns to zero; behavior matches all provided test cases.",453,52,505,1.4732568264007568,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773678316.6776323,run-6076e3a9,HumanEval/1,humaneval,,,,,,,,,,,critic_fail,0,,0,,,3047,27.16322159767151,"from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """""" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """"""
+    # Remove all spaces from the input string
+    cleaned_string = paren_string.replace(' ', '')
+    
+    result = []
+    current_group = []
+    balance = 0
+    
+    # Iterate through each character in the cleaned string
+    for char in cleaned_string:
+        if char == '(':
+            current_group.append(char)
+            balance += 1
+        elif char == ')':
+            current_group.append(char)
+            balance -= 1
+            
+            # When balance reaches 0, we have a complete group
+            if balance == 0:
+                result.append(''.join(current_group))
+                current_group = []
+    
+    return result",,,humaneval,"from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """""" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """"""
+",ba4d0641a184fb3cdd632060a25d6408a7e91fe9d79b5c341407e74b80536327,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """""" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """"""
+    # Remove all spaces from the input string
+    cleaned_string = paren_string.replace(' ', '')
+    
+    result = []
+    current_group = []
+    balance = 0
+    
+    # Iterate through each character in the cleaned string
+    for char in cleaned_string:
+        if char == '(':
+            current_group.append(char)
+            balance += 1
+        elif char == ')':
+            current_group.append(char)
+            balance -= 1
+            
+            # When balance reaches 0, we have a complete group
+            if balance == 0:
+                result.append(''.join(current_group))
+                current_group = []
+    
+    return result",297,1496,1793,20.92588448524475,442,307,749,4.385846138000488,453,52,505,1.4732568264007568,,,,,"Here is the implementation plan for the `separate_paren_groups` function.
+
+### 1. Functional Requirements
+1.  **Input Cleaning**: The function must remove all spaces from the input string. The resulting substrings in the output list must not contain any whitespace.
+2.  **Group Identification**: The function must iterate through the cleaned string to identify distinct, top-level groups of parentheses.
+3.  **Balance Tracking**: A group is defined as starting with an opening parenthesis `(` and ending when the net count of open parentheses equals the net count of closed parentheses `)`.
+4.  **Output Generation**: The function must return a list of strings, where each string represents","from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """""" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """"""
+    # Remove all spaces from the input string
+    cleaned_string = paren_string.replace(' ', '')
+    
+    result = []
+    current_group = []
+    balance = 0
+    
+    # Iterate through each character in the cleaned string
+    for char in cleaned_string:
+        if char == '(':
+            current_group.append(char)
+            balance += 1
+        elif char == ')':
+            current_group.append(char)
+            balance -= 1
+            
+            # When balance reaches 0, we have a complete group
+            if balance == 0:
+                result.append(''.join(current_group))
+                current_group = []
+    
+    return result","PASS
+All tests passed; groups correctly separated and spaces ignored.  
+Run summary: Function removes spaces, tracks balance of parentheses, and slices groups when balance returns to zero; behavior matches all provided test cases.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773678332.6957815,run-6076e3a9,HumanEval/2,humaneval,Planner,google/gemini-3-pro-preview,"[{""role"": ""system"", ""content"": ""You are the Planner in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\n\nYour responsibility is to define intent, structure, and constraints WITHOUT producing executable artifacts.\n\nHard rules:\n- Do NOT write code, pseudocode, tests, or patches.\n- Do NOT use code formatting or code syntax such as: def, class, import, ``` or \""diff --git\"".\n- When describing interfaces, use plain English signatures like:\n  - function_name(arg1, arg2) -> return_type\n  NOT Python syntax like: def function_name(...):\n\nOutput a structured specification:\n1) Functional requirements (numbered)\n2) Constraints/assumptions\n3) Interfaces (signatures / I/O)\n4) Acceptance criteria (testable conditions)\n""}, {""role"": ""user"", ""content"": ""Problem:\n\n\ndef truncate_number(number: float) -> float:\n    \""\""\"" Given a positive floating point number, it can be decomposed into\n    and integer part (largest integer smaller than given number) and decimals\n    (leftover part always smaller than 1).\n\n    Return the decimal part of the number.\n    >>> truncate_number(3.5)\n    0.5\n    \""\""\""\n\n\nRepo context (if any):\n""}]","Here is the specification for the `truncate_number` function.
+
+1. Functional Requirements
+    1. The function must accept a single floating-point number as input.
+    2. The function must determine the integer component of the input number (the largest integer smaller than or equal to the number).
+    3. The function must calculate the decimal (fractional) part by isolating the remainder of the number after removing the integer component.
+    4. The function must return this decimal part as a floating-point value.
+
+2. Constraints and Assumptions
+    1. The input is assumed to be a positive number, as specified in the problem description.
+    2. Standard floating-point precision limitations are acceptable (e.g., minor precision errors inherent to float arithmetic).
+    3. If the input is a whole number (e.g., 5.0), the returned decimal part should be 0.0.
+    4. If the input is less than 1.0 (e.g., 0.75), the returned value should be the input itself.
+
+3. Interfaces
+    1. Function Signature: truncate_number(number) -> float
+    2. Input: A float representing the number to decompose.
+    3. Output: A float representing the fractional part of the input.
+
+4. Acceptance Criteria
+    1. Calling the function with 3.5 returns 0.5.
+    2. Calling the function with 4.0 returns 0.0.
+    3. Calling the function with 0.123 returns 0.123.
+    4. Calling the function with a large float (e.g., 100.75) returns 0.75.","Here is the specification for the `truncate_number` function.
+
+1. Functional Requirements
+    1. The function must accept a single floating-point number as input.
+    2. The function must determine the integer component of the input number (the largest integer smaller than or equal to the number).
+    3. The function must calculate the decimal (fractional) part by isolating the remainder of the number after removing the integer component.
+    4. The function must return this decimal part as a floating-point value.
+
+2. Constraints and Assumptions
+    1. The input is assumed to be a positive number, as specified in the problem description.
+    2. Standard floating-point precision limitations are acceptable (e.g., minor precision errors inherent to float arithmetic).
+    3. If the input is a whole number (e.g., 5.0), the returned decimal part should be 0.0.
+    4. If the input is less than 1.0 (e.g., 0.75), the returned value should be the input itself.
+
+3. Interfaces
+    1. Function Signature: truncate_number(number) -> float
+    2. Input: A float representing the number to decompose.
+    3. Output: A float representing the fractional part of the input.
+
+4. Acceptance Criteria
+    1. Calling the function with 3.5 returns 0.5.
+    2. Calling the function with 4.0 returns 0.0.
+    3. Calling the function with 0.123 returns 0.123.
+    4. Calling the function with a large float (e.g., 100.75) returns 0.75.",260,1425,1685,15.986993551254272,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678336.256322,run-6076e3a9,HumanEval/2,humaneval,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\n\n\ndef truncate_number(number: float) -> float:\n    \""\""\"" Given a positive floating point number, it can be decomposed into\n    and integer part (largest integer smaller than given number) and decimals\n    (leftover part always smaller than 1).\n\n    Return the decimal part of the number.\n    >>> truncate_number(3.5)\n    0.5\n    \""\""\""\n\n\nPlanner spec:\nHere is the specification for the `truncate_number` function.\n\n1. Functional Requirements\n    1. The function must accept a single floating-point number as input.\n    2. The function must determine the integer component of the input number (the largest integer smaller than or equal to the number).\n    3. The function must calculate the decimal (fractional) part by isolating the remainder of the number after removing the integer component.\n    4. The function must return this decimal part as a floating-point value.\n\n2. Constraints and Assumptions\n    1. The input is assumed to be a positive number, as specified in the problem description.\n    2. Standard floating-point precision limitations are acceptable (e.g., minor precision errors inherent to float arithmetic).\n    3. If the input is a whole number (e.g., 5.0), the returned decimal part should be 0.0.\n    4. If the input is less than 1.0 (e.g., 0.75), the returned value should be the input itself.\n\n3. Interfaces\n    1. Function Signature: truncate_number(number) -> float\n    2. Input: A float representing the number to decompose.\n    3. Output: A float representing the fractional part of the input.\n\n4. Acceptance Criteria\n    1. Calling the function with 3.5 returns 0.5.\n    2. Calling the function with 4.0 returns 0.0.\n    3. Calling the function with 0.123 returns 0.123.\n    4. Calling the function with a large float (e.g., 100.75) returns 0.75.\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+def truncate_number(number: float) -> float:
+    """""" Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """"""
+    return number - int(number)
+```","def truncate_number(number: float) -> float:
+    """""" Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """"""
+    return number - int(number)",616,104,720,3.5310137271881104,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678337.715094,run-6076e3a9,HumanEval/2,humaneval,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate(3.5) == 0.5\n    assert abs(candidate(1.33) - 0.33) < 1e-6\n    assert abs(candidate(123.456) - 0.456) < 1e-6\n\nCode artifact:\ndef truncate_number(number: float) -> float:\n    \""\""\"" Given a positive floating point number, it can be decomposed into\n    and integer part (largest integer smaller than given number) and decimals\n    (leftover part always smaller than 1).\n\n    Return the decimal part of the number.\n    >>> truncate_number(3.5)\n    0.5\n    \""\""\""\n    return number - int(number)""}]","PASS
+All tests pass; decimal part correctly returned for positive floats via `number - int(number)`.
+Run summary: 3 assertions executed successfully.","PASS
+All tests pass; decimal part correctly returned for positive floats via `number - int(number)`.
+Run summary: 3 assertions executed successfully.",248,40,288,1.4332599639892578,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773678338.0406306,run-6076e3a9,HumanEval/2,humaneval,,,,,,,,,,,critic_fail,0,,0,,,2693,21.333871603012085,"def truncate_number(number: float) -> float:
+    """""" Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """"""
+    return number - int(number)",,,humaneval,"
+
+def truncate_number(number: float) -> float:
+    """""" Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """"""
+",fecb9ddd4f103f1c3e9d9c7d6c3b948a4b1285b50c3498437c85a9d604d957eb,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"def truncate_number(number: float) -> float:
+    """""" Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """"""
+    return number - int(number)",260,1425,1685,15.986993551254272,616,104,720,3.5310137271881104,248,40,288,1.4332599639892578,,,,,"Here is the specification for the `truncate_number` function.
+
+1. Functional Requirements
+    1. The function must accept a single floating-point number as input.
+    2. The function must determine the integer component of the input number (the largest integer smaller than or equal to the number).
+    3. The function must calculate the decimal (fractional) part by isolating the remainder of the number after removing the integer component.
+    4. The function must return this decimal part as a floating-point value.
+
+2. Constraints and Assumptions
+    1. The input is assumed to be a positive number, as specified in the problem description.
+    2. Standard floating-point precision limitations are acceptable (e.g., minor precision errors inherent to float arithmetic).
+    3. If the input is a whole number (e.g., 5.0), the returned decimal part should be 0.0.
+    4. If the input is less than 1.0 (e.g., 0.75), the returned value should be the input itself.
+
+3. Interfaces
+    1. Function Signature: truncate_number(number) -> float
+    2. Input: A float representing the number to decompose.
+    3. Output: A float representing the fractional part of the input.
+
+4. Acceptance Criteria
+    1. Calling the function with 3.5 returns 0.5.
+    2. Calling the function with 4.0 returns 0.0.
+    3. Calling the function with 0.123 returns 0.123.
+    4. Calling the function with a large float (e.g., 100.75) returns 0.75.","def truncate_number(number: float) -> float:
+    """""" Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """"""
+    return number - int(number)","PASS
+All tests pass; decimal part correctly returned for positive floats via `number - int(number)`.
+Run summary: 3 assertions executed successfully.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773678356.9762373,run-6076e3a9,HumanEval/3,humaneval,Planner,google/gemini-3-pro-preview,"[{""role"": ""system"", ""content"": ""You are the Planner in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\n\nYour responsibility is to define intent, structure, and constraints WITHOUT producing executable artifacts.\n\nHard rules:\n- Do NOT write code, pseudocode, tests, or patches.\n- Do NOT use code formatting or code syntax such as: def, class, import, ``` or \""diff --git\"".\n- When describing interfaces, use plain English signatures like:\n  - function_name(arg1, arg2) -> return_type\n  NOT Python syntax like: def function_name(...):\n\nOutput a structured specification:\n1) Functional requirements (numbered)\n2) Constraints/assumptions\n3) Interfaces (signatures / I/O)\n4) Acceptance criteria (testable conditions)\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef below_zero(operations: List[int]) -> bool:\n    \""\""\"" You're given a list of deposit and withdrawal operations on a bank account that starts with\n    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and\n    at that point function should return True. Otherwise it should return False.\n    >>> below_zero([1, 2, 3])\n    False\n    >>> below_zero([1, 2, -4, 5])\n    True\n    \""\""\""\n\n\nRepo context (if any):\n""}]","Here is the structured specification for the `below_zero` function.
+
+1. Functional Requirements
+    1.  The function must accept a single argument representing a list of bank account operations (integers).
+    2.  The function must initialize a running balance variable to zero.
+    3.  The function must iterate through each integer in the input list sequentially.
+    4.  For each integer, the function must add the value to the running balance.
+    5.  Immediately after updating the balance, the function must check if the balance is strictly less than zero.
+    6.  If the balance is less than zero, the function must immediately return True.
+    7.  If the iteration completes without the balance ever falling below zero, the function must return False.
+
+2. Constraints & Assumptions
+    1.  The input list contains only integers (positive for deposits, negative for withdrawals, or zero).
+    2.  The starting balance is always zero.
+    3.  An empty input list implies no operations occurred, so the balance remains zero (never falls below zero), resulting in a return value of False.
+    4.  ""Below zero"" is defined as strictly negative (balance < 0). A balance of exactly 0 is not below zero.
+
+3. Interfaces
+    1.  below_zero(operations) -> boolean
+        -   Input: A list of integers.
+        -   Output: A boolean value (True or False).
+
+4. Acceptance Criteria
+    1.  Returns False for a list of only positive integers (e.g., 1, 2, 3).
+    2.  Returns True if the balance drops below zero after a sequence of operations (e.g., 1, 2, -4).
+    3.  Returns True if the very first operation is negative (e.g., -1).
+    4.  Returns False for an empty list.
+    5.  Returns False if the balance reaches exactly zero but never goes below it (e.g., 1, -1).
+    6.  Returns False for mixed operations where the balance fluctuates but stays non-negative.","Here is the structured specification for the `below_zero` function.
+
+1. Functional Requirements
+    1.  The function must accept a single argument representing a list of bank account operations (integers).
+    2.  The function must initialize a running balance variable to zero.
+    3.  The function must iterate through each integer in the input list sequentially.
+    4.  For each integer, the function must add the value to the running balance.
+    5.  Immediately after updating the balance, the function must check if the balance is strictly less than zero.
+    6.  If the balance is less than zero, the function must immediately return True.
+    7.  If the iteration completes without the balance ever falling below zero, the function must return False.
+
+2. Constraints & Assumptions
+    1.  The input list contains only integers (positive for deposits, negative for withdrawals, or zero).
+    2.  The starting balance is always zero.
+    3.  An empty input list implies no operations occurred, so the balance remains zero (never falls below zero), resulting in a return value of False.
+    4.  ""Below zero"" is defined as strictly negative (balance < 0). A balance of exactly 0 is not below zero.
+
+3. Interfaces
+    1.  below_zero(operations) -> boolean
+        -   Input: A list of integers.
+        -   Output: A boolean value (True or False).
+
+4. Acceptance Criteria
+    1.  Returns False for a list of only positive integers (e.g., 1, 2, 3).
+    2.  Returns True if the balance drops below zero after a sequence of operations (e.g., 1, 2, -4).
+    3.  Returns True if the very first operation is negative (e.g., -1).
+    4.  Returns False for an empty list.
+    5.  Returns False if the balance reaches exactly zero but never goes below it (e.g., 1, -1).
+    6.  Returns False for mixed operations where the balance fluctuates but stays non-negative.",299,1293,1592,18.898868560791016,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678360.5635784,run-6076e3a9,HumanEval/3,humaneval,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef below_zero(operations: List[int]) -> bool:\n    \""\""\"" You're given a list of deposit and withdrawal operations on a bank account that starts with\n    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and\n    at that point function should return True. Otherwise it should return False.\n    >>> below_zero([1, 2, 3])\n    False\n    >>> below_zero([1, 2, -4, 5])\n    True\n    \""\""\""\n\n\nPlanner spec:\nHere is the structured specification for the `below_zero` function.\n\n1. Functional Requirements\n    1.  The function must accept a single argument representing a list of bank account operations (integers).\n    2.  The function must initialize a running balance variable to zero.\n    3.  The function must iterate through each integer in the input list sequentially.\n    4.  For each integer, the function must add the value to the running balance.\n    5.  Immediately after updating the balance, the function must check if the balance is strictly less than zero.\n    6.  If the balance is less than zero, the function must immediately return True.\n    7.  If the iteration completes without the balance ever falling below zero, the function must return False.\n\n2. Constraints & Assumptions\n    1.  The input list contains only integers (positive for deposits, negative for withdrawals, or zero).\n    2.  The starting balance is always zero.\n    3.  An empty input list implies no operations occurred, so the balance remains zero (never falls below zero), resulting in a return value of False.\n    4.  \""Below zero\"" is defined as strictly negative (balance < 0). A balance of exactly 0 is not below zero.\n\n3. Interfaces\n    1.  below_zero(operations) -> boolean\n        -   Input: A list of integers.\n        -   Output: A boolean value (True or False).\n\n4. Acceptance Criteria\n    1.  Returns False for a list of only positive integers (e.g., 1, 2, 3).\n    2.  Returns True if the balance drops below zero after a sequence of operations (e.g., 1, 2, -4).\n    3.  Returns True if the very first operation is negative (e.g., -1).\n    4.  Returns False for an empty list.\n    5.  Returns False if the balance reaches exactly zero but never goes below it (e.g., 1, -1).\n    6.  Returns False for mixed operations where the balance fluctuates but stays non-negative.\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """""" You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """"""
+    balance = 0
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            return True
+    return False
+```","from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """""" You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """"""
+    balance = 0
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            return True
+    return False",739,163,902,3.561471462249756,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678362.6299498,run-6076e3a9,HumanEval/3,humaneval,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate([]) == False\n    assert candidate([1, 2, -3, 1, 2, -3]) == False\n    assert candidate([1, 2, -4, 5, 6]) == True\n    assert candidate([1, -1, 2, -2, 5, -5, 4, -4]) == False\n    assert candidate([1, -1, 2, -2, 5, -5, 4, -5]) == True\n    assert candidate([1, -2, 2, -2, 5, -5, 4, -4]) == True\n\nCode artifact:\nfrom typing import List\n\n\ndef below_zero(operations: List[int]) -> bool:\n    \""\""\"" You're given a list of deposit and withdrawal operations on a bank account that starts with\n    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and\n    at that point function should return True. Otherwise it should return False.\n    >>> below_zero([1, 2, 3])\n    False\n    >>> below_zero([1, 2, -4, 5])\n    True\n    \""\""\""\n    balance = 0\n    for operation in operations:\n        balance += operation\n        if balance < 0:\n            return True\n    return False""}]","PASS
+All tests passed; behavior matches specification that returns True iff running balance ever drops below zero.
+Ran provided inputs including edge case [] and mixed deposits/withdrawals; all assertions satisfied.","PASS
+All tests passed; behavior matches specification that returns True iff running balance ever drops below zero.
+Ran provided inputs including edge case [] and mixed deposits/withdrawals; all assertions satisfied.",391,48,439,2.0398242473602295,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773678363.0321054,run-6076e3a9,HumanEval/3,humaneval,,,,,,,,,,,critic_fail,0,,0,,,2933,24.956501483917236,"from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """""" You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """"""
+    balance = 0
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            return True
+    return False",,,humaneval,"from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """""" You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """"""
+",430706f794ffabb60ec5818ca7c9fdbd281b97ef9d3ac6d6ba140a7a2498f5a5,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """""" You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """"""
+    balance = 0
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            return True
+    return False",299,1293,1592,18.898868560791016,739,163,902,3.561471462249756,391,48,439,2.0398242473602295,,,,,"Here is the structured specification for the `below_zero` function.
+
+1. Functional Requirements
+    1.  The function must accept a single argument representing a list of bank account operations (integers).
+    2.  The function must initialize a running balance variable to zero.
+    3.  The function must iterate through each integer in the input list sequentially.
+    4.  For each integer, the function must add the value to the running balance.
+    5.  Immediately after updating the balance, the function must check if the balance is strictly less than zero.
+    6.  If the balance is less than zero, the function must immediately return True.
+    7.  If the iteration completes without the balance ever falling below zero, the function must return False.
+
+2. Constraints & Assumptions
+    1.  The input list contains only integers (positive for deposits, negative for withdrawals, or zero).
+    2.  The starting balance is always zero.
+    3.  An empty input list implies no operations occurred, so the balance remains zero (never falls below zero), resulting in a return value of False.
+    4.  ""Below zero"" is defined as strictly negative (balance < 0). A balance of exactly 0 is not below zero.
+
+3. Interfaces
+    1.  below_zero(operations) -> boolean
+        -   Input: A list of integers.
+        -   Output: A boolean value (True or False).
+
+4. Acceptance Criteria
+    1.  Returns False for a list of only positive integers (e.g., 1, 2, 3).
+    2.  Returns True if the balance drops below zero after a sequence of operations (e.g., 1, 2, -4).
+    3.  Returns True if the very first operation is negative (e.g., -1).
+    4.  Returns False for an empty list.
+    5.  Returns False if the balance reaches exactly zero but never goes below it (e.g., 1, -1).
+    6.  Returns False for mixed operations where the balance fluctuates but stays non-negative.","from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """""" You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """"""
+    balance = 0
+    for operation in operations:
+        balance += operation
+        if balance < 0:
+            return True
+    return False","PASS
+All tests passed; behavior matches specification that returns True iff running balance ever drops below zero.
+Ran provided inputs including edge case [] and mixed deposits/withdrawals; all assertions satisfied.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773678377.608885,run-6076e3a9,HumanEval/4,humaneval,Planner,google/gemini-3-pro-preview,"[{""role"": ""system"", ""content"": ""You are the Planner in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\n\nYour responsibility is to define intent, structure, and constraints WITHOUT producing executable artifacts.\n\nHard rules:\n- Do NOT write code, pseudocode, tests, or patches.\n- Do NOT use code formatting or code syntax such as: def, class, import, ``` or \""diff --git\"".\n- When describing interfaces, use plain English signatures like:\n  - function_name(arg1, arg2) -> return_type\n  NOT Python syntax like: def function_name(...):\n\nOutput a structured specification:\n1) Functional requirements (numbered)\n2) Constraints/assumptions\n3) Interfaces (signatures / I/O)\n4) Acceptance criteria (testable conditions)\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef mean_absolute_deviation(numbers: List[float]) -> float:\n    \""\""\"" For a given list of input numbers, calculate Mean Absolute Deviation\n    around the mean of this dataset.\n    Mean Absolute Deviation is the average absolute difference between each\n    element and a centerpoint (mean in this case):\n    MAD = average | x - x_mean |\n    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])\n    1.0\n    \""\""\""\n\n\nRepo context (if any):\n""}]","Here is the specification for the `mean_absolute_deviation` function.
+
+1.  **Functional Requirements**
+    1.  Calculate the arithmetic mean (average) of the provided list of numbers.
+    2.  For each number in the list, calculate the absolute difference between that number and the arithmetic mean calculated in step 1.
+    3.  Calculate the arithmetic mean of these absolute differences.
+    4.  Return the final calculated value as a float.
+
+2.  **Constraints & Assumptions**
+    1.  The input list `numbers` is assumed to contain at least one element to avoid division by zero errors.
+    2.  The input elements are expected to be floating-point numbers or integers.
+    3.  The solution should rely on standard built-in arithmetic operations.
+
+3.  **Interfaces**
+    *   **Function:** `mean_absolute_deviation(numbers)`
+    *   **Input:** `numbers` (List of floating-point numbers)
+    *   **Output:** Returns a single floating-point number representing the Mean Absolute Deviation.
+
+4.  **Acceptance Criteria**
+    1.  **Standard Case:** Input `[1.0, 2.0, 3.0, 4.0]` must return `1.0`.
+    2.  **Uniform Case:** Input `[5.0, 5.0, 5.0]` must return `0.0` (since the mean is 5.0 and all deviations are 0).
+    3.  **Negative Numbers:** Input containing negative numbers (e.g., `[-1.0, 1.0]`) must correctly calculate the mean (0.0) and the absolute deviations (1.0 each), resulting in a MAD of `1.0`.
+    4.  **Precision:** The result should be a float.","Here is the specification for the `mean_absolute_deviation` function.
+
+1.  **Functional Requirements**
+    1.  Calculate the arithmetic mean (average) of the provided list of numbers.
+    2.  For each number in the list, calculate the absolute difference between that number and the arithmetic mean calculated in step 1.
+    3.  Calculate the arithmetic mean of these absolute differences.
+    4.  Return the final calculated value as a float.
+
+2.  **Constraints & Assumptions**
+    1.  The input list `numbers` is assumed to contain at least one element to avoid division by zero errors.
+    2.  The input elements are expected to be floating-point numbers or integers.
+    3.  The solution should rely on standard built-in arithmetic operations.
+
+3.  **Interfaces**
+    *   **Function:** `mean_absolute_deviation(numbers)`
+    *   **Input:** `numbers` (List of floating-point numbers)
+    *   **Output:** Returns a single floating-point number representing the Mean Absolute Deviation.
+
+4.  **Acceptance Criteria**
+    1.  **Standard Case:** Input `[1.0, 2.0, 3.0, 4.0]` must return `1.0`.
+    2.  **Uniform Case:** Input `[5.0, 5.0, 5.0]` must return `0.0` (since the mean is 5.0 and all deviations are 0).
+    3.  **Negative Numbers:** Input containing negative numbers (e.g., `[-1.0, 1.0]`) must correctly calculate the mean (0.0) and the absolute deviations (1.0 each), resulting in a MAD of `1.0`.
+    4.  **Precision:** The result should be a float.",295,1383,1678,14.535582304000854,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678381.1986246,run-6076e3a9,HumanEval/4,humaneval,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef mean_absolute_deviation(numbers: List[float]) -> float:\n    \""\""\"" For a given list of input numbers, calculate Mean Absolute Deviation\n    around the mean of this dataset.\n    Mean Absolute Deviation is the average absolute difference between each\n    element and a centerpoint (mean in this case):\n    MAD = average | x - x_mean |\n    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])\n    1.0\n    \""\""\""\n\n\nPlanner spec:\nHere is the specification for the `mean_absolute_deviation` function.\n\n1.  **Functional Requirements**\n    1.  Calculate the arithmetic mean (average) of the provided list of numbers.\n    2.  For each number in the list, calculate the absolute difference between that number and the arithmetic mean calculated in step 1.\n    3.  Calculate the arithmetic mean of these absolute differences.\n    4.  Return the final calculated value as a float.\n\n2.  **Constraints & Assumptions**\n    1.  The input list `numbers` is assumed to contain at least one element to avoid division by zero errors.\n    2.  The input elements are expected to be floating-point numbers or integers.\n    3.  The solution should rely on standard built-in arithmetic operations.\n\n3.  **Interfaces**\n    *   **Function:** `mean_absolute_deviation(numbers)`\n    *   **Input:** `numbers` (List of floating-point numbers)\n    *   **Output:** Returns a single floating-point number representing the Mean Absolute Deviation.\n\n4.  **Acceptance Criteria**\n    1.  **Standard Case:** Input `[1.0, 2.0, 3.0, 4.0]` must return `1.0`.\n    2.  **Uniform Case:** Input `[5.0, 5.0, 5.0]` must return `0.0` (since the mean is 5.0 and all deviations are 0).\n    3.  **Negative Numbers:** Input containing negative numbers (e.g., `[-1.0, 1.0]`) must correctly calculate the mean (0.0) and the absolute deviations (1.0 each), resulting in a MAD of `1.0`.\n    4.  **Precision:** The result should be a float.\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """""" For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """"""
+    mean = sum(numbers) / len(numbers)
+    absolute_differences = [abs(x - mean) for x in numbers]
+    mad = sum(absolute_differences) / len(absolute_differences)
+    return mad
+```","from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """""" For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """"""
+    mean = sum(numbers) / len(numbers)
+    absolute_differences = [abs(x - mean) for x in numbers]
+    mad = sum(absolute_differences) / len(absolute_differences)
+    return mad",692,183,875,3.562018632888794,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678382.5432136,run-6076e3a9,HumanEval/4,humaneval,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert abs(candidate([1.0, 2.0, 3.0]) - 2.0/3.0) < 1e-6\n    assert abs(candidate([1.0, 2.0, 3.0, 4.0]) - 1.0) < 1e-6\n    assert abs(candidate([1.0, 2.0, 3.0, 4.0, 5.0]) - 6.0/5.0) < 1e-6\n\nCode artifact:\nfrom typing import List\n\n\ndef mean_absolute_deviation(numbers: List[float]) -> float:\n    \""\""\"" For a given list of input numbers, calculate Mean Absolute Deviation\n    around the mean of this dataset.\n    Mean Absolute Deviation is the average absolute difference between each\n    element and a centerpoint (mean in this case):\n    MAD = average | x - x_mean |\n    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])\n    1.0\n    \""\""\""\n    mean = sum(numbers) / len(numbers)\n    absolute_differences = [abs(x - mean) for x in numbers]\n    mad = sum(absolute_differences) / len(absolute_differences)\n    return mad""}]","PASS
+All provided tests for mean_absolute_deviation pass; implementation correctly computes mean absolute deviation around the mean.
+Run summary: 3 assertions executed successfully.","PASS
+All provided tests for mean_absolute_deviation pass; implementation correctly computes mean absolute deviation around the mean.
+Run summary: 3 assertions executed successfully.",384,41,425,1.3159806728363037,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773678382.8863797,run-6076e3a9,HumanEval/4,humaneval,,,,,,,,,,,critic_fail,0,,0,,,2978,19.81595206260681,"from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """""" For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """"""
+    mean = sum(numbers) / len(numbers)
+    absolute_differences = [abs(x - mean) for x in numbers]
+    mad = sum(absolute_differences) / len(absolute_differences)
+    return mad",,,humaneval,"from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """""" For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """"""
+",2717edd5d203ea22a6eebf62263effd9b792e1a2ef93e017868cedaac7b5ef10,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """""" For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """"""
+    mean = sum(numbers) / len(numbers)
+    absolute_differences = [abs(x - mean) for x in numbers]
+    mad = sum(absolute_differences) / len(absolute_differences)
+    return mad",295,1383,1678,14.535582304000854,692,183,875,3.562018632888794,384,41,425,1.3159806728363037,,,,,"Here is the specification for the `mean_absolute_deviation` function.
+
+1.  **Functional Requirements**
+    1.  Calculate the arithmetic mean (average) of the provided list of numbers.
+    2.  For each number in the list, calculate the absolute difference between that number and the arithmetic mean calculated in step 1.
+    3.  Calculate the arithmetic mean of these absolute differences.
+    4.  Return the final calculated value as a float.
+
+2.  **Constraints & Assumptions**
+    1.  The input list `numbers` is assumed to contain at least one element to avoid division by zero errors.
+    2.  The input elements are expected to be floating-point numbers or integers.
+    3.  The solution should rely on standard built-in arithmetic operations.
+
+3.  **Interfaces**
+    *   **Function:** `mean_absolute_deviation(numbers)`
+    *   **Input:** `numbers` (List of floating-point numbers)
+    *   **Output:** Returns a single floating-point number representing the Mean Absolute Deviation.
+
+4.  **Acceptance Criteria**
+    1.  **Standard Case:** Input `[1.0, 2.0, 3.0, 4.0]` must return `1.0`.
+    2.  **Uniform Case:** Input `[5.0, 5.0, 5.0]` must return `0.0` (since the mean is 5.0 and all deviations are 0).
+    3.  **Negative Numbers:** Input containing negative numbers (e.g., `[-1.0, 1.0]`) must correctly calculate the mean (0.0) and the absolute deviations (1.0 each), resulting in a MAD of `1.0`.
+    4.  **Precision:** The result should be a float.","from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """""" For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """"""
+    mean = sum(numbers) / len(numbers)
+    absolute_differences = [abs(x - mean) for x in numbers]
+    mad = sum(absolute_differences) / len(absolute_differences)
+    return mad","PASS
+All provided tests for mean_absolute_deviation pass; implementation correctly computes mean absolute deviation around the mean.
+Run summary: 3 assertions executed successfully.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773678403.8469243,run-6076e3a9,HumanEval/5,humaneval,Planner,google/gemini-3-pro-preview,"[{""role"": ""system"", ""content"": ""You are the Planner in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\n\nYour responsibility is to define intent, structure, and constraints WITHOUT producing executable artifacts.\n\nHard rules:\n- Do NOT write code, pseudocode, tests, or patches.\n- Do NOT use code formatting or code syntax such as: def, class, import, ``` or \""diff --git\"".\n- When describing interfaces, use plain English signatures like:\n  - function_name(arg1, arg2) -> return_type\n  NOT Python syntax like: def function_name(...):\n\nOutput a structured specification:\n1) Functional requirements (numbered)\n2) Constraints/assumptions\n3) Interfaces (signatures / I/O)\n4) Acceptance criteria (testable conditions)\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef intersperse(numbers: List[int], delimeter: int) -> List[int]:\n    \""\""\"" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n    >>> intersperse([], 4)\n    []\n    >>> intersperse([1, 2, 3], 4)\n    [1, 4, 2, 4, 3]\n    \""\""\""\n\n\nRepo context (if any):\n""}]","Here is the structured specification for the `intersperse` function.
+
+1. **Functional Requirements**
+    1.  The function must accept a list of integers and a single integer delimiter.
+    2.  If the input list is empty, the function must return an empty list.
+    3.  If the input list is not empty, the function must return a new list containing all elements from the input list in their original order.
+    4.  The provided delimiter integer must be inserted exactly once between every pair of consecutive elements in the resulting list.
+    5.  The delimiter must not be added before the first element or after the last element.
+
+2. **Constraints & Assumptions**
+    1.  The input `numbers` is assumed to be a list of integers.
+    2.  The input `delimeter` is assumed to be an integer.
+    3.  The output should be a new list; in-place modification is not required or expected based on the signature.
+    4.  For an input list of size N (where N > 0), the output list size will be 2N - 1.
+
+3. **Interfaces**
+    *   **intersperse(numbers, delimeter)** -> returns a List of integers
+        *   *numbers*: A list containing integer elements.
+        *   *delimeter*: An integer to insert between elements.
+
+4. **Acceptance Criteria**
+    1.  **Empty List:** Calling the function with an empty list and any delimiter returns an empty list.
+    2.  **Single Element:** Calling the function with a single-element list (e.g., `[5]`) returns the same list (`[5]`) without the delimiter.
+    3.  **Multiple Elements:** Calling the function with `[1, 2, 3]` and delimiter `4` returns `[1, 4, 2, 4,","Here is the structured specification for the `intersperse` function.
+
+1. **Functional Requirements**
+    1.  The function must accept a list of integers and a single integer delimiter.
+    2.  If the input list is empty, the function must return an empty list.
+    3.  If the input list is not empty, the function must return a new list containing all elements from the input list in their original order.
+    4.  The provided delimiter integer must be inserted exactly once between every pair of consecutive elements in the resulting list.
+    5.  The delimiter must not be added before the first element or after the last element.
+
+2. **Constraints & Assumptions**
+    1.  The input `numbers` is assumed to be a list of integers.
+    2.  The input `delimeter` is assumed to be an integer.
+    3.  The output should be a new list; in-place modification is not required or expected based on the signature.
+    4.  For an input list of size N (where N > 0), the output list size will be 2N - 1.
+
+3. **Interfaces**
+    *   **intersperse(numbers, delimeter)** -> returns a List of integers
+        *   *numbers*: A list containing integer elements.
+        *   *delimeter*: An integer to insert between elements.
+
+4. **Acceptance Criteria**
+    1.  **Empty List:** Calling the function with an empty list and any delimiter returns an empty list.
+    2.  **Single Element:** Calling the function with a single-element list (e.g., `[5]`) returns the same list (`[5]`) without the delimiter.
+    3.  **Multiple Elements:** Calling the function with `[1, 2, 3]` and delimiter `4` returns `[1, 4, 2, 4,",275,1496,1771,20.925506591796875,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678407.5241425,run-6076e3a9,HumanEval/5,humaneval,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef intersperse(numbers: List[int], delimeter: int) -> List[int]:\n    \""\""\"" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n    >>> intersperse([], 4)\n    []\n    >>> intersperse([1, 2, 3], 4)\n    [1, 4, 2, 4, 3]\n    \""\""\""\n\n\nPlanner spec:\nHere is the structured specification for the `intersperse` function.\n\n1. **Functional Requirements**\n    1.  The function must accept a list of integers and a single integer delimiter.\n    2.  If the input list is empty, the function must return an empty list.\n    3.  If the input list is not empty, the function must return a new list containing all elements from the input list in their original order.\n    4.  The provided delimiter integer must be inserted exactly once between every pair of consecutive elements in the resulting list.\n    5.  The delimiter must not be added before the first element or after the last element.\n\n2. **Constraints & Assumptions**\n    1.  The input `numbers` is assumed to be a list of integers.\n    2.  The input `delimeter` is assumed to be an integer.\n    3.  The output should be a new list; in-place modification is not required or expected based on the signature.\n    4.  For an input list of size N (where N > 0), the output list size will be 2N - 1.\n\n3. **Interfaces**\n    *   **intersperse(numbers, delimeter)** -> returns a List of integers\n        *   *numbers*: A list containing integer elements.\n        *   *delimeter*: An integer to insert between elements.\n\n4. **Acceptance Criteria**\n    1.  **Empty List:** Calling the function with an empty list and any delimiter returns an empty list.\n    2.  **Single Element:** Calling the function with a single-element list (e.g., `[5]`) returns the same list (`[5]`) without the delimiter.\n    3.  **Multiple Elements:** Calling the function with `[1, 2, 3]` and delimiter `4` returns `[1, 4, 2, 4,\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """""" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    for i, num in enumerate(numbers):
+        result.append(num)
+        if i < len(numbers) - 1:
+            result.append(delimeter)
+    
+    return result
+```","from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """""" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    for i, num in enumerate(numbers):
+        result.append(num)
+        if i < len(numbers) - 1:
+            result.append(delimeter)
+    
+    return result",671,172,843,3.610018491744995,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678409.183883,run-6076e3a9,HumanEval/5,humaneval,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate([], 7) == []\n    assert candidate([5, 6, 3, 2], 8) == [5, 8, 6, 8, 3, 8, 2]\n    assert candidate([2, 2, 2], 2) == [2, 2, 2, 2, 2]\n\nCode artifact:\nfrom typing import List\n\n\ndef intersperse(numbers: List[int], delimeter: int) -> List[int]:\n    \""\""\"" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n    >>> intersperse([], 4)\n    []\n    >>> intersperse([1, 2, 3], 4)\n    [1, 4, 2, 4, 3]\n    \""\""\""\n    if not numbers:\n        return []\n    \n    result = []\n    for i, num in enumerate(numbers):\n        result.append(num)\n        if i < len(numbers) - 1:\n            result.append(delimeter)\n    \n    return result""}]","PASS
+All provided tests pass; function correctly intersperses delimiter and handles empty list.
+Ran 3 assertions: empty input, general case, and repeated elements.","PASS
+All provided tests pass; function correctly intersperses delimiter and handles empty list.
+Ran 3 assertions: empty input, general case, and repeated elements.",325,43,368,1.6315984725952148,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773678409.5066612,run-6076e3a9,HumanEval/5,humaneval,,,,,,,,,,,critic_fail,0,,0,,,2982,26.587080717086792,"from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """""" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    for i, num in enumerate(numbers):
+        result.append(num)
+        if i < len(numbers) - 1:
+            result.append(delimeter)
+    
+    return result",,,humaneval,"from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """""" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """"""
+",388474ac71e5b893802f5971102df2e4ea82ddf2f916a4a55361c19370f54012,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """""" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    for i, num in enumerate(numbers):
+        result.append(num)
+        if i < len(numbers) - 1:
+            result.append(delimeter)
+    
+    return result",275,1496,1771,20.925506591796875,671,172,843,3.610018491744995,325,43,368,1.6315984725952148,,,,,"Here is the structured specification for the `intersperse` function.
+
+1. **Functional Requirements**
+    1.  The function must accept a list of integers and a single integer delimiter.
+    2.  If the input list is empty, the function must return an empty list.
+    3.  If the input list is not empty, the function must return a new list containing all elements from the input list in their original order.
+    4.  The provided delimiter integer must be inserted exactly once between every pair of consecutive elements in the resulting list.
+    5.  The delimiter must not be added before the first element or after the last element.
+
+2. **Constraints & Assumptions**
+    1.  The input `numbers` is assumed to be a list of integers.
+    2.  The input `delimeter` is assumed to be an integer.
+    3.  The output should be a new list; in-place modification is not required or expected based on the signature.
+    4.  For an input list of size N (where N > 0), the output list size will be 2N - 1.
+
+3. **Interfaces**
+    *   **intersperse(numbers, delimeter)** -> returns a List of integers
+        *   *numbers*: A list containing integer elements.
+        *   *delimeter*: An integer to insert between elements.
+
+4. **Acceptance Criteria**
+    1.  **Empty List:** Calling the function with an empty list and any delimiter returns an empty list.
+    2.  **Single Element:** Calling the function with a single-element list (e.g., `[5]`) returns the same list (`[5]`) without the delimiter.
+    3.  **Multiple Elements:** Calling the function with `[1, 2, 3]` and delimiter `4` returns `[1, 4, 2, 4,","from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """""" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    for i, num in enumerate(numbers):
+        result.append(num)
+        if i < len(numbers) - 1:
+            result.append(delimeter)
+    
+    return result","PASS
+All provided tests pass; function correctly intersperses delimiter and handles empty list.
+Ran 3 assertions: empty input, general case, and repeated elements.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773678429.7919765,run-6076e3a9,HumanEval/6,humaneval,Planner,google/gemini-3-pro-preview,"[{""role"": ""system"", ""content"": ""You are the Planner in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\n\nYour responsibility is to define intent, structure, and constraints WITHOUT producing executable artifacts.\n\nHard rules:\n- Do NOT write code, pseudocode, tests, or patches.\n- Do NOT use code formatting or code syntax such as: def, class, import, ``` or \""diff --git\"".\n- When describing interfaces, use plain English signatures like:\n  - function_name(arg1, arg2) -> return_type\n  NOT Python syntax like: def function_name(...):\n\nOutput a structured specification:\n1) Functional requirements (numbered)\n2) Constraints/assumptions\n3) Interfaces (signatures / I/O)\n4) Acceptance criteria (testable conditions)\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef parse_nested_parens(paren_string: str) -> List[int]:\n    \""\""\"" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\n    For each of the group, output the deepest level of nesting of parentheses.\n    E.g. (()()) has maximum two levels of nesting while ((())) has three.\n\n    >>> parse_nested_parens('(()()) ((())) () ((())()())')\n    [2, 3, 1, 3]\n    \""\""\""\n\n\nRepo context (if any):\n""}]","Here is the implementation plan for the `parse_nested_parens` function.
+
+### 1. Functional Requirements
+1.  **Input Parsing**: The function must accept a string containing one or more groups of parentheses separated by spaces. It must split this string into individual groups.
+2.  **Depth Calculation**: For each isolated group string, the function must calculate the maximum nesting depth.
+    *   Encountering an opening parenthesis `(` increases the current nesting level.
+    *   Encountering a closing parenthesis `)` decreases the current nesting level.
+    *   The maximum depth for a group is the highest value the current nesting level reaches during the traversal of that group.
+3.  **Aggregation**: The function must collect the maximum depth calculated for each group into a list.
+4.  **Output**: The function must return the list of integers representing the maximum depths.
+
+### 2. Constraints & Assumptions
+*   **Input Validity**: It is assumed that the input string contains valid, balanced parentheses groups.
+*   **Separators**: Groups are separated by one or more spaces.
+*   **Empty Input**: An empty input string should result in an empty list.
+*   **Libraries**: Use only standard Python libraries (specifically `typing`).
+
+### 3. Interfaces
+*   **Function Signature**:
+    `parse_nested_parens(paren_string)` -> `List of integers`
+    *   `paren_string`: A string containing space-separated parentheses groups.
+    *   Returns: A list of integers where each integer is the maximum nesting depth of the corresponding group.
+
+### 4. Acceptance Criteria
+*   **Example Case**:
+    Input: `'(()()) ((())) () ((())()())'`
+    Output: `[2, 3, 1, 3]`
+*   **Single Group**:
+    Input: `'((()))'`
+    Output: `[3]`
+*   **Multiple Simple Groups**:
+    Input: `'() (())'`
+    Output: `[1, 2]`
+*   **Empty String**:
+    Input: `''`
+    Output: `[]`","Here is the implementation plan for the `parse_nested_parens` function.
+
+### 1. Functional Requirements
+1.  **Input Parsing**: The function must accept a string containing one or more groups of parentheses separated by spaces. It must split this string into individual groups.
+2.  **Depth Calculation**: For each isolated group string, the function must calculate the maximum nesting depth.
+    *   Encountering an opening parenthesis `(` increases the current nesting level.
+    *   Encountering a closing parenthesis `)` decreases the current nesting level.
+    *   The maximum depth for a group is the highest value the current nesting level reaches during the traversal of that group.
+3.  **Aggregation**: The function must collect the maximum depth calculated for each group into a list.
+4.  **Output**: The function must return the list of integers representing the maximum depths.
+
+### 2. Constraints & Assumptions
+*   **Input Validity**: It is assumed that the input string contains valid, balanced parentheses groups.
+*   **Separators**: Groups are separated by one or more spaces.
+*   **Empty Input**: An empty input string should result in an empty list.
+*   **Libraries**: Use only standard Python libraries (specifically `typing`).
+
+### 3. Interfaces
+*   **Function Signature**:
+    `parse_nested_parens(paren_string)` -> `List of integers`
+    *   `paren_string`: A string containing space-separated parentheses groups.
+    *   Returns: A list of integers where each integer is the maximum nesting depth of the corresponding group.
+
+### 4. Acceptance Criteria
+*   **Example Case**:
+    Input: `'(()()) ((())) () ((())()())'`
+    Output: `[2, 3, 1, 3]`
+*   **Single Group**:
+    Input: `'((()))'`
+    Output: `[3]`
+*   **Multiple Simple Groups**:
+    Input: `'() (())'`
+    Output: `[1, 2]`
+*   **Empty String**:
+    Input: `''`
+    Output: `[]`",295,1307,1602,20.25062656402588,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678433.9232,run-6076e3a9,HumanEval/6,humaneval,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef parse_nested_parens(paren_string: str) -> List[int]:\n    \""\""\"" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\n    For each of the group, output the deepest level of nesting of parentheses.\n    E.g. (()()) has maximum two levels of nesting while ((())) has three.\n\n    >>> parse_nested_parens('(()()) ((())) () ((())()())')\n    [2, 3, 1, 3]\n    \""\""\""\n\n\nPlanner spec:\nHere is the implementation plan for the `parse_nested_parens` function.\n\n### 1. Functional Requirements\n1.  **Input Parsing**: The function must accept a string containing one or more groups of parentheses separated by spaces. It must split this string into individual groups.\n2.  **Depth Calculation**: For each isolated group string, the function must calculate the maximum nesting depth.\n    *   Encountering an opening parenthesis `(` increases the current nesting level.\n    *   Encountering a closing parenthesis `)` decreases the current nesting level.\n    *   The maximum depth for a group is the highest value the current nesting level reaches during the traversal of that group.\n3.  **Aggregation**: The function must collect the maximum depth calculated for each group into a list.\n4.  **Output**: The function must return the list of integers representing the maximum depths.\n\n### 2. Constraints & Assumptions\n*   **Input Validity**: It is assumed that the input string contains valid, balanced parentheses groups.\n*   **Separators**: Groups are separated by one or more spaces.\n*   **Empty Input**: An empty input string should result in an empty list.\n*   **Libraries**: Use only standard Python libraries (specifically `typing`).\n\n### 3. Interfaces\n*   **Function Signature**:\n    `parse_nested_parens(paren_string)` -> `List of integers`\n    *   `paren_string`: A string containing space-separated parentheses groups.\n    *   Returns: A list of integers where each integer is the maximum nesting depth of the corresponding group.\n\n### 4. Acceptance Criteria\n*   **Example Case**:\n    Input: `'(()()) ((())) () ((())()())'`\n    Output: `[2, 3, 1, 3]`\n*   **Single Group**:\n    Input: `'((()))'`\n    Output: `[3]`\n*   **Multiple Simple Groups**:\n    Input: `'() (())'`\n    Output: `[1, 2]`\n*   **Empty String**:\n    Input: `''`\n    Output: `[]`\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """""" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """"""
+    if not paren_string:
+        return []
+    
+    groups = paren_string.split()
+    result = []
+    
+    for group in groups:
+        max_depth = 0
+        current_depth = 0
+        
+        for char in group:
+            if char == '(':
+                current_depth += 1
+                max_depth = max(max_depth, current_depth)
+            elif char == ')':
+                current_depth -= 1
+        
+        result.append(max_depth)
+    
+    return result
+```","from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """""" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """"""
+    if not paren_string:
+        return []
+    
+    groups = paren_string.split()
+    result = []
+    
+    for group in groups:
+        max_depth = 0
+        current_depth = 0
+        
+        for char in group:
+            if char == '(':
+                current_depth += 1
+                max_depth = max(max_depth, current_depth)
+            elif char == ')':
+                current_depth -= 1
+        
+        result.append(max_depth)
+    
+    return result",787,267,1054,4.105470180511475,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678435.1642091,run-6076e3a9,HumanEval/6,humaneval,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate('(()()) ((())) () ((())()())') == [2, 3, 1, 3]\n    assert candidate('() (()) ((())) (((())))') == [1, 2, 3, 4]\n    assert candidate('(()(())((())))') == [4]\n\nCode artifact:\nfrom typing import List\n\n\ndef parse_nested_parens(paren_string: str) -> List[int]:\n    \""\""\"" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\n    For each of the group, output the deepest level of nesting of parentheses.\n    E.g. (()()) has maximum two levels of nesting while ((())) has three.\n\n    >>> parse_nested_parens('(()()) ((())) () ((())()())')\n    [2, 3, 1, 3]\n    \""\""\""\n    if not paren_string:\n        return []\n    \n    groups = paren_string.split()\n    result = []\n    \n    for group in groups:\n        max_depth = 0\n        current_depth = 0\n        \n        for char in group:\n            if char == '(':\n                current_depth += 1\n                max_depth = max(max_depth, current_depth)\n            elif char == ')':\n                current_depth -= 1\n        \n        result.append(max_depth)\n    \n    return result""}]","PASS
+All provided tests pass; function correctly computes maximum nesting depth per parenthesis group.
+Run summary: No errors encountered; outputs match expected results for all test cases.","PASS
+All provided tests pass; function correctly computes maximum nesting depth per parenthesis group.
+Run summary: No errors encountered; outputs match expected results for all test cases.",372,44,416,1.2179327011108398,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773678435.4716833,run-6076e3a9,HumanEval/6,humaneval,,,,,,,,,,,critic_fail,0,,0,,,3072,25.932100296020508,"from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """""" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """"""
+    if not paren_string:
+        return []
+    
+    groups = paren_string.split()
+    result = []
+    
+    for group in groups:
+        max_depth = 0
+        current_depth = 0
+        
+        for char in group:
+            if char == '(':
+                current_depth += 1
+                max_depth = max(max_depth, current_depth)
+            elif char == ')':
+                current_depth -= 1
+        
+        result.append(max_depth)
+    
+    return result",,,humaneval,"from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """""" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """"""
+",39b4ae7cbb22820ff04ffe8a3cbe4bd4332d16046130335d78f36d75a5c3cf4c,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """""" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """"""
+    if not paren_string:
+        return []
+    
+    groups = paren_string.split()
+    result = []
+    
+    for group in groups:
+        max_depth = 0
+        current_depth = 0
+        
+        for char in group:
+            if char == '(':
+                current_depth += 1
+                max_depth = max(max_depth, current_depth)
+            elif char == ')':
+                current_depth -= 1
+        
+        result.append(max_depth)
+    
+    return result",295,1307,1602,20.25062656402588,787,267,1054,4.105470180511475,372,44,416,1.2179327011108398,,,,,"Here is the implementation plan for the `parse_nested_parens` function.
+
+### 1. Functional Requirements
+1.  **Input Parsing**: The function must accept a string containing one or more groups of parentheses separated by spaces. It must split this string into individual groups.
+2.  **Depth Calculation**: For each isolated group string, the function must calculate the maximum nesting depth.
+    *   Encountering an opening parenthesis `(` increases the current nesting level.
+    *   Encountering a closing parenthesis `)` decreases the current nesting level.
+    *   The maximum depth for a group is the highest value the current nesting level reaches during the traversal of that group.
+3.  **Aggregation**: The function must collect the maximum depth calculated for each group into a list.
+4.  **Output**: The function must return the list of integers representing the maximum depths.
+
+### 2. Constraints & Assumptions
+*   **Input Validity**: It is assumed that the input string contains valid, balanced parentheses groups.
+*   **Separators**: Groups are separated by one or more spaces.
+*   **Empty Input**: An empty input string should result in an empty list.
+*   **Libraries**: Use only standard Python libraries (specifically `typing`).
+
+### 3. Interfaces
+*   **Function Signature**:
+    `parse_nested_parens(paren_string)` -> `List of integers`
+    *   `paren_string`: A string containing space-separated parentheses groups.
+    *   Returns: A list of integers where each integer is the maximum nesting depth of the corresponding group.
+
+### 4. Acceptance Criteria
+*   **Example Case**:
+    Input: `'(()()) ((())) () ((())()())'`
+    Output: `[2, 3, 1, 3]`
+*   **Single Group**:
+    Input: `'((()))'`
+    Output: `[3]`
+*   **Multiple Simple Groups**:
+    Input: `'() (())'`
+    Output: `[1, 2]`
+*   **Empty String**:
+    Input: `''`
+    Output: `[]`","from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """""" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """"""
+    if not paren_string:
+        return []
+    
+    groups = paren_string.split()
+    result = []
+    
+    for group in groups:
+        max_depth = 0
+        current_depth = 0
+        
+        for char in group:
+            if char == '(':
+                current_depth += 1
+                max_depth = max(max_depth, current_depth)
+            elif char == ')':
+                current_depth -= 1
+        
+        result.append(max_depth)
+    
+    return result","PASS
+All provided tests pass; function correctly computes maximum nesting depth per parenthesis group.
+Run summary: No errors encountered; outputs match expected results for all test cases.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773678451.3874478,run-6076e3a9,HumanEval/7,humaneval,Planner,google/gemini-3-pro-preview,"[{""role"": ""system"", ""content"": ""You are the Planner in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\n\nYour responsibility is to define intent, structure, and constraints WITHOUT producing executable artifacts.\n\nHard rules:\n- Do NOT write code, pseudocode, tests, or patches.\n- Do NOT use code formatting or code syntax such as: def, class, import, ``` or \""diff --git\"".\n- When describing interfaces, use plain English signatures like:\n  - function_name(arg1, arg2) -> return_type\n  NOT Python syntax like: def function_name(...):\n\nOutput a structured specification:\n1) Functional requirements (numbered)\n2) Constraints/assumptions\n3) Interfaces (signatures / I/O)\n4) Acceptance criteria (testable conditions)\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef filter_by_substring(strings: List[str], substring: str) -> List[str]:\n    \""\""\"" Filter an input list of strings only for ones that contain given substring\n    >>> filter_by_substring([], 'a')\n    []\n    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')\n    ['abc', 'bacd', 'array']\n    \""\""\""\n\n\nRepo context (if any):\n""}]","Here is the structured specification for the `filter_by_substring` function.
+
+**1. Functional Requirements**
+1.  The function must accept a list of strings and a target substring.
+2.  It must iterate through the provided list of strings.
+3.  It must identify which strings in the list contain the target substring.
+4.  It must return a new list containing only the strings that matched the criteria.
+5.  The order of elements in the returned list must match their relative order in the input list.
+
+**2. Constraints & Assumptions**
+1.  The matching logic is case-sensitive (e.g., 'a' is distinct from 'A').
+2.  If the input list is empty, the function returns an empty list.
+3.  No external libraries should be used; standard string manipulation is sufficient.
+4.  Input types are assumed to be a list of strings and a single string, consistent with the provided type hints.
+
+**3. Interfaces**
+1.  **filter_by_substring(strings, substring)** -> returns a List of strings
+    *   **strings**: A list containing string elements.
+    *   **substring**: The string pattern to search for within the elements.
+
+**4. Acceptance Criteria**
+1.  **Empty Input**: Calling the function with an empty list and any substring returns an empty list.
+2.  **Mixed Matches**: Calling the function with `['abc', 'bacd', 'cde', 'array']` and substring `'a'` returns `['abc', 'bacd', 'array']`.
+3.  **No Matches**: Calling the function with a list where no strings contain the substring returns an empty list.
+4.  **Full Match**: Calling the","Here is the structured specification for the `filter_by_substring` function.
+
+**1. Functional Requirements**
+1.  The function must accept a list of strings and a target substring.
+2.  It must iterate through the provided list of strings.
+3.  It must identify which strings in the list contain the target substring.
+4.  It must return a new list containing only the strings that matched the criteria.
+5.  The order of elements in the returned list must match their relative order in the input list.
+
+**2. Constraints & Assumptions**
+1.  The matching logic is case-sensitive (e.g., 'a' is distinct from 'A').
+2.  If the input list is empty, the function returns an empty list.
+3.  No external libraries should be used; standard string manipulation is sufficient.
+4.  Input types are assumed to be a list of strings and a single string, consistent with the provided type hints.
+
+**3. Interfaces**
+1.  **filter_by_substring(strings, substring)** -> returns a List of strings
+    *   **strings**: A list containing string elements.
+    *   **substring**: The string pattern to search for within the elements.
+
+**4. Acceptance Criteria**
+1.  **Empty Input**: Calling the function with an empty list and any substring returns an empty list.
+2.  **Mixed Matches**: Calling the function with `['abc', 'bacd', 'cde', 'array']` and substring `'a'` returns `['abc', 'bacd', 'array']`.
+3.  **No Matches**: Calling the function with a list where no strings contain the substring returns an empty list.
+4.  **Full Match**: Calling the",275,1497,1772,15.879037618637085,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678454.5708644,run-6076e3a9,HumanEval/7,humaneval,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List\n\n\ndef filter_by_substring(strings: List[str], substring: str) -> List[str]:\n    \""\""\"" Filter an input list of strings only for ones that contain given substring\n    >>> filter_by_substring([], 'a')\n    []\n    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')\n    ['abc', 'bacd', 'array']\n    \""\""\""\n\n\nPlanner spec:\nHere is the structured specification for the `filter_by_substring` function.\n\n**1. Functional Requirements**\n1.  The function must accept a list of strings and a target substring.\n2.  It must iterate through the provided list of strings.\n3.  It must identify which strings in the list contain the target substring.\n4.  It must return a new list containing only the strings that matched the criteria.\n5.  The order of elements in the returned list must match their relative order in the input list.\n\n**2. Constraints & Assumptions**\n1.  The matching logic is case-sensitive (e.g., 'a' is distinct from 'A').\n2.  If the input list is empty, the function returns an empty list.\n3.  No external libraries should be used; standard string manipulation is sufficient.\n4.  Input types are assumed to be a list of strings and a single string, consistent with the provided type hints.\n\n**3. Interfaces**\n1.  **filter_by_substring(strings, substring)** -> returns a List of strings\n    *   **strings**: A list containing string elements.\n    *   **substring**: The string pattern to search for within the elements.\n\n**4. Acceptance Criteria**\n1.  **Empty Input**: Calling the function with an empty list and any substring returns an empty list.\n2.  **Mixed Matches**: Calling the function with `['abc', 'bacd', 'cde', 'array']` and substring `'a'` returns `['abc', 'bacd', 'array']`.\n3.  **No Matches**: Calling the function with a list where no strings contain the substring returns an empty list.\n4.  **Full Match**: Calling the\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """""" Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """"""
+    result = []
+    for string in strings:
+        if substring in string:
+            result.append(string)
+    return result
+```","from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """""" Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """"""
+    result = []
+    for string in strings:
+        if substring in string:
+            result.append(string)
+    return result",650,145,795,3.1522247791290283,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678455.9665232,run-6076e3a9,HumanEval/7,humaneval,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate([], 'john') == []\n    assert candidate(['xxx', 'asd', 'xxy', 'john doe', 'xxxAAA', 'xxx'], 'xxx') == ['xxx', 'xxxAAA', 'xxx']\n    assert candidate(['xxx', 'asd', 'aaaxxy', 'john doe', 'xxxAAA', 'xxx'], 'xx') == ['xxx', 'aaaxxy', 'xxxAAA', 'xxx']\n    assert candidate(['grunt', 'trumpet', 'prune', 'gruesome'], 'run') == ['grunt', 'prune']\n\nCode artifact:\nfrom typing import List\n\n\ndef filter_by_substring(strings: List[str], substring: str) -> List[str]:\n    \""\""\"" Filter an input list of strings only for ones that contain given substring\n    >>> filter_by_substring([], 'a')\n    []\n    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')\n    ['abc', 'bacd', 'array']\n    \""\""\""\n    result = []\n    for string in strings:\n        if substring in string:\n            result.append(string)\n    return result""}]","PASS
+All tests pass; function correctly filters strings containing the given substring.
+Run summary: Behavior matches expected outputs for empty list, exact matches, substring-in-middle, and multiple positions.","PASS
+All tests pass; function correctly filters strings containing the given substring.
+Run summary: Behavior matches expected outputs for empty list, exact matches, substring-in-middle, and multiple positions.",338,47,385,1.367605209350586,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773678456.2981474,run-6076e3a9,HumanEval/7,humaneval,,,,,,,,,,,critic_fail,0,,0,,,2952,20.791764974594116,"from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """""" Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """"""
+    result = []
+    for string in strings:
+        if substring in string:
+            result.append(string)
+    return result",,,humaneval,"from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """""" Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """"""
+",5eecb2c6bb2b4fcd70989d66291a7c4c02d3afbf31591ad684e926a1e60ee969,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """""" Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """"""
+    result = []
+    for string in strings:
+        if substring in string:
+            result.append(string)
+    return result",275,1497,1772,15.879037618637085,650,145,795,3.1522247791290283,338,47,385,1.367605209350586,,,,,"Here is the structured specification for the `filter_by_substring` function.
+
+**1. Functional Requirements**
+1.  The function must accept a list of strings and a target substring.
+2.  It must iterate through the provided list of strings.
+3.  It must identify which strings in the list contain the target substring.
+4.  It must return a new list containing only the strings that matched the criteria.
+5.  The order of elements in the returned list must match their relative order in the input list.
+
+**2. Constraints & Assumptions**
+1.  The matching logic is case-sensitive (e.g., 'a' is distinct from 'A').
+2.  If the input list is empty, the function returns an empty list.
+3.  No external libraries should be used; standard string manipulation is sufficient.
+4.  Input types are assumed to be a list of strings and a single string, consistent with the provided type hints.
+
+**3. Interfaces**
+1.  **filter_by_substring(strings, substring)** -> returns a List of strings
+    *   **strings**: A list containing string elements.
+    *   **substring**: The string pattern to search for within the elements.
+
+**4. Acceptance Criteria**
+1.  **Empty Input**: Calling the function with an empty list and any substring returns an empty list.
+2.  **Mixed Matches**: Calling the function with `['abc', 'bacd', 'cde', 'array']` and substring `'a'` returns `['abc', 'bacd', 'array']`.
+3.  **No Matches**: Calling the function with a list where no strings contain the substring returns an empty list.
+4.  **Full Match**: Calling the","from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """""" Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """"""
+    result = []
+    for string in strings:
+        if substring in string:
+            result.append(string)
+    return result","PASS
+All tests pass; function correctly filters strings containing the given substring.
+Run summary: Behavior matches expected outputs for empty list, exact matches, substring-in-middle, and multiple positions.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773678483.2950592,run-6076e3a9,HumanEval/8,humaneval,Planner,google/gemini-3-pro-preview,"[{""role"": ""system"", ""content"": ""You are the Planner in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\n\nYour responsibility is to define intent, structure, and constraints WITHOUT producing executable artifacts.\n\nHard rules:\n- Do NOT write code, pseudocode, tests, or patches.\n- Do NOT use code formatting or code syntax such as: def, class, import, ``` or \""diff --git\"".\n- When describing interfaces, use plain English signatures like:\n  - function_name(arg1, arg2) -> return_type\n  NOT Python syntax like: def function_name(...):\n\nOutput a structured specification:\n1) Functional requirements (numbered)\n2) Constraints/assumptions\n3) Interfaces (signatures / I/O)\n4) Acceptance criteria (testable conditions)\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List, Tuple\n\n\ndef sum_product(numbers: List[int]) -> Tuple[int, int]:\n    \""\""\"" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\n    Empty sum should be equal to 0 and empty product should be equal to 1.\n    >>> sum_product([])\n    (0, 1)\n    >>> sum_product([1, 2, 3, 4])\n    (10, 24)\n    \""\""\""\n\n\nRepo context (if any):\n""}]","Here is the structured specification for the `sum_product` function.
+
+1. Functional Requirements
+    1.  The function must accept a single argument representing a list of integers.
+    2.  It must calculate the arithmetic sum of all integers in the provided list.
+    3.  It must calculate the arithmetic product of all integers in the provided list.
+    4.  If the input list is empty, the sum must be calculated as 0.
+    5.  If the input list is empty, the product must be calculated as 1.
+    6.  The function must return a tuple containing exactly two integers: the calculated sum followed by the calculated product.
+
+2. Constraints & Assumptions
+    1.  The input is assumed to be a valid list of integers.
+    2.  Standard integer arithmetic applies (handling of negative numbers and zero is implied).
+    3.  No external libraries should be used; use standard Python functionality.
+
+3. Interfaces
+    1.  **Function Signature**: sum_product(numbers: List of integers) -> Tuple of (integer, integer)
+
+4. Acceptance Criteria
+    1.  **Empty List Case**: Calling the function with an empty list `[]` returns `(0, 1)`.
+    2.  **Positive Integers Case**: Calling the function with `[1, 2, 3, 4]` returns `(10, 24)`.
+    3.  **Single Element Case**: Calling the function with a single element list (e.g., `[5]`) returns that element as both sum and product (e.g., `(5, 5)`).
+    4.  **Zero Inclusion Case**: Calling the function with a list containing zero (e.g., `[1, 2, 0]`) returns the correct sum and a product of `0`.","Here is the structured specification for the `sum_product` function.
+
+1. Functional Requirements
+    1.  The function must accept a single argument representing a list of integers.
+    2.  It must calculate the arithmetic sum of all integers in the provided list.
+    3.  It must calculate the arithmetic product of all integers in the provided list.
+    4.  If the input list is empty, the sum must be calculated as 0.
+    5.  If the input list is empty, the product must be calculated as 1.
+    6.  The function must return a tuple containing exactly two integers: the calculated sum followed by the calculated product.
+
+2. Constraints & Assumptions
+    1.  The input is assumed to be a valid list of integers.
+    2.  Standard integer arithmetic applies (handling of negative numbers and zero is implied).
+    3.  No external libraries should be used; use standard Python functionality.
+
+3. Interfaces
+    1.  **Function Signature**: sum_product(numbers: List of integers) -> Tuple of (integer, integer)
+
+4. Acceptance Criteria
+    1.  **Empty List Case**: Calling the function with an empty list `[]` returns `(0, 1)`.
+    2.  **Positive Integers Case**: Calling the function with `[1, 2, 3, 4]` returns `(10, 24)`.
+    3.  **Single Element Case**: Calling the function with a single element list (e.g., `[5]`) returns that element as both sum and product (e.g., `(5, 5)`).
+    4.  **Zero Inclusion Case**: Calling the function with a list containing zero (e.g., `[1, 2, 0]`) returns the correct sum and a product of `0`.",296,1252,1548,26.957578897476196,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678486.7215173,run-6076e3a9,HumanEval/8,humaneval,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List, Tuple\n\n\ndef sum_product(numbers: List[int]) -> Tuple[int, int]:\n    \""\""\"" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\n    Empty sum should be equal to 0 and empty product should be equal to 1.\n    >>> sum_product([])\n    (0, 1)\n    >>> sum_product([1, 2, 3, 4])\n    (10, 24)\n    \""\""\""\n\n\nPlanner spec:\nHere is the structured specification for the `sum_product` function.\n\n1. Functional Requirements\n    1.  The function must accept a single argument representing a list of integers.\n    2.  It must calculate the arithmetic sum of all integers in the provided list.\n    3.  It must calculate the arithmetic product of all integers in the provided list.\n    4.  If the input list is empty, the sum must be calculated as 0.\n    5.  If the input list is empty, the product must be calculated as 1.\n    6.  The function must return a tuple containing exactly two integers: the calculated sum followed by the calculated product.\n\n2. Constraints & Assumptions\n    1.  The input is assumed to be a valid list of integers.\n    2.  Standard integer arithmetic applies (handling of negative numbers and zero is implied).\n    3.  No external libraries should be used; use standard Python functionality.\n\n3. Interfaces\n    1.  **Function Signature**: sum_product(numbers: List of integers) -> Tuple of (integer, integer)\n\n4. Acceptance Criteria\n    1.  **Empty List Case**: Calling the function with an empty list `[]` returns `(0, 1)`.\n    2.  **Positive Integers Case**: Calling the function with `[1, 2, 3, 4]` returns `(10, 24)`.\n    3.  **Single Element Case**: Calling the function with a single element list (e.g., `[5]`) returns that element as both sum and product (e.g., `(5, 5)`).\n    4.  **Zero Inclusion Case**: Calling the function with a list containing zero (e.g., `[1, 2, 0]`) returns the correct sum and a product of `0`.\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """""" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """"""
+    total_sum = 0
+    total_product = 1
+    
+    for num in numbers:
+        total_sum += num
+        total_product *= num
+    
+    return (total_sum, total_product)
+```","from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """""" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """"""
+    total_sum = 0
+    total_product = 1
+    
+    for num in numbers:
+        total_sum += num
+        total_product *= num
+    
+    return (total_sum, total_product)",681,182,863,3.399808168411255,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678489.1942656,run-6076e3a9,HumanEval/8,humaneval,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate([]) == (0, 1)\n    assert candidate([1, 1, 1]) == (3, 1)\n    assert candidate([100, 0]) == (100, 0)\n    assert candidate([3, 5, 7]) == (3 + 5 + 7, 3 * 5 * 7)\n    assert candidate([10]) == (10, 10)\n\nCode artifact:\nfrom typing import List, Tuple\n\n\ndef sum_product(numbers: List[int]) -> Tuple[int, int]:\n    \""\""\"" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\n    Empty sum should be equal to 0 and empty product should be equal to 1.\n    >>> sum_product([])\n    (0, 1)\n    >>> sum_product([1, 2, 3, 4])\n    (10, 24)\n    \""\""\""\n    total_sum = 0\n    total_product = 1\n    \n    for num in numbers:\n        total_sum += num\n        total_product *= num\n    \n    return (total_sum, total_product)""}]","PASS
+All provided test cases pass; sum and product logic (including empty list behavior) matches the specification.
+Run summary: Correctly returns (0,1) for empty list, handles single and multiple elements as expected.","PASS
+All provided test cases pass; sum and product logic (including empty list behavior) matches the specification.
+Run summary: Correctly returns (0,1) for empty list, handles single and multiple elements as expected.",341,55,396,2.4443295001983643,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773678489.5063143,run-6076e3a9,HumanEval/8,humaneval,,,,,,,,,,,critic_fail,0,,0,,,2807,33.170891523361206,"from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """""" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """"""
+    total_sum = 0
+    total_product = 1
+    
+    for num in numbers:
+        total_sum += num
+        total_product *= num
+    
+    return (total_sum, total_product)",,,humaneval,"from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """""" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """"""
+",84dc98e731928675a91c68cbff1f89d0677596f849fa0e6b34fa9b40335fce03,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """""" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """"""
+    total_sum = 0
+    total_product = 1
+    
+    for num in numbers:
+        total_sum += num
+        total_product *= num
+    
+    return (total_sum, total_product)",296,1252,1548,26.957578897476196,681,182,863,3.399808168411255,341,55,396,2.4443295001983643,,,,,"Here is the structured specification for the `sum_product` function.
+
+1. Functional Requirements
+    1.  The function must accept a single argument representing a list of integers.
+    2.  It must calculate the arithmetic sum of all integers in the provided list.
+    3.  It must calculate the arithmetic product of all integers in the provided list.
+    4.  If the input list is empty, the sum must be calculated as 0.
+    5.  If the input list is empty, the product must be calculated as 1.
+    6.  The function must return a tuple containing exactly two integers: the calculated sum followed by the calculated product.
+
+2. Constraints & Assumptions
+    1.  The input is assumed to be a valid list of integers.
+    2.  Standard integer arithmetic applies (handling of negative numbers and zero is implied).
+    3.  No external libraries should be used; use standard Python functionality.
+
+3. Interfaces
+    1.  **Function Signature**: sum_product(numbers: List of integers) -> Tuple of (integer, integer)
+
+4. Acceptance Criteria
+    1.  **Empty List Case**: Calling the function with an empty list `[]` returns `(0, 1)`.
+    2.  **Positive Integers Case**: Calling the function with `[1, 2, 3, 4]` returns `(10, 24)`.
+    3.  **Single Element Case**: Calling the function with a single element list (e.g., `[5]`) returns that element as both sum and product (e.g., `(5, 5)`).
+    4.  **Zero Inclusion Case**: Calling the function with a list containing zero (e.g., `[1, 2, 0]`) returns the correct sum and a product of `0`.","from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """""" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """"""
+    total_sum = 0
+    total_product = 1
+    
+    for num in numbers:
+        total_sum += num
+        total_product *= num
+    
+    return (total_sum, total_product)","PASS
+All provided test cases pass; sum and product logic (including empty list behavior) matches the specification.
+Run summary: Correctly returns (0,1) for empty list, handles single and multiple elements as expected.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,
+AGENT_CALL,1773678511.5620234,run-6076e3a9,HumanEval/9,humaneval,Planner,google/gemini-3-pro-preview,"[{""role"": ""system"", ""content"": ""You are the Planner in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\n\nYour responsibility is to define intent, structure, and constraints WITHOUT producing executable artifacts.\n\nHard rules:\n- Do NOT write code, pseudocode, tests, or patches.\n- Do NOT use code formatting or code syntax such as: def, class, import, ``` or \""diff --git\"".\n- When describing interfaces, use plain English signatures like:\n  - function_name(arg1, arg2) -> return_type\n  NOT Python syntax like: def function_name(...):\n\nOutput a structured specification:\n1) Functional requirements (numbered)\n2) Constraints/assumptions\n3) Interfaces (signatures / I/O)\n4) Acceptance criteria (testable conditions)\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List, Tuple\n\n\ndef rolling_max(numbers: List[int]) -> List[int]:\n    \""\""\"" From a given list of integers, generate a list of rolling maximum element found until given moment\n    in the sequence.\n    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])\n    [1, 2, 3, 3, 3, 4, 4]\n    \""\""\""\n\n\nRepo context (if any):\n""}]","Here is the specification for the `rolling_max` function.
+
+1. Functional Requirements
+    1. The function must accept a list of integers as input.
+    2. It must return a new list of integers of the same length as the input.
+    3. For every index `i` in the input list, the element at index `i` in the output list must be equal to the maximum value found in the input list among all elements from index 0 up to and including index `i`.
+    4. If the input list is empty, the function must return an empty list.
+
+2. Constraints & Assumptions
+    1. The input list contains only integers.
+    2. The solution should iterate through the list efficiently (ideally O(N) time complexity).
+    3. No external libraries should be used.
+    4. The function should handle negative integers correctly.
+
+3. Interfaces
+    1. Function Name: rolling_max
+    2. Input: numbers (List of integers)
+    3. Output: List of integers representing the running maximums.
+
+4. Acceptance Criteria
+    1. **Standard Case:** Input `[1, 2, 3, 2, 3, 4, 2]` returns `[1, 2, 3, 3, 3, 4, 4]`.
+    2. **Empty List:** Input `[]` returns `[]`.
+    3. **Increasing Sequence:** Input `[1, 2, 3]` returns `[1, 2, 3]`.
+    4. **Decreasing Sequence:** Input `[3, 2, 1]` returns `[3, 3, 3]`.
+    5. **Negative Numbers:** Input `[-10, -5, -8]` returns `[-10, -5, -5]`.
+    6. **Single Element:** Input `[5]` returns `[5]`.","Here is the specification for the `rolling_max` function.
+
+1. Functional Requirements
+    1. The function must accept a list of integers as input.
+    2. It must return a new list of integers of the same length as the input.
+    3. For every index `i` in the input list, the element at index `i` in the output list must be equal to the maximum value found in the input list among all elements from index 0 up to and including index `i`.
+    4. If the input list is empty, the function must return an empty list.
+
+2. Constraints & Assumptions
+    1. The input list contains only integers.
+    2. The solution should iterate through the list efficiently (ideally O(N) time complexity).
+    3. No external libraries should be used.
+    4. The function should handle negative integers correctly.
+
+3. Interfaces
+    1. Function Name: rolling_max
+    2. Input: numbers (List of integers)
+    3. Output: List of integers representing the running maximums.
+
+4. Acceptance Criteria
+    1. **Standard Case:** Input `[1, 2, 3, 2, 3, 4, 2]` returns `[1, 2, 3, 3, 3, 4, 4]`.
+    2. **Empty List:** Input `[]` returns `[]`.
+    3. **Increasing Sequence:** Input `[1, 2, 3]` returns `[1, 2, 3]`.
+    4. **Decreasing Sequence:** Input `[3, 2, 1]` returns `[3, 3, 3]`.
+    5. **Negative Numbers:** Input `[-10, -5, -8]` returns `[-10, -5, -5]`.
+    6. **Single Element:** Input `[5]` returns `[5]`.",280,1226,1506,17.728638410568237,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678515.3444612,run-6076e3a9,HumanEval/9,humaneval,Executor,anthropic/claude-sonnet-4.5,"[{""role"": ""system"", ""content"": ""You are the Executor in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nImplement exactly the Planner spec.\n\nHard output rules:\n- If repo context exists, output ONLY a unified diff patch (git-style).\n- Do NOT include markdown fences (no ```).\n- Do NOT output standalone code blocks.\n- The very first line must start with: diff --git\n\nIf repo context is empty, output full code (no markdown fences).\n""}, {""role"": ""user"", ""content"": ""Problem:\nfrom typing import List, Tuple\n\n\ndef rolling_max(numbers: List[int]) -> List[int]:\n    \""\""\"" From a given list of integers, generate a list of rolling maximum element found until given moment\n    in the sequence.\n    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])\n    [1, 2, 3, 3, 3, 4, 4]\n    \""\""\""\n\n\nPlanner spec:\nHere is the specification for the `rolling_max` function.\n\n1. Functional Requirements\n    1. The function must accept a list of integers as input.\n    2. It must return a new list of integers of the same length as the input.\n    3. For every index `i` in the input list, the element at index `i` in the output list must be equal to the maximum value found in the input list among all elements from index 0 up to and including index `i`.\n    4. If the input list is empty, the function must return an empty list.\n\n2. Constraints & Assumptions\n    1. The input list contains only integers.\n    2. The solution should iterate through the list efficiently (ideally O(N) time complexity).\n    3. No external libraries should be used.\n    4. The function should handle negative integers correctly.\n\n3. Interfaces\n    1. Function Name: rolling_max\n    2. Input: numbers (List of integers)\n    3. Output: List of integers representing the running maximums.\n\n4. Acceptance Criteria\n    1. **Standard Case:** Input `[1, 2, 3, 2, 3, 4, 2]` returns `[1, 2, 3, 3, 3, 4, 4]`.\n    2. **Empty List:** Input `[]` returns `[]`.\n    3. **Increasing Sequence:** Input `[1, 2, 3]` returns `[1, 2, 3]`.\n    4. **Decreasing Sequence:** Input `[3, 2, 1]` returns `[3, 3, 3]`.\n    5. **Negative Numbers:** Input `[-10, -5, -8]` returns `[-10, -5, -5]`.\n    6. **Single Element:** Input `[5]` returns `[5]`.\n\nRepo context (optional):\n\n\nReturn ONLY the code artifact now. No markdown fences.""}]","```python
+from typing import List, Tuple
+
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """""" From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    current_max = numbers[0]
+    
+    for num in numbers:
+        if num > current_max:
+            current_max = num
+        result.append(current_max)
+    
+    return result
+```","from typing import List, Tuple
+
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """""" From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    current_max = numbers[0]
+    
+    for num in numbers:
+        if num > current_max:
+            current_max = num
+        result.append(current_max)
+    
+    return result",686,180,866,3.7602696418762207,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+AGENT_CALL,1773678516.9599483,run-6076e3a9,HumanEval/9,humaneval,Critic,openai/gpt-5.1,"[{""role"": ""system"", ""content"": ""You are the Critic evaluator in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).\nYou must evaluate functional correctness via the provided test harness.\nYou must NOT propose fixes. Output:\n- PASS or FAIL (single line)\n- Short failure localization / summary (if FAIL)\n- Concise run summary\n""}, {""role"": ""user"", ""content"": ""Test harness:\nMETADATA = {\n    'author': 'jt',\n    'dataset': 'test'\n}\n\n\ndef check(candidate):\n    assert candidate([]) == []\n    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]\n    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]\n    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]\n\nCode artifact:\nfrom typing import List, Tuple\n\n\ndef rolling_max(numbers: List[int]) -> List[int]:\n    \""\""\"" From a given list of integers, generate a list of rolling maximum element found until given moment\n    in the sequence.\n    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])\n    [1, 2, 3, 3, 3, 4, 4]\n    \""\""\""\n    if not numbers:\n        return []\n    \n    result = []\n    current_max = numbers[0]\n    \n    for num in numbers:\n        if num > current_max:\n            current_max = num\n        result.append(current_max)\n    \n    return result""}]","PASS
+All tests satisfied: behavior matches expected rolling maximum logic for empty list, increasing, decreasing, and mixed cases.
+Run summary: Function maintains a running maximum correctly and returns the accumulated maxima list; no assertion failures.","PASS
+All tests satisfied: behavior matches expected rolling maximum logic for empty list, increasing, decreasing, and mixed cases.
+Run summary: Function maintains a running maximum correctly and returns the accumulated maxima list; no assertion failures.",347,54,401,1.590946912765503,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RUN_SUMMARY,1773678517.2815883,run-6076e3a9,HumanEval/9,humaneval,,,,,,,,,,,critic_fail,0,,0,,,2773,27.740564584732056,"from typing import List, Tuple
+
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """""" From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    current_max = numbers[0]
+    
+    for num in numbers:
+        if num > current_max:
+            current_max = num
+        result.append(current_max)
+    
+    return result",,,humaneval,"from typing import List, Tuple
+
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """""" From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """"""
+",583b281fbe1bf261fbade6e1a03119de96084ac87b508387f0d23c3b0cfdbbdb,google/gemini-3-pro-preview,anthropic/claude-sonnet-4.5,openai/gpt-5.1,,"from typing import List, Tuple
+
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """""" From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    current_max = numbers[0]
+    
+    for num in numbers:
+        if num > current_max:
+            current_max = num
+        result.append(current_max)
+    
+    return result",280,1226,1506,17.728638410568237,686,180,866,3.7602696418762207,347,54,401,1.590946912765503,,,,,"Here is the specification for the `rolling_max` function.
+
+1. Functional Requirements
+    1. The function must accept a list of integers as input.
+    2. It must return a new list of integers of the same length as the input.
+    3. For every index `i` in the input list, the element at index `i` in the output list must be equal to the maximum value found in the input list among all elements from index 0 up to and including index `i`.
+    4. If the input list is empty, the function must return an empty list.
+
+2. Constraints & Assumptions
+    1. The input list contains only integers.
+    2. The solution should iterate through the list efficiently (ideally O(N) time complexity).
+    3. No external libraries should be used.
+    4. The function should handle negative integers correctly.
+
+3. Interfaces
+    1. Function Name: rolling_max
+    2. Input: numbers (List of integers)
+    3. Output: List of integers representing the running maximums.
+
+4. Acceptance Criteria
+    1. **Standard Case:** Input `[1, 2, 3, 2, 3, 4, 2]` returns `[1, 2, 3, 3, 3, 4, 4]`.
+    2. **Empty List:** Input `[]` returns `[]`.
+    3. **Increasing Sequence:** Input `[1, 2, 3]` returns `[1, 2, 3]`.
+    4. **Decreasing Sequence:** Input `[3, 2, 1]` returns `[3, 3, 3]`.
+    5. **Negative Numbers:** Input `[-10, -5, -8]` returns `[-10, -5, -5]`.
+    6. **Single Element:** Input `[5]` returns `[5]`.","from typing import List, Tuple
+
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """""" From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """"""
+    if not numbers:
+        return []
+    
+    result = []
+    current_max = numbers[0]
+    
+    for num in numbers:
+        if num > current_max:
+            current_max = num
+        result.append(current_max)
+    
+    return result","PASS
+All tests satisfied: behavior matches expected rolling maximum logic for empty list, increasing, decreasing, and mixed cases.
+Run summary: Function maintains a running maximum correctly and returns the accumulated maxima list; no assertion failures.",,,,,,,0,0,0,0,0,1,1,,,0,,,,0,,,

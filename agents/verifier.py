@@ -1,11 +1,11 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 from .base import AgentBase
 
-SYSTEM_PROMPT = """You are the Verifier in a fixed software development pipeline (Architect -> Developer -> Security -> QA -> Verifier).
+SYSTEM_PROMPT = """You are the Verifier in a fixed software development pipeline (Planner -> Executor -> Critic -> Verifier).
 You are strictly non-generative: do not write code, patches, or file edits.
 
-You do not see source code directly. You only see QA summary, Security summary, artifact mode, and format checks.
+You do not see source code directly. You only see Critic summary, artifact mode, and format checks.
 
 Output exactly one of:
 ACCEPT
@@ -18,12 +18,12 @@ Hard rules:
     REJECT: Output ONLY a unified diff patch (diff --git ... with ---/+++ and @@ hunks). No markdown fences.
 - If artifact_mode == code:
   - Do NOT request diff format.
-  - Reject only with targeted, minimal repair requests based on QA/Security signals.
+  - Reject only with targeted, minimal repair requests based on Critic signals.
 
-When QA is skipped, do NOT pretend to judge functional correctness.
+When Critic is skipped, do NOT pretend to judge functional correctness.
 In that case:
 - For patch mode, you may ACCEPT only if looks_like_patch=true and has_markdown_fence=false.
-- For code mode, you may ACCEPT only if there is no explicit blocker in security summary.
+- For code mode, you may ACCEPT only when there is no explicit blocker in Critic summary.
 
 Otherwise REJECT with a short, targeted request.
 """
@@ -34,15 +34,13 @@ class VerifierAgent(AgentBase):
 
     def build_messages(
         self,
-        qa_summary: str,
-        security_summary: str,
+        critic_summary: str,
         disagreement: bool,
         artifact_mode: str = "patch",
         format_checks: str | None = None,
     ):
         user = (
-            f"QA summary:\n{qa_summary}\n\n"
-            f"Security summary:\n{security_summary}\n\n"
+            f"Critic summary:\n{critic_summary}\n\n"
             f"Disagreement indicator: {disagreement}\n\n"
             f"Artifact mode: {artifact_mode}\n\n"
         )
@@ -54,3 +52,4 @@ class VerifierAgent(AgentBase):
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": user},
         ]
+

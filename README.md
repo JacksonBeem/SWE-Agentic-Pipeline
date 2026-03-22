@@ -1,12 +1,12 @@
-# Agentic LLM Evaluation Pipeline
+﻿# Agentic LLM Evaluation Pipeline
 
 This repository evaluates code-generation strategies across `HumanEval`, `MBPP`, and `BigCodeBench` using a shared Python pipeline, OpenRouter-backed model calls, local execution checks, and post-run aggregation scripts.
 
 It supports three execution styles:
 
 - `monolithic`: one model produces the final solution in a single call
-- `agentic`: `Architect -> Developer -> QA`
-- `agentic_plus_verifier`: `Architect -> Developer -> QA -> Verifier`, with a single repair loop when the verifier rejects
+- `agentic`: `Planner -> Executor -> Critic`
+- `agentic_plus_verifier`: `Planner -> Executor -> Critic -> Verifier`, with a single repair loop when the verifier rejects
 
 The repo already contains dataset files, run logs, converted predictions, boolean pass/fail outputs, and aggregated summaries for all three datasets and all three strategies.
 
@@ -54,18 +54,17 @@ Detailed workflow docs:
 
 The multi-agent pipeline is implemented in [orchestrator.py](/c:/VScode/pipeline/orchestrator.py) and the agent prompt definitions live in [agents](/c:/VScode/pipeline/agents).
 
-- `Architect`: writes a structured problem specification without code
-- `Developer`: produces the code artifact
-- `QA`: reviews the artifact against the provided test harness and emits `PASS` or `FAIL`
-- `Verifier`: accepts or rejects based on QA/security summaries and can request one targeted repair
-- `Security`: implemented, but disabled in the current default workflow settings
+- `Planner`: writes a structured problem specification without code
+- `Executor`: produces the code artifact
+- `Critic`: reviews the artifact against the provided test harness and emits `PASS` or `FAIL`
+- `Verifier`: accepts or rejects based on Critic summaries and can request one targeted repair
 
 ### Strategies
 
 - `monolithic`
-  Uses one model call with an internal Architect/Developer/QA instruction scaffold.
+  Uses one model call with an internal Planner/Executor/Critic instruction scaffold.
 - `agentic`
-  Runs explicit `Architect`, `Developer`, and `QA` stages.
+  Runs explicit `Planner`, `Executor`, and `Critic` stages.
 - `agentic_plus_verifier`
   Adds a `Verifier` stage and supports one repair attempt if the verifier returns `REJECT`.
 
@@ -73,10 +72,9 @@ The multi-agent pipeline is implemented in [orchestrator.py](/c:/VScode/pipeline
 
 Model selection is currently hard-coded in [config.py](/c:/VScode/pipeline/config.py):
 
-- Architect: `google/gemini-3-pro-preview`
-- Developer: `anthropic/claude-sonnet-4.5`
-- Security: `openai/gpt-4o-mini`
-- QA: `openai/gpt-5.1`
+- Planner: `google/gemini-3-pro-preview`
+- Executor: `anthropic/claude-sonnet-4.5`
+- Critic: `openai/gpt-5.1`
 - Verifier: `google/gemini-3-pro-preview`
 
 The pipeline calls models through OpenRouter via [openrouter_client.py](/c:/VScode/pipeline/openrouter_client.py).
@@ -286,7 +284,6 @@ The current aggregated summaries in [strategy_summary.csv](/c:/VScode/pipeline/a
 
 - The OpenRouter API key is hard-coded in the current implementation rather than loaded from environment variables.
 - There is no committed project-level `requirements.txt` for this repo yet.
-- `SecurityAgent` exists, but the default workflow configuration keeps security disabled.
 - Local execution for benchmark tasks may require third-party libraries depending on the generated code and benchmark task content, especially for `BigCodeBench`.
 - The `results/` directory contains older or ad hoc outputs; `logs/` plus `aggregated/` represent the current standardized layout used by the main scripts.
 
@@ -305,3 +302,4 @@ For repeatable experiments:
 Short description suitable for the GitHub repository settings:
 
 `Multi-agent LLM evaluation pipeline for HumanEval, MBPP, and BigCodeBench with OpenRouter orchestration, executable prediction conversion, boolean evaluation, and aggregated experiment analytics.`
+

@@ -1,0 +1,2 @@
+dataset,strategy,scope,run_id,rows,unique_task_ids,rows_with_boolean,rows_without_boolean,pass_count,fail_count,unknown_count,accuracy_eval_pct,accuracy_eval_ci95_low_pct,accuracy_eval_ci95_high_pct,fail_rate_eval_pct,unknown_rate_eval_pct,expected_task_count,accuracy_expected_pct,coverage_vs_expected_pct,missing_vs_expected
+mbpp,agentic_plus_verifier,all_runs,,62,62,62,0,52,10,0,83.870968,72.793431,90.996028,16.129032,0.0,200,26.0,31.0,138

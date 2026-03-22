@@ -1,0 +1,4 @@
+dataset,strategy,scope,run_id,rows,unique_task_ids,rows_with_boolean,rows_without_boolean,pass_count,fail_count,unknown_count,accuracy_eval_pct,accuracy_eval_ci95_low_pct,accuracy_eval_ci95_high_pct,fail_rate_eval_pct,unknown_rate_eval_pct,expected_task_count,accuracy_expected_pct,coverage_vs_expected_pct,missing_vs_expected
+mbpp,agentic_no_planner,unique_runs,,50,50,50,0,43,7,0,86.0,73.813543,93.049255,14.0,0.0,200,21.5,25.0,150
+mbpp,agentic_no_planner,run_id,run-3f893dc6,39,39,39,0,33,6,0,84.615385,70.27023,92.752626,15.384615,0.0,200,16.5,19.5,161
+mbpp,agentic_no_planner,run_id,run-eb31cc7e,11,11,11,0,10,1,0,90.909091,62.263537,98.376825,9.090909,0.0,200,5.0,5.5,189

@@ -1,9 +1,8 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import ast
 import time
 import json
-import re
 import hashlib
 from typing import Any
 
@@ -12,16 +11,15 @@ from .schemas import TaskInput
 from .openrouter_client import OpenRouterClient
 from .config import AppConfig, PipelineConfig
 
-from .agents.architect import ArchitectAgent
-from .agents.developer import DeveloperAgent
-from .agents.security import SecurityAgent
-from .agents.qa import QAAgent
+from .agents.planner import PlannerAgent
+from .agents.executor import ExecutorAgent
+from .agents.critic import CriticAgent
 from .agents.verifier import VerifierAgent
 from .utils.artifact_to_code import compose_humaneval_executable_code, extract_code_from_artifact_text
 from .checkpoint_eval import evaluate_pre_verifier_checkpoint
 
 
-def parse_qa_passfail(text: str) -> tuple[bool | None, str]:
+def parse_critic_passfail(text: str) -> tuple[bool | None, str]:
     t = (text or "").strip()
     first = t.splitlines()[0].strip().upper() if t else ""
     if first.startswith("PASS"):
@@ -43,24 +41,6 @@ def parse_verifier(text: str) -> tuple[str | None, str | None]:
         req = "\n".join(lines[1:]).strip() if len(lines) > 1 else ""
         return "REJECT", (req or None)
     return None, None
-
-
-def security_is_high_or_critical(security_text: str) -> bool:
-    """
-    Prevent false positives by only triggering on explicit severity declarations.
-    Matches examples like:
-      - "Severity: HIGH"
-      - "**Severity:** HIGH"
-      - "Severity - CRITICAL"
-    """
-    t = (security_text or "").upper()
-    patterns = [
-        r"\bSEVERITY\b\s*[:\-]\s*HIGH\b",
-        r"\bSEVERITY\b\s*[:\-]\s*CRITICAL\b",
-        r"\*\*SEVERITY\*\*\s*[:\-]\s*HIGH\b",
-        r"\*\*SEVERITY\*\*\s*[:\-]\s*CRITICAL\b",
-    ]
-    return any(re.search(p, t) for p in patterns)
 
 
 def patch_format_summary(text: str) -> dict:
@@ -98,10 +78,9 @@ class PipelineOrchestrator:
 
         client = OpenRouterClient(app.openrouter)
 
-        self.architect = ArchitectAgent(client, app.architect_model)
-        self.developer = DeveloperAgent(client, app.developer_model)
-        self.security = SecurityAgent(client, app.security_model)
-        self.qa = QAAgent(client, app.qa_model)
+        self.planner = PlannerAgent(client, app.planner_model)
+        self.executor = ExecutorAgent(client, app.executor_model)
+        self.critic = CriticAgent(client, app.critic_model)
         self.verifier = VerifierAgent(client, app.verifier_model)
 
     # ---------------------------
@@ -200,32 +179,32 @@ class PipelineOrchestrator:
         prompt_text = task.problem or ""
         prompt_hash = hashlib.sha256(prompt_text.encode("utf-8")).hexdigest()
 
-        architect_answer = None
-        developer_answer = None
-        qa_answer = None
+        planner_answer = None
+        executor_answer = None
+        critic_answer = None
         verifier_answer = None
 
-        architect_error_text = None
-        developer_error_text = None
-        qa_error_text = None
+        planner_error_text = None
+        executor_error_text = None
+        critic_error_text = None
         verifier_error_text = None
 
-        architect_prompt_tokens = None
-        architect_completion_tokens = None
-        architect_total_tokens = None
-        architect_latency_s = None
+        planner_prompt_tokens = None
+        planner_completion_tokens = None
+        planner_total_tokens = None
+        planner_latency_s = None
 
-        developer_prompt_tokens_sum = 0
-        developer_completion_tokens_sum = 0
-        developer_total_tokens_sum = 0
-        developer_latency_s_sum = 0.0
-        developer_seen = False
+        executor_prompt_tokens_sum = 0
+        executor_completion_tokens_sum = 0
+        executor_total_tokens_sum = 0
+        executor_latency_s_sum = 0.0
+        executor_seen = False
 
-        qa_prompt_tokens_sum = 0
-        qa_completion_tokens_sum = 0
-        qa_total_tokens_sum = 0
-        qa_latency_s_sum = 0.0
-        qa_seen = False
+        critic_prompt_tokens_sum = 0
+        critic_completion_tokens_sum = 0
+        critic_total_tokens_sum = 0
+        critic_latency_s_sum = 0.0
+        critic_seen = False
 
         verifier_prompt_tokens = None
         verifier_completion_tokens = None
@@ -244,45 +223,45 @@ class PipelineOrchestrator:
         verifier_post_repair_exec_passed: int | None = None
         verifier_post_repair_exec_error_type = None
         verifier_post_repair_exec_error = None
-        architect_spec_text = task.problem or ""
+        planner_spec_text = task.problem or ""
 
-        # 1) Architect
+        # 1) Planner
         if self.pipe.enable_planner:
             a_messages = None
             try:
-                a_messages = self.architect.build_messages(problem=task.problem, repo_context=task.repo_context)
-                a = self.architect.run(problem=task.problem, repo_context=task.repo_context)
-                self._log_call_success(task.task_id, pipeline_config, "Architect", self.app.architect_model.model, a_messages, a)
+                a_messages = self.planner.build_messages(problem=task.problem, repo_context=task.repo_context)
+                a = self.planner.run(problem=task.problem, repo_context=task.repo_context)
+                self._log_call_success(task.task_id, pipeline_config, "Planner", self.app.planner_model.model, a_messages, a)
                 total_tokens += (a.llm.total_tokens or 0)
-                architect_answer = a.output_text
-                architect_spec_text = a.output_text
-                architect_prompt_tokens = a.llm.prompt_tokens
-                architect_completion_tokens = a.llm.completion_tokens
-                architect_total_tokens = a.llm.total_tokens
-                architect_latency_s = a.llm.latency_s
+                planner_answer = a.output_text
+                planner_spec_text = a.output_text
+                planner_prompt_tokens = a.llm.prompt_tokens
+                planner_completion_tokens = a.llm.completion_tokens
+                planner_total_tokens = a.llm.total_tokens
+                planner_latency_s = a.llm.latency_s
             except Exception as e:
-                architect_error_text = str(e)
-                self._log_call_error(task.task_id, pipeline_config, "Architect", self.app.architect_model.model, a_messages, str(e))
+                planner_error_text = str(e)
+                self._log_call_error(task.task_id, pipeline_config, "Planner", self.app.planner_model.model, a_messages, str(e))
                 raise
         else:
-            architect_answer = "PLANNER_BYPASSED: direct prompt sent to Developer."
+            planner_answer = "PLANNER_BYPASSED: direct prompt sent to Executor."
 
-        # 2) Developer
+        # 2) Executor
         d_messages = None
         try:
-            d_messages = self.developer.build_messages(problem=task.problem, architect_spec=architect_spec_text, repo_context=task.repo_context)
-            d = self.developer.run(problem=task.problem, architect_spec=architect_spec_text, repo_context=task.repo_context)
-            self._log_call_success(task.task_id, pipeline_config, "Developer", self.app.developer_model.model, d_messages, d)
+            d_messages = self.executor.build_messages(problem=task.problem, planner_spec=planner_spec_text, repo_context=task.repo_context)
+            d = self.executor.run(problem=task.problem, planner_spec=planner_spec_text, repo_context=task.repo_context)
+            self._log_call_success(task.task_id, pipeline_config, "Executor", self.app.executor_model.model, d_messages, d)
             total_tokens += (d.llm.total_tokens or 0)
-            developer_answer = d.output_text
-            developer_seen = True
-            developer_prompt_tokens_sum += int(d.llm.prompt_tokens or 0)
-            developer_completion_tokens_sum += int(d.llm.completion_tokens or 0)
-            developer_total_tokens_sum += int(d.llm.total_tokens or 0)
-            developer_latency_s_sum += float(d.llm.latency_s or 0.0)
+            executor_answer = d.output_text
+            executor_seen = True
+            executor_prompt_tokens_sum += int(d.llm.prompt_tokens or 0)
+            executor_completion_tokens_sum += int(d.llm.completion_tokens or 0)
+            executor_total_tokens_sum += int(d.llm.total_tokens or 0)
+            executor_latency_s_sum += float(d.llm.latency_s or 0.0)
         except Exception as e:
-            developer_error_text = str(e)
-            self._log_call_error(task.task_id, pipeline_config, "Developer", self.app.developer_model.model, d_messages, str(e))
+            executor_error_text = str(e)
+            self._log_call_error(task.task_id, pipeline_config, "Executor", self.app.executor_model.model, d_messages, str(e))
             raise
 
         artifact_mode = infer_artifact_mode(task)
@@ -291,26 +270,12 @@ class PipelineOrchestrator:
         fmt = patch_format_summary(d.output_text)
         format_checks_json = self._json_dumps_safe(fmt)
 
-        # 3) Security (optional)
-        security_summary = "Security skipped by config."
-        if self.pipe.enable_security:
-            s_messages = None
-            try:
-                s_messages = self.security.build_messages(code_artifact=d.output_text)
-                s = self.security.run(code_artifact=d.output_text)
-                self._log_call_success(task.task_id, pipeline_config, "Security", self.app.security_model.model, s_messages, s)
-                total_tokens += (s.llm.total_tokens or 0)
-                security_summary = s.output_text
-            except Exception as e:
-                self._log_call_error(task.task_id, pipeline_config, "Security", self.app.security_model.model, s_messages, str(e))
-                raise
-
-        # 4) QA (SKIP if no harness to avoid fake FAILs on SWE tasks)
+        # 3) Critic (SKIP if no harness to avoid fake FAILs on SWE tasks)
         q = None
-        qa_pass: bool | None = None
-        qa_summary: str = "QA skipped (no test harness provided)."
+        critic_pass: bool | None = None
+        critic_summary: str = "Critic skipped (no test harness provided)."
 
-        qa_artifact = (
+        critic_artifact = (
             (compose_humaneval_executable_code(task.problem, d.output_text).code or "").strip()
             if is_humaneval
             else d.output_text
@@ -319,25 +284,25 @@ class PipelineOrchestrator:
         if task.test_harness:
             q_messages = None
             try:
-                q_messages = self.qa.build_messages(code_artifact=qa_artifact, test_harness=task.test_harness)
-                q = self.qa.run(code_artifact=qa_artifact, test_harness=task.test_harness)
-                self._log_call_success(task.task_id, pipeline_config, "QA", self.app.qa_model.model, q_messages, q)
+                q_messages = self.critic.build_messages(code_artifact=critic_artifact, test_harness=task.test_harness)
+                q = self.critic.run(code_artifact=critic_artifact, test_harness=task.test_harness)
+                self._log_call_success(task.task_id, pipeline_config, "Critic", self.app.critic_model.model, q_messages, q)
                 total_tokens += (q.llm.total_tokens or 0)
-                qa_answer = q.output_text
-                qa_seen = True
-                qa_prompt_tokens_sum += int(q.llm.prompt_tokens or 0)
-                qa_completion_tokens_sum += int(q.llm.completion_tokens or 0)
-                qa_total_tokens_sum += int(q.llm.total_tokens or 0)
-                qa_latency_s_sum += float(q.llm.latency_s or 0.0)
+                critic_answer = q.output_text
+                critic_seen = True
+                critic_prompt_tokens_sum += int(q.llm.prompt_tokens or 0)
+                critic_completion_tokens_sum += int(q.llm.completion_tokens or 0)
+                critic_total_tokens_sum += int(q.llm.total_tokens or 0)
+                critic_latency_s_sum += float(q.llm.latency_s or 0.0)
             except Exception as e:
-                qa_error_text = str(e)
-                self._log_call_error(task.task_id, pipeline_config, "QA", self.app.qa_model.model, q_messages, str(e))
+                critic_error_text = str(e)
+                self._log_call_error(task.task_id, pipeline_config, "Critic", self.app.critic_model.model, q_messages, str(e))
                 raise
 
-            qa_pass, qa_summary = parse_qa_passfail(q.output_text)
+            critic_pass, critic_summary = parse_critic_passfail(q.output_text)
 
-        # 4b) Pre-verifier execution checkpoint (real executable test before verifier/repair)
-        if self.pipe.enable_pre_verifier_checkpoint:
+        # 3b) Pre-verifier execution checkpoint (real executable test before verifier/repair)
+        if self.pipe.enable_verifier and self.pipe.enable_pre_verifier_checkpoint:
             try:
                 checkpoint = evaluate_pre_verifier_checkpoint(task=task, artifact_text=d.output_text, timeout_s=20.0)
                 pre_verifier_exec_invoked = 1 if checkpoint.get("invoked") else 0
@@ -361,12 +326,8 @@ class PipelineOrchestrator:
         # --- Trigger policy ---
         disagreement = False
 
-        # Only treat QA as disagreement if we ran it and got an explicit FAIL.
-        if qa_pass is False:
-            disagreement = True
-
-        # Trigger on explicit high/critical severities only.
-        if self.pipe.enable_security and security_is_high_or_critical(security_summary):
+        # Only treat Critic as disagreement if we ran it and got an explicit FAIL.
+        if critic_pass is False:
             disagreement = True
 
         # Optional: treat invalid patch format as "disagreement" so verifier runs under disagreement policy.
@@ -375,13 +336,13 @@ class PipelineOrchestrator:
             disagreement = True
 
         policy = (self.pipe.trigger_policy or "").strip().lower()
-        if policy not in {"always", "disagreement", "qa_fail"}:
+        if policy not in {"always", "disagreement", "critic_fail"}:
             policy = "disagreement"
 
-        should_invoke_verifier = self.pipe.enable_verifier and (
+        should_invoke_verifier = self.pipe.enable_planner and self.pipe.enable_verifier and (
             (policy == "always")
             or (policy == "disagreement" and disagreement)
-            or (policy == "qa_fail" and qa_pass is False)
+            or (policy == "critic_fail" and critic_pass is False)
         )
 
         final_artifact = d.output_text
@@ -392,15 +353,13 @@ class PipelineOrchestrator:
             v_messages = None
             try:
                 v_messages = self.verifier.build_messages(
-                    qa_summary=qa_summary,
-                    security_summary=security_summary,
+                    critic_summary=critic_summary,
                     disagreement=disagreement,
                     artifact_mode=artifact_mode,
                     format_checks=format_checks_json,
                 )
                 v = self.verifier.run(
-                    qa_summary=qa_summary,
-                    security_summary=security_summary,
+                    critic_summary=critic_summary,
                     disagreement=disagreement,
                     artifact_mode=artifact_mode,
                     format_checks=format_checks_json,
@@ -442,24 +401,24 @@ class PipelineOrchestrator:
 
                 d2_messages = None
                 try:
-                    d2_messages = self.developer.build_messages(
+                    d2_messages = self.executor.build_messages(
                         problem=task.problem,
-                        architect_spec=architect_spec_text + "\n\nREPAIR REQUEST FROM VERIFIER:\n" + repair_request,
+                        planner_spec=planner_spec_text + "\n\nREPAIR REQUEST FROM VERIFIER:\n" + repair_request,
                         repo_context=task.repo_context,
                     )
-                    d2 = self.developer.run(
+                    d2 = self.executor.run(
                         problem=task.problem,
-                        architect_spec=architect_spec_text + "\n\nREPAIR REQUEST FROM VERIFIER:\n" + repair_request,
+                        planner_spec=planner_spec_text + "\n\nREPAIR REQUEST FROM VERIFIER:\n" + repair_request,
                         repo_context=task.repo_context,
                     )
-                    self._log_call_success(task.task_id, pipeline_config, "Developer", self.app.developer_model.model, d2_messages, d2)
+                    self._log_call_success(task.task_id, pipeline_config, "Executor", self.app.executor_model.model, d2_messages, d2)
                     total_tokens += (d2.llm.total_tokens or 0)
-                    developer_answer = d2.output_text
-                    developer_seen = True
-                    developer_prompt_tokens_sum += int(d2.llm.prompt_tokens or 0)
-                    developer_completion_tokens_sum += int(d2.llm.completion_tokens or 0)
-                    developer_total_tokens_sum += int(d2.llm.total_tokens or 0)
-                    developer_latency_s_sum += float(d2.llm.latency_s or 0.0)
+                    executor_answer = d2.output_text
+                    executor_seen = True
+                    executor_prompt_tokens_sum += int(d2.llm.prompt_tokens or 0)
+                    executor_completion_tokens_sum += int(d2.llm.completion_tokens or 0)
+                    executor_total_tokens_sum += int(d2.llm.total_tokens or 0)
+                    executor_latency_s_sum += float(d2.llm.latency_s or 0.0)
                     final_artifact = d2.output_text
                     if self.pipe.enable_verifier_repair_checkpoints:
                         try:
@@ -480,21 +439,21 @@ class PipelineOrchestrator:
                             verifier_post_repair_exec_error_type = type(e).__name__
                             verifier_post_repair_exec_error = str(e)
                     if is_humaneval and task.test_harness:
-                        # Re-run QA on the repaired executable artifact so QA and external eval align.
+                        # Re-run Critic on the repaired executable artifact so Critic and external eval align.
                         repaired_exec = (compose_humaneval_executable_code(task.problem, final_artifact).code or "").strip()
-                        q2_messages = self.qa.build_messages(code_artifact=repaired_exec, test_harness=task.test_harness)
-                        q2 = self.qa.run(code_artifact=repaired_exec, test_harness=task.test_harness)
-                        self._log_call_success(task.task_id, pipeline_config, "QA", self.app.qa_model.model, q2_messages, q2)
+                        q2_messages = self.critic.build_messages(code_artifact=repaired_exec, test_harness=task.test_harness)
+                        q2 = self.critic.run(code_artifact=repaired_exec, test_harness=task.test_harness)
+                        self._log_call_success(task.task_id, pipeline_config, "Critic", self.app.critic_model.model, q2_messages, q2)
                         total_tokens += (q2.llm.total_tokens or 0)
-                        qa_answer = q2.output_text
-                        qa_seen = True
-                        qa_prompt_tokens_sum += int(q2.llm.prompt_tokens or 0)
-                        qa_completion_tokens_sum += int(q2.llm.completion_tokens or 0)
-                        qa_total_tokens_sum += int(q2.llm.total_tokens or 0)
-                        qa_latency_s_sum += float(q2.llm.latency_s or 0.0)
+                        critic_answer = q2.output_text
+                        critic_seen = True
+                        critic_prompt_tokens_sum += int(q2.llm.prompt_tokens or 0)
+                        critic_completion_tokens_sum += int(q2.llm.completion_tokens or 0)
+                        critic_total_tokens_sum += int(q2.llm.total_tokens or 0)
+                        critic_latency_s_sum += float(q2.llm.latency_s or 0.0)
                 except Exception as e:
-                    developer_error_text = str(e)
-                    self._log_call_error(task.task_id, pipeline_config, "Developer", self.app.developer_model.model, d2_messages, str(e))
+                    executor_error_text = str(e)
+                    self._log_call_error(task.task_id, pipeline_config, "Executor", self.app.executor_model.model, d2_messages, str(e))
                     raise
 
         final_executable_code = (
@@ -521,31 +480,31 @@ class PipelineOrchestrator:
             )
             d3_messages = None
             try:
-                d3_messages = self.developer.build_messages(
+                d3_messages = self.executor.build_messages(
                     problem=task.problem,
-                    architect_spec=syntax_spec,
+                    planner_spec=syntax_spec,
                     repo_context=None,
                 )
-                d3 = self.developer.run(
+                d3 = self.executor.run(
                     problem=task.problem,
-                    architect_spec=syntax_spec,
+                    planner_spec=syntax_spec,
                     repo_context=None,
                 )
                 self._log_call_success(
                     task.task_id,
                     pipeline_config,
-                    "Developer",
-                    self.app.developer_model.model,
+                    "Executor",
+                    self.app.executor_model.model,
                     d3_messages,
                     d3,
                 )
                 total_tokens += (d3.llm.total_tokens or 0)
-                developer_answer = d3.output_text
-                developer_seen = True
-                developer_prompt_tokens_sum += int(d3.llm.prompt_tokens or 0)
-                developer_completion_tokens_sum += int(d3.llm.completion_tokens or 0)
-                developer_total_tokens_sum += int(d3.llm.total_tokens or 0)
-                developer_latency_s_sum += float(d3.llm.latency_s or 0.0)
+                executor_answer = d3.output_text
+                executor_seen = True
+                executor_prompt_tokens_sum += int(d3.llm.prompt_tokens or 0)
+                executor_completion_tokens_sum += int(d3.llm.completion_tokens or 0)
+                executor_total_tokens_sum += int(d3.llm.total_tokens or 0)
+                executor_latency_s_sum += float(d3.llm.latency_s or 0.0)
 
                 repaired_exec = (compose_humaneval_executable_code(task.problem, d3.output_text).code or "").strip()
                 ast.parse(repaired_exec or "")
@@ -555,12 +514,12 @@ class PipelineOrchestrator:
                 parse_error_text = None
                 repair_attempted = 1
             except Exception as e:
-                developer_error_text = str(e)
+                executor_error_text = str(e)
                 self._log_call_error(
                     task.task_id,
                     pipeline_config,
-                    "Developer",
-                    self.app.developer_model.model,
+                    "Executor",
+                    self.app.executor_model.model,
                     d3_messages,
                     str(e),
                 )
@@ -587,39 +546,39 @@ class PipelineOrchestrator:
                 config=pipeline_config,
                 prompt=prompt_text,
                 prompt_hash=prompt_hash,
-                architect=(self.app.architect_model.model if self.pipe.enable_planner else None),
-                developer=self.app.developer_model.model,
-                qa=self.app.qa_model.model,
+                planner=(self.app.planner_model.model if self.pipe.enable_planner else None),
+                executor=self.app.executor_model.model,
+                critic=self.app.critic_model.model,
                 verifier=self.app.verifier_model.model if verifier_invoked else None,
                 final_answer=final_executable_code,
-                architect_prompt_tokens=architect_prompt_tokens,
-                architect_completion_tokens=architect_completion_tokens,
-                architect_total_tokens=architect_total_tokens,
-                architect_latency_s=architect_latency_s,
-                developer_prompt_tokens=(developer_prompt_tokens_sum if developer_seen else None),
-                developer_completion_tokens=(developer_completion_tokens_sum if developer_seen else None),
-                developer_total_tokens=(developer_total_tokens_sum if developer_seen else None),
-                developer_latency_s=(developer_latency_s_sum if developer_seen else None),
-                qa_prompt_tokens=(qa_prompt_tokens_sum if qa_seen else None),
-                qa_completion_tokens=(qa_completion_tokens_sum if qa_seen else None),
-                qa_total_tokens=(qa_total_tokens_sum if qa_seen else None),
-                qa_latency_s=(qa_latency_s_sum if qa_seen else None),
+                planner_prompt_tokens=planner_prompt_tokens,
+                planner_completion_tokens=planner_completion_tokens,
+                planner_total_tokens=planner_total_tokens,
+                planner_latency_s=planner_latency_s,
+                executor_prompt_tokens=(executor_prompt_tokens_sum if executor_seen else None),
+                executor_completion_tokens=(executor_completion_tokens_sum if executor_seen else None),
+                executor_total_tokens=(executor_total_tokens_sum if executor_seen else None),
+                executor_latency_s=(executor_latency_s_sum if executor_seen else None),
+                critic_prompt_tokens=(critic_prompt_tokens_sum if critic_seen else None),
+                critic_completion_tokens=(critic_completion_tokens_sum if critic_seen else None),
+                critic_total_tokens=(critic_total_tokens_sum if critic_seen else None),
+                critic_latency_s=(critic_latency_s_sum if critic_seen else None),
                 verifier_prompt_tokens=verifier_prompt_tokens,
                 verifier_completion_tokens=verifier_completion_tokens,
                 verifier_total_tokens=verifier_total_tokens,
                 verifier_latency_s=verifier_latency_s,
-                architect_answer=architect_answer,
-                developer_answer=developer_answer,
-                qa_answer=qa_answer,
+                planner_answer=planner_answer,
+                executor_answer=executor_answer,
+                critic_answer=critic_answer,
                 verifier_answer=verifier_answer,
-                architect_error_text=architect_error_text,
-                developer_error_text=developer_error_text,
-                qa_error_text=qa_error_text,
+                planner_error_text=planner_error_text,
+                executor_error_text=executor_error_text,
+                critic_error_text=critic_error_text,
                 verifier_error_text=verifier_error_text,
                 correct_answer=None,
-                architect_error=(1 if architect_error_text else 0),
-                developer_repair=repair_attempted,
-                developer_harm=(1 if parse_error_type else 0),
+                planner_error=(1 if planner_error_text else 0),
+                executor_repair=repair_attempted,
+                executor_harm=(1 if parse_error_type else 0),
                 verifier_repair=(1 if verifier_decision == "REJECT" else 0),
                 verifier_harm=(1 if (verifier_invoked and parse_error_type) else 0),
                 pre_verifier_exec_invoked=pre_verifier_exec_invoked,
@@ -655,3 +614,4 @@ class PipelineOrchestrator:
             "pre_verifier_executable_code": pre_verifier_executable_code,
             "pre_verifier_artifact": d.output_text,
         }
+
